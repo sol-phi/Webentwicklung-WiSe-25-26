@@ -1,0 +1,27 @@
+.bg-blue{
+    background-color: #002060;
+}
+
+/* Überschreibt die Bootstrap-Attribute*/
+.text-white .nav-link.text-white .active.text-white{
+    color: #ffffff;
+}
+
+.active {
+    font-weight: bold;
+}
+
+/*Damit die Nav-Elemente nicht so nah am Logo sind*/
+.spacing{
+    margin:10px;
+}
+
+body {
+    min-height: 100vh; /*100% von der Höhe des Viewports*/
+    display: flex; /*Body wird zum Flex-Container, d.h. die Elemente werden langgezogen, bis der Viewport voll ist*/
+    flex-direction: column; /*Elemente werden vertikal langgezogen*/
+}
+
+.main {
+    flex: 1; /*Elemente mit dieser Klasse beanspruchen 100% des Flex-Raums für sich, und werden darin langgezogen.*/
+}
