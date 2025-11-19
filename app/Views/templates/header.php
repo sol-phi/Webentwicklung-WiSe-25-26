@@ -9,3 +9,4 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
         <link href="<?= base_url('public/assets/css/tasks.css') ?>" rel="stylesheet">
     </head>
+</html>

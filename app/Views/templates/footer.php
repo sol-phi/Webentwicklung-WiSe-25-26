@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
         <!-- padding_y-3 -->
         <footer class="bg-blue py-3 mt-4">
             <!-- Flex-Container, erstes Element links, und zweites Element rechts. Abstand automatisch zum Ausfüllen ermittelt-->
