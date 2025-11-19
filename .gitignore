@@ -124,3 +124,5 @@ _modules/*
 
 /results/
 /phpunit*.xml
+/writable/cache/index.html
+/writable/session/index.html
