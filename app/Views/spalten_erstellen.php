@@ -15,37 +15,37 @@
                     <!-- col-sm kann nicht in die class von <input> und <textarea> gepackt werden, daher hier für Konsistenz überall außen -->
                     <!-- mb-3 als Abstand nach unten zum nächsten Element -->
                     <!-- Für die anderen Elemente analog -->
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <label for="Bezeichnung" class="col-form-label">Bezeichnung</label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-md-10">
                         <input type="text" class="form-control" id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für die Spalte" required>
                     </div>
                 </div>
 
                 <div class="form-group row mb-3">
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <label for="Beschreibung" class="col-form-label">Beschreibung</label>
                     </div>
-                    <div class="col-sm-10"> <!-- rows="5" macht die textarea höher -->
+                    <div class="col-md-10"> <!-- rows="5" macht die textarea höher -->
                         <textarea type="text" class="form-control" rows="5" id="Beschreibung" name="Beschreibung" required></textarea>
                     </div>
                 </div>
 
                 <div class="form-group row mb-3">
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <label for="SortID" class="col-form-label">SortID</label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-md-10">
                         <input type="text" class="form-control" id="SortID" name="SortID" placeholder="SortID angeben" required>
                     </div>
                 </div>
 
                 <div class="form-group row mb-3">
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <label for="Board" class="col-form-label">Board auswählen</label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-md-10">
                         <select id="Board" name="Board" class="form-select">
                             <option value="1">Allgemeine Todos</option>
                             <option value="2">Dringende Aufgaben</option>
