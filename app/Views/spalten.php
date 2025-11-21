@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container mt-4 mb-4">
     <!-- margin_top-4 -->
     <div class="card">
         <!-- font_size-4 -->
