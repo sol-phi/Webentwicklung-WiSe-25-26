@@ -16,8 +16,3 @@
     margin:10px;
 }
 
-body {
-    min-height: 100vh; /*100% von der Höhe des Viewports*/
-    display: flex; /*Body wird zum Flex-Container, d.h. die Elemente werden langgezogen, bis der Viewport voll ist*/
-    flex-direction: column; /*Elemente werden vertikal langgezogen*/
-}
