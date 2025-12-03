@@ -25,9 +25,18 @@ class Home extends BaseController
 
     public function spalten(): void
     {
+        $db = \Config\Database::connect();
+        $builder = $db->table('spalten');
+        $builder->select('spalten.*, boards.board');
+        $builder->join('boards', 'boards.id = spalten.boardsid');
+        $builder->orderBy('spalten.sortid', 'ASC');
+
+        $query = $builder->get();
+        $data['spalten'] = $query->getResultArray();
+
         echo view('templates/header');
         echo view('templates/navigation');
-        echo view('spalten');
+        echo view('spalten', $data);
         echo view('templates/footer');
     }
 
