@@ -126,3 +126,6 @@ _modules/*
 /phpunit*.xml
 /writable/cache/index.html
 /writable/session/index.html
+
+# database geheime daten
+app/Config/Database.php
