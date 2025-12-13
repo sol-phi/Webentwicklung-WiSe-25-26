@@ -127,5 +127,6 @@ _modules/*
 /writable/cache/index.html
 /writable/session/index.html
 
-# database geheime daten
+#App und Database
+app/Config/App.php
 app/Config/Database.php

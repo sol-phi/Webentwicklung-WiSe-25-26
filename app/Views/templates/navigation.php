@@ -16,15 +16,19 @@
                     <li class="nav-item">
                         <!-- Überprüft die URL, und markiert das Element fett, auf dessen Seite wir gerade sind -->
                         <a class="nav-link text-white <?= ($segment === 'tasks' || $segment === '') ? 'active' : '' ?>"
-                           href="<?= base_url('public') ?>">Tasks</a>
+                           href="<?= base_url('public/tasks') ?>">Tasks</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white <?= $segment === 'boards' ? 'active' : '' ?>"
                            href="<?= base_url('public/boards') ?>">Boards</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white <?= ($segment === 'spalten' || $segment === 'spalten_erstellen') ? 'active' : '' ?>"
+                        <a class="nav-link text-white <?= ($segment === 'spalten' || $segment === 'spalten-erstellen') ? 'active' : '' ?>"
                            href="<?= base_url('public/spalten') ?>">Spalten</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white <?= $segment === 'personen' ? 'active' : '' ?>"
+                           href="<?= base_url('public/personen') ?>">Personen</a>
                     </li>
                 </ul>
             </div>

@@ -5,7 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::tasks');
-$routes->get('/boards', 'Home::boards');
-$routes->get('/spalten', 'Home::spalten');
-$routes->get('/spalten_erstellen', 'Home::spalten_erstellen');
+// Tasks ist hardcoded damit public/*Nichts* keinen 404 Fehler wirft, der Rest wird über AutoRouting gesteuert
+$routes->get('/', 'Tasks::getIndex');
+$routes->get('/tasks', 'Tasks::getIndex');
