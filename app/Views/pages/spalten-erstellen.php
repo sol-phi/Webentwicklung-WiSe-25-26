@@ -8,7 +8,7 @@
 
         <div class="card-body">
             <!-- onsubmit deaktiviert den "Speichern" button -->
-            <form method="POST" action="<?= base_url('main-controller/spalten_erstellen') ?>" onsubmit="return false;">
+            <form method="POST" action="<?= base_url('public/spalten_erstellen') ?>" onsubmit="return false;">
 
                 <div class="form-group row mb-3">
                     <!-- col-sm: 2 Spalten von dem Bootstrap-Grid für die Beschreibung vorgesehen, die anderen 10 für den Input -->
