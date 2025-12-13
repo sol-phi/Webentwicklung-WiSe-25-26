@@ -10,7 +10,7 @@
             <!-- class: btn sind die abgerundeten Kanten, btn-primary die Farbe und mb-3 der Abstand zur Tabelle -->
             <!-- id="toolbar" dient dazu, den Knopf zu der Zeile über der Tabelle hinzuzufügen, zu den anderen Elementen wie das Suchfeld -->
             <div id="toolbar">
-                <a href="<?= base_url('public/spalten-erstellen') ?>" class="btn btn-primary">
+                <a href="<?= base_url('main-controller/spalten_erstellen') ?>" class="btn btn-primary">
                     Erstellen
                 </a>
             </div>
