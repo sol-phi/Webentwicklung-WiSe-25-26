@@ -9,7 +9,7 @@ class TasksModel extends Model
     // ...
 
     public function getData(){
-        $this->personen = $this->db->table('tasks');
-        return $this->personen->select('*')->get()->getResultArray();
+        $tasks = $this->db->table('tasks');
+        return $tasks->select('*')->get()->getResultArray();
     }
 }

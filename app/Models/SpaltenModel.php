@@ -9,7 +9,7 @@ class SpaltenModel extends Model
     // ...
 
     public function getData(){
-        $this->personen = $this->db->table('spalten');
-        return $this->personen->select('*')->get()->getResultArray();
+        $spalten = $this->db->table('spalten');
+        return $spalten->select('*')->get()->getResultArray();
     }
 }
