@@ -36,7 +36,6 @@ class TasksModel extends Model
             'notizen'          => $post['notizen'] ?? '',
             'erledigt'         => isset($post['erledigt']) ? (int)$post['erledigt'] : 0,
             'geloescht'        => isset($post['geloescht']) ? (int)$post['geloescht'] : 0,
-            // passend zu deiner Spalte `erstelldatum (date)` nur Datum:
             'erstelldatum'     => date('Y-m-d'),
         ];
 

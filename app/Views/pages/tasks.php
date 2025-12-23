@@ -49,12 +49,10 @@
                         <td><?= esc($task['geloescht']) ?></td>
                         <td>
                             <div class="ml-1 d-inline-flex gap-3 ms-2">
-                                <!-- Edit: action 'e', id, mode 1 -->
                                 <a href="<?= base_url('public/tasks/crud/' . esc($task['id']) . '/1') ?>" title="Bearbeiten" class="text-decoration-none">
                                     <i class="fa-solid fa-pen-to-square text-primary"></i>
                                 </a>
 
-                                <!-- Delete: action 'd', id, mode 2 -->
                                 <a href="<?= base_url('public/tasks/crud/' . esc($task['id']) . '/2') ?>" title="Löschen" class="text-decoration-none">
                                     <i class="fa-solid fa-trash text-danger"></i>
                                 </a>

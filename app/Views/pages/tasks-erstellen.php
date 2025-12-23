@@ -1,9 +1,7 @@
 <?php
-// Datei: app/Views/pages/tasks-erstellen.php
 $todo = (int) ($todo ?? 0);
 $tasks = is_array($tasks) ? $tasks : []; // sicherstellen, dass $tasks definiert ist
 
-// datetime-local benötigt Format "Y-m-d\TH:i"
 $erinnerungsValue = '';
 if (!empty($tasks['erinnerungsdatum'])) {
     try {
