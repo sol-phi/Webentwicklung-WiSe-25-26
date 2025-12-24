@@ -11,12 +11,9 @@ class Boards extends BaseController
 
     public function getIndex(): void
     {
+        // Daten aus dem Model zum Erzeugen der Tabelle
         $boardsModel = new BoardsModel();
         $data['boards'] = $boardsModel->getData();
-
-//        echo("<pre>");
-//        var_dump($data['boards']);
-//        echo("<pre>");
 
         echo view('templates/header');
         echo view('templates/navigation');

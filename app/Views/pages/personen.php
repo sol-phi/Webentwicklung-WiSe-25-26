@@ -2,13 +2,13 @@
     <!-- margin_top-4 -->
     <div class="card">
         <!-- font_size-4 -->
-        <div class="card-header fs-4">
+        <div class="card-header fs-4 fw-semibold">
             Personen
         </div>
         <div class="card-body">
             <div id="toolbar">
                 <a href="<?= base_url('public/personen-erstellen') ?>" class="btn btn-primary disabled">
-                    Erstellen
+                    Neu
                 </a>
             </div>
             <table class="table table-responsive table-bordered table-striped table-hover d-table"
@@ -23,7 +23,8 @@
                     <th class="text-nowrap" data-sortable="true">Vorname</th>
                     <th class="text-nowrap" data-sortable="true">Name</th>
                     <th class="text-nowrap" data-sortable="true">E-Mail</th>
-                    <th class="text-nowrap" data-sortable="true">Passwort</th>
+                    <!--Sollte man besser nicht anzeigen-->
+                    <!--<th class="text-nowrap" data-sortable="true">Passwort</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +34,7 @@
                         <td><?= esc($person['vorname']) ?></td>
                         <td><?= esc($person['name']) ?></td>
                         <td><?= esc($person['email']) ?></td>
-                        <td><?= esc($person['passwort']) ?></td>
+                        <!--<td><?php /*= esc($person['passwort']) */?></td>-->
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

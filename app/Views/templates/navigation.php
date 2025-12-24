@@ -15,7 +15,7 @@
 
                     <li class="nav-item">
                         <!-- Überprüft die URL, und markiert das Element fett, auf dessen Seite wir gerade sind -->
-                        <a class="nav-link text-white <?= ($segment === 'tasks' || $segment === '') ? 'active' : '' ?>"
+                        <a class="nav-link text-white <?= ($segment === 'tasks' || $segment === 'tasks-erstellen' || $segment === '') ? 'active' : '' ?>"
                            href="<?= base_url('public/tasks') ?>">Tasks</a>
                     </li>
                     <li class="nav-item">

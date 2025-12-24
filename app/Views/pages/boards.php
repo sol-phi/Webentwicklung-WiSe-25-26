@@ -2,13 +2,13 @@
     <!-- margin_top-4 -->
     <div class="card">
         <!-- font_size-4 -->
-        <div class="card-header fs-4">
+        <div class="card-header fs-4 fw-semibold">
             Boards
         </div>
         <div class="card-body">
             <div id="toolbar">
                 <a href="<?= base_url('public/boards-erstellen') ?>" class="btn btn-primary disabled">
-                    Erstellen
+                    Neu
                 </a>
             </div>
             <table class="table table-responsive table-bordered table-striped table-hover d-table"
