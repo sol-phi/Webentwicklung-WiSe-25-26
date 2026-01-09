@@ -11,13 +11,9 @@ class Spalten extends BaseController
 
     public function getIndex(): void
     {
-
+        // Daten aus dem Model zum Erzeugen der Tabelle
         $spaltenModel = new SpaltenModel();
         $data['spalten'] = $spaltenModel->getData();
-
-//        echo("<pre>");
-//        var_dump($data['spalten']);
-//        echo("<pre>");
 
         echo view('templates/header');
         echo view('templates/navigation');

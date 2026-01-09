@@ -11,12 +11,9 @@ class Personen extends BaseController
 
     public function getIndex(): void
     {
+        // Daten aus dem Model zum Erzeugen der Tabelle
         $personenModel = new PersonenModel();
         $data['personen'] = $personenModel->getData();
-
-//        echo("<pre>");
-//        var_dump($data['personen']);
-//        echo("<pre>");
 
         echo view('templates/header');
         echo view('templates/navigation');

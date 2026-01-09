@@ -6,71 +6,65 @@ use CodeIgniter\Model;
 
 class TasksModel extends Model
 {
-    protected $table = 'tasks';
-
-    public function getData(): array
-    {
-        $builder = $this->db->table($this->table);
-        return $builder->select('*')->get()->getResultArray();
+    // Gibt alle Tasks zurück, als Default
+    public function getData(){
+        $this->tasks = $this->db->table('tasks');
+        return $this->tasks->select('*')->orderBy('tasks', 'asc')->get()->getResultArray();
+    }
+    // Gibt alle Tasks zurück, die zu dem einen Board gehören.
+    // Dafür müssen wir die Spalten mit joinen, um auf den Board zugreifen zu können, zu dem die Tasks alle gehören.
+    // Und noch ein orderBy obendrauf, entsprechend Aufgabenstellung von Übung 5
+    public function getDataFromBoard($boardId){
+        $this->tasks = $this->db->table('tasks');
+        return $this->tasks->select('tasks.*')->join('spalten', 'tasks.spaltenid = spalten.id')
+            ->where('boardsid', $boardId)->orderBy('tasks', 'asc')->get()->getResultArray();
     }
 
-    public function getID(int $id): ?array
-    {
-        $builder = $this->db->table($this->table);
-        $row = $builder->select('*')->where('id', $id)->get()->getRowArray();
-        return $row ?: null;
+    // Gibt alle Daten zu dem einen Task zurück, welcher der übergebenen Task-ID entspricht, als RowArray (eindimensional)
+    public function getDataFromTask($taskId){
+        $this->tasks = $this->db->table('tasks');
+        return $this->tasks->select('tasks.*')->where('id', $taskId)->get()->getRowArray();
     }
-
-    public function createTask(array $post): int
-    {
-        $builder = $this->db->table($this->table);
-
-        $data = [
-            'tasks'            => trim($post['tasks'] ?? ''),
-            'taskartenid'      => isset($post['taskartenid']) ? (int)$post['taskartenid'] : null,
-            'personenid'       => isset($post['personenid']) ? (int)$post['personenid'] : null,
-            'spaltenid'        => isset($post['spaltenid']) ? (int)$post['spaltenid'] : null,
-            'sortid'           => isset($post['sortid']) ? (int)$post['sortid'] : 100,
-            'erinnerungsdatum' => $post['erinnerungsdatum'] ?? null, // datetime-string oder null
-            'erinnerung'       => isset($post['erinnerung']) ? (int)$post['erinnerung'] : 0,
-            'notizen'          => $post['notizen'] ?? '',
-            'erledigt'         => isset($post['erledigt']) ? (int)$post['erledigt'] : 0,
-            'geloescht'        => isset($post['geloescht']) ? (int)$post['geloescht'] : 0,
-            'erstelldatum'     => date('Y-m-d'),
-        ];
-
-        $builder->insert($data);
-        return (int) $this->db->insertID();
+    public function createTask($data){
+        $this->tasks = $this->db->table('tasks');
+        // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und eingefügt.
+        $this->tasks->insert([
+            //'id' hat Auto-Increment
+            'personenid'          => $data['PersonID'],
+            'taskartenid'         => $data['TaskartID'],
+            'spaltenid'           => $data['SpaltenID'],
+            'sortid'              => $data['SortID'],
+            'tasks'               => $data['Bezeichnung'],
+            'erstelldatum'        => date('Y-m-d'), // Timestamp des aktuellen Datums
+            'erinnerungsdatum'    => $data['Erinnerungsdatum'],
+            'erinnerung'          => $data['Erinnerung'],
+            'notizen'             => $data['Notizen'],
+            'erledigt'            => 0,
+            'geloescht'           => 0,
+        ]);
     }
-
-    public function updateTask(int $id, array $post): bool
-    {
-        $builder = $this->db->table($this->table);
-
-        $data = [];
-        if (isset($post['tasks']))            $data['tasks'] = trim($post['tasks']);
-        if (isset($post['taskartenid']))      $data['taskartenid'] = (int)$post['taskartenid'];
-        if (isset($post['personenid']))       $data['personenid'] = (int)$post['personenid'];
-        if (isset($post['spaltenid']))        $data['spaltenid'] = (int)$post['spaltenid'];
-        if (isset($post['sortid']))           $data['sortid'] = (int)$post['sortid'];
-        if (array_key_exists('erinnerungsdatum', $post)) $data['erinnerungsdatum'] = $post['erinnerungsdatum'];
-        if (isset($post['erinnerung']))       $data['erinnerung'] = (int)$post['erinnerung'];
-        if (isset($post['notizen']))          $data['notizen'] = $post['notizen'];
-        if (isset($post['erledigt']))         $data['erledigt'] = (int)$post['erledigt'];
-        if (isset($post['geloescht']))        $data['geloescht'] = (int)$post['geloescht'];
-
-        if (empty($data)) {
-            return false;
-        }
-
-        $builder->where('id', $id)->update($data);
-        return ($this->db->affectedRows() > 0);
+    public function updateTask($data, $taskId){
+        $this->tasks = $this->db->table('tasks');
+        // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
+        $this->tasks->where('id', $taskId)->update([
+            //'id' hat Auto-Increment
+            'personenid'          => $data['PersonID'],
+            'taskartenid'         => $data['TaskartID'],
+            'spaltenid'           => $data['SpaltenID'],
+            'sortid'              => $data['SortID'],
+            'tasks'               => $data['Bezeichnung'],
+            // Erstelldatum soll sich beim Bearbeiten nicht ändern. Vielleicht stattdessen ein 'Letztes Update' Feld hinzufügen?
+            //'erstelldatum'        => date('Y-m-d'),
+            'erinnerungsdatum'    => $data['Erinnerungsdatum'],
+            'erinnerung'          => $data['Erinnerung'],
+            'notizen'             => $data['Notizen'],
+            //'erledigt'            => 0,
+            //'geloescht'           => 0,
+        ]);
     }
-
-    public function deleteTask(int $id): bool
-    {
-        $builder = $this->db->table($this->table);
-        $builder->where('id', $id)->delete();
-        return ($this->db->affectedRows() > 0);
+    public function deleteTask($taskId){
+        // Es wird nur nach der Task-ID gesucht, und dann die entsprechende Zeile gelöscht.
+        $this->tasks = $this->db->table('tasks');
+        $this->tasks->where('id', $taskId)->delete();
     }
 }
