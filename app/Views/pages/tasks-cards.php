@@ -56,7 +56,7 @@
                 </a>
                 <!--Funktioniert nicht, sollte aber auf jeder Seite drauf sein. Vielleicht für später?-->
                 <div class="input-group ms-3" style="max-width: 250px;">
-                    <input id="taskSearch" type="search" class="form-control" placeholder="Suchen... (WIP)">
+                    <input id="taskSearch" type="search" class="form-control" placeholder="Suchen...">
                     <button class="btn btn-outline-primary" type="button" id="button-search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -67,7 +67,7 @@
                 <!--Jede Spalte wird in einer vertikalen Card dargestellt-->
                 <?php foreach ($spalten as $spalte): ?>
                     <!--Min- und Max-Width verhindern gequetschte oder gedehnte Spalten. flex-box und card müssen separate divs sein-->
-                    <div class="flex-grow-1" style="min-width: 200px; max-width: 300px;">
+                    <div class="flex-grow-1 task-column" style="min-width: 200px; max-width: 300px;">
                         <div class="card">
 
                             <div class="card-header">
@@ -81,7 +81,7 @@
                                     <?php if ($task['spaltenid'] == $spalte['id']): ?>
 
                                         <!--Jeder Task wird als kleine Card innerhalb der Spalte dargestellt-->
-                                        <div class="card mb-3">
+                                        <div class="card mb-3 task-card">
 
                                             <div class="card-header bg-light-subtle fw-semibold d-flex align-items-center justify-content-between">
                                                 <span><?= esc($task['tasks']) ?></span>
@@ -150,3 +150,59 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript für die Suchfunktionalität - PHP implementierung ist wahrscheinlich unübersichtlich und zu komplex.
+Deshalb KI-Generierte Javascript-Lösung -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('taskSearch');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.trim().toLowerCase();
+            const columns = document.querySelectorAll('.task-column');
+
+            columns.forEach(function(column) {
+                // Spalten-Header (der Titel der Spalte)
+                const headerEl = column.querySelector('.card .card-header .fs-5 .small') || column.querySelector('.card-header');
+                const headerText = headerEl ? headerEl.innerText.toLowerCase() : '';
+
+                const tasks = column.querySelectorAll('.task-card');
+                let hasVisibleTasks = false;
+
+                // Leeres Suchfeld -> alles zurücksetzen
+                if (searchTerm === '') {
+                    column.classList.remove('d-none');
+                    tasks.forEach(t => t.classList.remove('d-none'));
+                    return;
+                }
+
+                // Wenn Spaltenname passt -> komplette Spalte anzeigen (alle Tasks)
+                if (headerText.includes(searchTerm)) {
+                    column.classList.remove('d-none');
+                    tasks.forEach(t => t.classList.remove('d-none'));
+                    return;
+                }
+
+                // Sonst: nach Tasks filtern
+                tasks.forEach(function(task) {
+                    const taskText = task.innerText.toLowerCase();
+                    if (taskText.includes(searchTerm)) {
+                        task.classList.remove('d-none');
+                        hasVisibleTasks = true;
+                    } else {
+                        task.classList.add('d-none');
+                    }
+                });
+
+                // Spalte aus-/einblenden je nach Treffer
+                if (hasVisibleTasks) {
+                    column.classList.remove('d-none');
+                } else {
+                    column.classList.add('d-none');
+                }
+            });
+        });
+    });
+</script>
+
+
