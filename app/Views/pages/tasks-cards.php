@@ -1,7 +1,7 @@
 <div class="container mt-4 mb-4">
 
     <?php
-    // Zeige Flash\-Messages (Bootstrap Alerts)
+    // Zeige Flash-Messages (Bootstrap Alerts) als Bestätigungsmeldung, wenn von einem erfolgreichen Submit von der Erstellen View kommend
     if (session()->getFlashdata('success')): ?>
         <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
     <?php endif;
@@ -124,7 +124,13 @@
                                                         <i class="fa-solid fa-bell text-muted"></i>
                                                     </div>
                                                     <div class="col">
-                                                        <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
+                                                        <!--Leere Werte werden in Erinnerungsdatum als '0000-00-00 00:00:00' in der DB gespeichert,
+                                                        daher müssen wir danach testen.-->
+                                                        <?php if (empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00'): ?>
+                                                            -
+                                                        <?php else: ?> <!--DateTime wird nur der Formatierung wegen on the fly erzeugt-->
+                                                            <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -132,7 +138,11 @@
                                                         <i class="fa-solid fa-sticky-note text-muted"></i>
                                                     </div>
                                                     <div class="col">
-                                                        <?= esc($task['notizen']) ?>
+                                                        <?php if (empty($task['notizen'])): ?>
+                                                            -
+                                                        <?php else: ?>
+                                                            <?= esc($task['notizen']) ?>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>

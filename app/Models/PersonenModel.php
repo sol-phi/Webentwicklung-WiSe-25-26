@@ -16,8 +16,8 @@ class PersonenModel extends Model
     // Joins über Tasks und Spalten, notwendig, um Personen ihrem Board zuzuordnen.
     // Distinct notwendig, damit jede Person nur einmal zurückgegeben wird, auch wenn sie mehreren Tasks zugewiesen ist.
     public function getDataFromBoard($boardId){
-        $this->spalten = $this->db->table('personen');
-        return $this->spalten->distinct()->select('personen.*')->join('tasks', 'personen.id = tasks.personenid')
+        $this->personen = $this->db->table('personen');
+        return $this->personen->distinct()->select('personen.*')->join('tasks', 'personen.id = tasks.personenid')
             ->join('spalten', 'tasks.spaltenid = spalten.id')
             ->where('spalten.boardsid', $boardId)->get()->getResultArray();
     }
