@@ -13,7 +13,7 @@ class Spalten extends BaseController
     {
         // Daten aus dem Model zum Erzeugen der Tabelle
         $spaltenModel = new SpaltenModel();
-        $data['spalten'] = $spaltenModel->getDataWithBoard();
+        $data['spalten'] = $spaltenModel->getDatawithBoardNames();
 
         echo view('templates/header');
         echo view('templates/navigation');

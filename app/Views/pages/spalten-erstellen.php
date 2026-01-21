@@ -36,26 +36,14 @@
                     <div class="col-md-10">
                         <!--Im Voraus ausgefüllt, wenn eine Spalte zum Bearbeiten oder Löschen ausgewählt wurde-->
                         <!--Beim Löschen soll das Feld deaktiviert sein-->
-                        <!--Die $Bezeichnung-Variable (also die Variable mit dem gleichen Namen wie id und name) enthält den vom Benutzer eingegebenen Wert,
-                        wenn ein Fehler aufgetreten ist und das Formular neu angezeigt wird.-->
-                        <!--Diese hat für Update Priorität,
-                        da $selected_spalte['spalte'] den alten Wert von dem zu bearbeitenden Spalten-Element enthält
-                        und daher nur einmal am Anfang geladen werden soll.-->
                         <!--Class: Wenn ein Fehler auftritt, wird das Feld rot umrandet.-->
                         <input type="text" class="form-control <?=(isset($error['Bezeichnung']))?'is-invalid':''?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für die Spalte"
-                                <?php if (($todo == "create" || $todo == "update") && isset($Bezeichnung)): ?>
-                                    value="<?= esc($Bezeichnung) ?>"
-                                <?php elseif ($todo == "update"): ?>
-                                    value="<?= esc($selected_spalte['spalte']) ?>"
-                                <?php elseif ($todo == "delete"): ?>
-                                    value="<?= esc($selected_spalte['spalte']) ?>"
-                                    disabled
-                                <?php endif; ?>>
-                        <!--Wenn ein Fehler auftritt, erscheint die Fehlermeldung in einem div unter dem Eingabefeld.-->
-                        <?php if (isset($error['Bezeichnung'])): ?>
-                            <div class="invalid-feedback">
-                                <?= esc($error['Bezeichnung']) ?>
+                               value="<?= old('Bezeichnung', $selected_spalte['spalte'] ?? '') ?>"
+                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                        <?php if (session('errors.Bezeichnung')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.Bezeichnung')) ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -65,17 +53,14 @@
                     <div class="col-md-2">
                         <label for="Beschreibung" class="col-form-label">Beschreibung</label>
                     </div>
-                    <div class="col-md-10"> <!-- rows="5" macht die textarea höher -->
-                        <textarea type="text" class="form-control <?=(isset($error['Beschreibung']))?'is-invalid':''?>"
-                                  rows="5" id="Beschreibung" name="Beschreibung" placeholder="Weitere Bemerkungen zur Spalte"
-                        <?php if ($todo == "delete"): ?>
-                            disabled
-                        <?php endif; ?>
-                        ><?php if (($todo == "create" || $todo == "update") && isset($Beschreibung)): ?><?= esc($Beschreibung) ?><?php elseif ($todo == "update" || $todo == "delete"): ?><?= esc($selected_spalte['spaltenbeschreibung']) ?><?php endif; ?></textarea>
-                        <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
-                        <?php if (isset($error['Beschreibung'])): ?>
-                            <div class="invalid-feedback">
-                                <?= esc($error['Beschreibung']) ?>
+                    <div class="col-md-10">
+                        <textarea class="form-control <?= session('errors.Beschreibung') ? 'is-invalid' : '' ?>"
+                                  rows="5" id="Beschreibung" name="Beschreibung"
+                                  placeholder="Weitere Bemerkungen zur Spalte"
+                                  <?= ($todo === "delete") ? 'disabled' : '' ?>><?= old('Beschreibung', $selected_spalte['spaltenbeschreibung'] ?? '') ?></textarea>
+                        <?php if (session('errors.Beschreibung')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.Beschreibung')) ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -86,19 +71,13 @@
                         <label for="SortID" class="col-form-label">SortID</label>
                     </div>
                     <div class="col-md-10">
-                        <input class="form-control <?=(isset($error['SortID']))?'is-invalid':''?>"
+                        <input type="number" class="form-control <?= session('errors.SortID') ? 'is-invalid' : '' ?>"
                                id="SortID" name="SortID" placeholder="ID zum Sortieren"
-                                <?php if (($todo == "create" || $todo == "update") && isset($SortID)): ?>
-                                    value="<?= esc($SortID) ?>"
-                                <?php elseif ($todo == "update"): ?>
-                                    value="<?= esc($selected_spalte['sortid']) ?>"
-                                <?php elseif ($todo == "delete"): ?>
-                                    value="<?= esc($selected_spalte['sortid']) ?>"
-                                    disabled
-                                <?php endif; ?>>
-                        <?php if (isset($error['SortID'])): ?>
-                            <div class="invalid-feedback">
-                                <?= esc($error['SortID']) ?>
+                               value="<?= old('SortID', $selected_spalte['sortid'] ?? '') ?>"
+                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                        <?php if (session('errors.SortID')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.SortID')) ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -115,39 +94,28 @@
                         <!--Sobald etwas ausgewählt wird, ändert sich die Schriftfarbe zu schwarz.-->
                         <!--Bei Edit und Delete hingegen ist schon ein Wert eingefüllt, daher immer schwarz als Default.-->
                         <!--Bei Delete ist der Dropdown wie bei den anderen Feldern deaktiviert.-->
-                        <select id="BoardID" name="BoardID" class="form-select <?=(isset($error['BoardID']))?'is-invalid':''?>"
-                                <?php if ($todo == "create" && !isset($BoardID)): ?>
-                                    style="color:#6c757d;"
+                        <select id="Board" name="Board" class="form-select <?= session('errors.Board') ? 'is-invalid' : '' ?>"
+                                <?= ($todo === "delete") ? 'disabled' : '' ?>
+                                <?php if ($todo === "create"): ?>
+                                    style="color:<?= old('Board') ? '#212529' : '#6c757d' ?>;"
                                     onchange="this.style.color='#212529'"
-                                <?php elseif ($todo == "delete"): ?>
-                                    disabled
+                                <?php else: ?>
+                                    style="color:#212529;"
                                 <?php endif; ?>>
-                            <!--Die Default-Option ist die hier, ausgegraut, und sobald irgendetwas anderes gewählt wird, ändert sich die Farbe zu schwarz.-->
-                            <!--Danach kann man auch nicht mehr zu dem hier zurückändern.-->
-                            <?php if ($todo == "create"): ?>
-                                <option value="" disabled selected hidden>Bitte Board wählen</option>
+                            <?php if ($todo === "create"): ?>
+                                <option value="" disabled <?= !old('Board') ? 'selected' : '' ?> hidden>Bitte Board wählen</option>
                             <?php endif; ?>
+
                             <?php foreach ($boards as $board): ?>
-                                <?php // Komplizierte Logik, um die richtige Option als ausgewählt zu markieren
-                                $isSelected = '';
-                                // Nach einem Validierungsfehler bei einem anderen Element wird das vorhin ausgewählte Element ($BoardID) in dem Dropdown ausgefüllt.
-                                if (($todo === "create" || $todo === "update") && isset($BoardID)) {
-                                    $isSelected = ($BoardID == $board['id']) ? 'selected' : '' ;
-                                } // Beim Laden des Formulars zum Bearbeiten oder Löschen wird das Element ausgewählt, das zu dem betroffenen Spalten-Element gehört.
-                                elseif (($todo === "update" || $todo === "delete")) {
-                                    $isSelected = ($selected_board['id'] == $board['id']) ? 'selected' : '' ;
-                                }
-                                ?>
-                                <option value="<?= esc($board['id']) ?>"
-                                        style="color:#000;"
-                                        <?=$isSelected?>>
+                                <option value="<?= esc($board['id']) ?>" style="color:#000;"
+                                        <?= (old('Board', $selected_spalte['boardsid'] ?? '') == $board['id']) ? 'selected' : '' ?>>
                                     <?= esc($board['board']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <?php if (isset($error['BoardID'])): ?>
-                            <div class="invalid-feedback">
-                                <?= esc($error['BoardID']) ?>
+                        <?php if (session('errors.Board')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.Board')) ?>
                             </div>
                         <?php endif; ?>
                     </div>

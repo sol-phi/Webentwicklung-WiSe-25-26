@@ -53,8 +53,7 @@ abstract class BaseController extends Controller
 
         // Preload any models, libraries, etc, here.
 
-        // E.g.: $this->session = service('session');
-        // Aktiviert CodeIgniters Validierung
+        $this->session = \Config\Services::session();
         $this->validation = \Config\Services::validation();
     }
 }
