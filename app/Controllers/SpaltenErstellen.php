@@ -40,12 +40,6 @@ class SpaltenErstellen extends BaseController
             return redirect()->to(base_url('public/spalten'));
         }
 
-        if (session('data') !== null) {
-            // Bei gescheiterter Validierung werden hier alle bis dahin korrekt ausgefüllten Werte mit übergeben,
-            // damit diese beim Neuladen der Seite in den Formularfeldern bleiben. Plus die neuen Fehlermeldungen.
-            // session('data') hat bei gleichen Array-Schlüsseln Vorrang vor $data.
-            $data = array_merge($data, session('data'));
-        }
 
         echo view('templates/header');
         echo view('templates/navigation');
