@@ -1,4 +1,14 @@
 <div class="container mt-4 mb-4">
+
+    <?php if (session()->has('errors')): ?>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <?php foreach (session('errors') as $error): ?>
+                    <li><?= esc($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
     <!-- margin_top-4 -->
     <div class="card">
         <!-- font_size-4 -->

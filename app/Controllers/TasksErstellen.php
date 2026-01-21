@@ -116,42 +116,41 @@ class TasksErstellen extends BaseController
     // und $boardId, $tod0 und $taskId. werden in der URL als Parameter übergeben, und darauf kann mit AutoRouting direkt hier zugegriffen werden.
     public function postSubmit($view = null, $boardId = null, $todo = null, $taskId = null)
     {
-        // Abfangen von URL-Manipulationen hier nicht notwendig, da diese Funktion nut mit fest vordefinierten Parametern durch die View aufgerufen wird.
-        // Datensicherheit wird durch vorherige Abfänge von URL-Manipulationen gewährleistet.
+        // Validierung nur bei Create und Update
+        if ($todo !== "delete") {
+            $rules = config('MyRules')->taskserstellen;
+            $errors = config('MyRules')->taskserstellen_errors;
 
-        // Füllt die POST-Daten in ein Array, um sie an das Model zu übergeben.
+            if (!$this->validate($rules, $errors)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+        }
+
         $data = [
-            'Bezeichnung'       => $this->request->getPost('Bezeichnung'),
-            'TaskartID'         => $this->request->getPost('TaskartID'),
-            'PersonID'          => $this->request->getPost('PersonID'),
-            'SpaltenID'         => $this->request->getPost('SpaltenID'),
-            'SortID'            => $this->request->getPost('SortID'),
-            'Erinnerungsdatum'  => $this->request->getPost('Erinnerungsdatum'),
-            'Erinnerung'        => $this->request->getPost('Erinnerung') ? 1 : 0,
-            'Notizen'             => $this->request->getPost('Notizen'),
+            'Bezeichnung'      => $this->request->getPost('Bezeichnung'),
+            'TaskartID'        => $this->request->getPost('TaskartID'),
+            'PersonID'         => $this->request->getPost('PersonID'),
+            'SpaltenID'        => $this->request->getPost('SpaltenID'),
+            'SortID'           => $this->request->getPost('SortID'),
+            'Erinnerungsdatum' => $this->request->getPost('Erinnerungsdatum'),
+            'Erinnerung'       => $this->request->getPost('Erinnerung') ? 1 : 0,
+            'Notizen'          => $this->request->getPost('Notizen'),
         ];
 
         $tasksModel = new TasksModel();
         $session = session();
-        // Differenzierung zwischen Cards- und Table-Ansicht geschieht in der View
+
         if ($todo == "create") {
-            // Die Daten werden nun als neuer Task im Model in die Datenbank eingefügt.
             $tasksModel->createTask($data);
             $session->setFlashdata('success', 'Task erstellt!');
-        }
-        elseif ($todo == "update") {
-            // Die Daten werden nun an der Stelle id == $taskId die vorherige Zeile überschreiben, in der Datenbank, durch das Model
+        } elseif ($todo == "update") {
             $tasksModel->updateTask($data, $taskId);
             $session->setFlashdata('success', 'Task aktualisiert.');
-        }
-        elseif ($todo == "delete") {
-            // Die Datenbank wird nun nach $taskid durchsucht, und dessen Zeile gelöscht.
+        } elseif ($todo == "delete") {
             $tasksModel->deleteTask($taskId);
-            // Kein Fehler, Löschen soll nur rot angezeigt werden.
             $session->setFlashdata('error', 'Task gelöscht.');
         }
 
-        // Leitet zurück dorthin, von wo die Erstellen View aufgerufen wurde.
-        return redirect()->to(base_url('public/tasks/' . $view . (($view == "cards") ? '/' . $boardId : '' ) ));
+        return redirect()->to(base_url('public/tasks/' . $view . (($view == "cards") ? '/' . $boardId : '')));
     }
 }

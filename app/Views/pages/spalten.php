@@ -1,4 +1,29 @@
 <div class="container mt-4 mb-4">
+
+    <?php
+    $success = session()->getFlashdata('success');
+    $error = session()->getFlashdata('error');
+    $errors = session('errors');
+    ?>
+
+    <?php if ($success): ?>
+        <div class="alert alert-success"><?= esc($success) ?></div>
+    <?php endif; ?>
+
+    <?php if ($error): ?>
+        <div class="alert alert-danger"><?= esc($error) ?></div>
+    <?php endif; ?>
+
+    <?php if ($errors): ?>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <?php foreach ($errors as $err): ?>
+                    <li><?= esc($err) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
     <!-- margin_top-4 -->
     <div class="card">
         <!-- font_size-4 -->
@@ -10,7 +35,7 @@
             <!-- class: btn sind die abgerundeten Kanten, btn-primary die Farbe und mb-3 der Abstand zur Tabelle -->
             <!-- id="toolbar" dient dazu, den Knopf zu der Zeile über der Tabelle hinzuzufügen, zu den anderen Elementen wie das Suchfeld -->
             <div id="toolbar">
-                <a href="<?= base_url('public/spalten-erstellen') ?>" class="btn btn-primary">
+                <a href="<?= base_url('public/spalten-erstellen/create') ?>" class="btn btn-primary">
                     Neu
                 </a>
             </div>
@@ -34,14 +59,18 @@
                 <?php foreach ($spalten as $spalte): ?>
                     <tr>
                         <td><?= esc($spalte['id']) ?></td>
-                        <td><?= esc($spalte['boardsid']) ?></td>
+                        <td><?= esc($spalte['board']) ?></td>
                         <td><?= esc($spalte['sortid']) ?></td>
                         <td><?= esc($spalte['spalte']) ?></td>
                         <td><?= esc($spalte['spaltenbeschreibung']) ?></td>
                         <td>
                             <div class="ml-1 d-inline-flex gap-3 ms-2"> <!-- class für besseres Spacing -->
-                                <i class="fa-solid fa-pen-to-square text-primary"></i>
-                                <i class="fa-solid fa-trash text-primary"></i>
+                                <a href="<?= base_url('public/spalten-erstellen/update/'. $spalte['id'])?>">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>
+                                <a href="<?= base_url('public/spalten-erstellen/delete/'. $spalte['id'])?>">
+                                    <i class="fa-solid fa-trash text-primary"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

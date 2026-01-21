@@ -1,12 +1,27 @@
 <div class="container mt-4 mb-4">
 
     <?php
-    // Zeige Flash\-Messages (Bootstrap Alerts)
-    if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
-    <?php endif;
-    if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger"><?= esc(session()->getFlashdata('error')) ?></div>
+    $success = session()->getFlashdata('success');
+    $error = session()->getFlashdata('error');
+    $errors = session('errors');
+    ?>
+
+    <?php if ($success): ?>
+        <div class="alert alert-success"><?= esc($success) ?></div>
+    <?php endif; ?>
+
+    <?php if ($error): ?>
+        <div class="alert alert-danger"><?= esc($error) ?></div>
+    <?php endif; ?>
+
+    <?php if ($errors): ?>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <?php foreach ($errors as $err): ?>
+                    <li><?= esc($err) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     <?php endif; ?>
 
     <!-- margin_top-4 -->
