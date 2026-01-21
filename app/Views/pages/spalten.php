@@ -1,27 +1,12 @@
 <div class="container mt-4 mb-4">
 
     <?php
-    $success = session()->getFlashdata('success');
-    $error = session()->getFlashdata('error');
-    $errors = session('errors');
-    ?>
-
-    <?php if ($success): ?>
-        <div class="alert alert-success"><?= esc($success) ?></div>
-    <?php endif; ?>
-
-    <?php if ($error): ?>
-        <div class="alert alert-danger"><?= esc($error) ?></div>
-    <?php endif; ?>
-
-    <?php if ($errors): ?>
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                <?php foreach ($errors as $err): ?>
-                    <li><?= esc($err) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+    // Zeige Flash-Messages (Bootstrap Alerts) als Bestätigungsmeldung, wenn von einem erfolgreichen Submit von der Erstellen View kommend
+    if (session()->getFlashdata('success')): ?>
+        <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
+    <?php endif;
+    if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= esc(session()->getFlashdata('error')) ?></div>
     <?php endif; ?>
 
     <!-- margin_top-4 -->
@@ -52,7 +37,7 @@
                     <th class="text-nowrap" data-sortable="true">Sort-ID</th>
                     <th class="text-nowrap" data-sortable="true">Spalte</th>
                     <th class="text-nowrap" data-sortable="true">Spaltenbeschreibung</th>
-                    <th class="text-nowrap" data-sortable="true">Bearbeiten</th>
+                    <th class="text-nowrap" data-sortable="true">Aktionen</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,11 +49,11 @@
                         <td><?= esc($spalte['spalte']) ?></td>
                         <td><?= esc($spalte['spaltenbeschreibung']) ?></td>
                         <td>
-                            <div class="ml-1 d-inline-flex gap-3 ms-2"> <!-- class für besseres Spacing -->
-                                <a href="<?= base_url('public/spalten-erstellen/update/'. $spalte['id'])?>">
+                            <div class="d-inline-flex gap-3">
+                                <a href="<?= base_url('public/spalten-erstellen/update/' . $spalte['id'])?>">
                                     <i class="fa-solid fa-pen-to-square text-primary"></i>
                                 </a>
-                                <a href="<?= base_url('public/spalten-erstellen/delete/'. $spalte['id'])?>">
+                                <a href="<?= base_url('public/spalten-erstellen/delete/' . $spalte['id'])?>">
                                     <i class="fa-solid fa-trash text-primary"></i>
                                 </a>
                             </div>

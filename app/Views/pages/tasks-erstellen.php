@@ -1,14 +1,4 @@
 <div class="container mt-4 mb-4">
-
-    <?php if (session()->has('errors')): ?>
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                <?php foreach (session('errors') as $error): ?>
-                    <li><?= esc($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
     <!-- margin_top-4 -->
     <div class="card">
         <!-- font_size-4 -->
@@ -37,7 +27,6 @@
         <div class="card-body">
             <!--Je nach Ursprungsort wird der submit-Befehl anders gestaltet, damit dieser weiß, wohin anschließend zurückgeleitet werden soll.-->
             <!--Für Table dient die Board-ID von 0 dazu, dass die Parameterreihenfolge in der submit-Funktion konsistent bleibt.-->
-            <!--Für Table dient die Board-ID von 0 dazu, dass die Parameterreihenfolge in der submit-Funktion konsistent bleibt.-->
             <form method="POST"
                 <?php if (isset($cards) && $todo == "create"): ?>
                     action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/create') ?>"
@@ -61,17 +50,20 @@
                     <div class="col-md-2">
                         <label for="Bezeichnung" class="col-form-label">Bezeichnung</label>
                     </div>
+                    <!--Für die anderen Felder analog-->
                     <div class="col-md-10">
                         <!--Im Voraus ausgefüllt, wenn ein Task zum Bearbeiten oder Löschen ausgewählt wurde-->
                         <!--Beim Löschen soll das Feld deaktiviert sein-->
                         <!--Für die anderen Felder analog-->
-                        <input type="text" class="form-control" id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für den Task" required
-                               <?php if ($todo == "update" || $todo == "delete"): ?>
-                                   value="<?= esc($selected_task['tasks']) ?>"
-                               <?php endif; ?>
-                               <?php if ($todo == "delete"): ?>
-                                   disabled
-                               <?php endif; ?>>
+                        <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
+                               id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für den Task"
+                               value="<?= old('Bezeichnung', $selected_task['tasks'] ?? '') ?>"
+                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                        <?php if (session('errors.Bezeichnung')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.Bezeichnung')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -80,36 +72,37 @@
                     <div class="col-md-2">
                         <label for="TaskartID" class="col-form-label">Taskart</label>
                     </div>
+                    <!--Für die anderen Dropdowns analog-->
                     <div class="col-md-10">
                         <!--Bei Create wird der Dropdown leer und ausgegraut angezeigt. Sobald etwas ausgewählt wird, ändert sich die Schriftfarbe zu schwarz.-->
                         <!--Bei Edit und Delete hingegen ist schon ein Wert eingefüllt, daher immer schwarz als Default.-->
                         <!--Bei Delete ist der Dropdown wie bei den anderen Feldern deaktiviert.-->
                         <!--Für die anderen Dropdowns analog-->
-                        <select class="form-select" id="TaskartID" name="TaskartID" required
+                        <select class="form-select <?= session('errors.TaskartID') ? 'is-invalid' : '' ?>"
+                                id="TaskartID" name="TaskartID"
                                 <?php if ($todo === "create"): ?>
-                                    style="color:#6c757d;"
+                                    style="color:<?= old('TaskartID') ? '#212529' : '#6c757d' ?>;"
                                     onchange="this.style.color='#212529'"
+                                <?php else: ?>
+                                    style="color:#212529;"
                                 <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>
-                                    disabled
-                                <?php endif; ?>>
+                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
                             <?php if ($todo == "create"): ?>
-                                <option value="" disabled selected hidden>Bitte Taskart wählen</option>
+                                <option value="" disabled <?= !old('TaskartID') ? 'selected' : '' ?> hidden>Bitte Taskart wählen</option>
                             <?php endif; ?>
 
                             <?php foreach ($taskarten as $taskart): ?>
-                                <!--style="color:#000;" dient dazu, die Dropdown-Einträge selbst direkt schwarz anzuzeigen-->
-                                <!--Die Taskarten werden dynamisch aus der Datenbank geladen,-->
-                                <!--und beim Bearbeiten/Löschen wird die Taskart, die zu dem Task gehört, im Voraus ausgewählt.-->-->
-                                <!--Für die anderen Dropdowns analog-->
                                 <option value="<?= esc($taskart['id']) ?>" style="color:#000;"
-                                        <?php if (($todo == "update" || $todo == "delete") && ($selected_taskart['id'] == $taskart['id'])): ?>
-                                            selected
-                                        <?php endif; ?>>
+                                        <?= (old('TaskartID', $selected_taskart['id'] ?? '') == $taskart['id']) ? 'selected' : '' ?>>
                                     <?= esc($taskart['taskart']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <?php if (session('errors.TaskartID')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.TaskartID')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -118,27 +111,31 @@
                         <label for="PersonID" class="col-form-label">Zugewiesene Person</label>
                     </div>
                     <div class="col-md-10">
-                        <select class="form-select" id="PersonID" name="PersonID" required
+                        <select class="form-select <?= session('errors.PersonID') ? 'is-invalid' : '' ?>"
+                                id="PersonID" name="PersonID"
                                 <?php if ($todo === "create"): ?>
-                                    style="color:#6c757d;"
+                                    style="color:<?= old('PersonID') ? '#212529' : '#6c757d' ?>;"
                                     onchange="this.style.color='#212529'"
+                                <?php else: ?>
+                                    style="color:#212529;"
                                 <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>
-                                    disabled
-                                <?php endif; ?>>
+                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
                             <?php if ($todo == "create"): ?>
-                                <option value="" disabled selected hidden>Bitte Person wählen</option>
+                                <option value="" disabled <?= !old('PersonID') ? 'selected' : '' ?> hidden>Bitte Person wählen</option>
                             <?php endif; ?>
 
                             <?php foreach ($personen as $person): ?>
                                 <option value="<?= esc($person['id']) ?>" style="color:#000;"
-                                        <?php if (($todo == "update" || $todo == "delete") && ($selected_person['id'] == $person['id'])): ?>
-                                            selected
-                                        <?php endif; ?>>
+                                        <?= (old('PersonID', $selected_person['id'] ?? '') == $person['id']) ? 'selected' : '' ?>>
                                     <?= esc($person['vorname']) ?> <?= esc($person['name']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <?php if (session('errors.PersonID')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.PersonID')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -147,32 +144,33 @@
                         <label for="SpaltenID" class="col-form-label">Spalte</label>
                     </div>
                     <div class="col-md-10">
-                        <select class="form-select" id="SpaltenID" name="SpaltenID" required
+                        <select class="form-select <?= session('errors.SpaltenID') ? 'is-invalid' : '' ?>"
+                                id="SpaltenID" name="SpaltenID"
                                 <?php if ($todo === "create"): ?>
-                                    style="color:#6c757d;"
+                                    style="color:<?= old('SpaltenID') ? '#212529' : '#6c757d' ?>;"
                                     onchange="this.style.color='#212529'"
+                                <?php else: ?>
+                                    style="color:#212529;"
                                 <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>
-                                    disabled
-                                <?php endif; ?>>
+                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
                             <?php if ($todo == "create"): ?>
-                                <option value="" disabled selected hidden>Bitte Spalte wählen</option>
+                                <option value="" disabled <?= !old('SpaltenID') ? 'selected' : '' ?> hidden>Bitte Spalte wählen</option>
                             <?php endif; ?>
 
                             <?php foreach ($spalten as $spalte): ?>
-                                <!--Falls in der Kartenansicht, nur Spalten des ausgewählten Boards anzeigen-->
                                 <?php if (isset($table) || (isset($cards) && $spalte['boardsid'] == $selected_board['id'])): ?>
-                                    <!--Falls beim Bearbeiten/Löschen, dann die Spalte, die zum Task gehört, im Voraus auswählen-->
                                     <option value="<?= esc($spalte['id']) ?>" style="color:#000;"
-                                            <?php if (($todo == "update" || $todo == "delete") &&
-                                                    ($selected_spalte['id'] == $spalte['id'])): ?>
-                                                selected
-                                            <?php endif; ?>>
+                                            <?= (old('SpaltenID', $selected_spalte['id'] ?? '') == $spalte['id']) ? 'selected' : '' ?>>
                                         <?= esc($spalte['spalte']) ?>
                                     </option>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
+                        <?php if (session('errors.SpaltenID')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.SpaltenID')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -181,13 +179,15 @@
                         <label for="SortID" class="col-form-label">SortID</label>
                     </div>
                     <div class="col-md-10">
-                        <input type="number" class="form-control" id="SortID" name="SortID" placeholder="ID zum Sortieren" required
-                                <?php if ($todo == "update" || $todo == "delete"): ?>
-                                    value="<?= esc($selected_task['sortid']) ?>"
-                                <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>
-                                    disabled
-                                <?php endif; ?>>
+                        <input type="number" class="form-control <?= session('errors.SortID') ? 'is-invalid' : '' ?>"
+                               id="SortID" name="SortID" placeholder="ID zum Sortieren"
+                               value="<?= old('SortID', $selected_task['sortid'] ?? '') ?>"
+                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                        <?php if (session('errors.SortID')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.SortID')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -199,16 +199,17 @@
                         <!--Zu Beginn beim Erstellen ist es leer und ausgegraut.-->
                         <!--Beim Bearbeiten/Löschen ist es schon befüllt, daher immer schwarz als Default.-->
                         <!--Sobald ein Datum komplett eingegeben wurde, wird die Schrift schwarz. Wenn nicht mehr vollständig, wird es wieder grau.-->
-                        <input type="datetime-local" class="form-control" id="Erinnerungsdatum" name="Erinnerungsdatum" placeholder="Erinnerungsdatum" required
+                        <input type="datetime-local" class="form-control <?= session('errors.Erinnerungsdatum') ? 'is-invalid' : '' ?>"
+                               id="Erinnerungsdatum" name="Erinnerungsdatum"
                                oninput="this.style.color = this.value ? '#212529' : '#6c757d'"
-                                <?php if ($todo == "create"): ?>
-                                    style="color:#6c757d;"
-                               <?php elseif ($todo == "update" || $todo == "delete"): ?>
-                                   value="<?= esc($selected_task['erinnerungsdatum']) ?>"
-                               <?php endif; ?>
-                               <?php if ($todo == "delete"): ?>
-                                   disabled
-                               <?php endif; ?>>
+                               value="<?= old('Erinnerungsdatum', $selected_task['erinnerungsdatum'] ?? '') ?>"
+                                <?= ($todo === "create") ? 'style="color:#6c757d;"' : '' ?>
+                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                        <?php if (session('errors.Erinnerungsdatum')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.Erinnerungsdatum')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -237,12 +238,16 @@
                         <label for="Notizen" class="col-form-label">Notizen</label>
                     </div>
                     <div class="col-md-10"> <!-- rows="5" macht die textarea höher. So formatiert, damit in der Textarea keine Einschübe auftauchen -->
-                        <textarea type="text" class="form-control" rows="5" id="Notizen" name="Notizen" placeholder="Weitere Bemerkungen zum Task" required
-                        <?php if ($todo == "delete"): ?>
-                            disabled
-                        <?php endif; ?>
-                        ><?php if ($todo == "update" || $todo == "delete"): ?><?= esc($selected_task['notizen']) ?><?php endif; ?></textarea>
+                        <textarea class="form-control <?= session('errors.Notizen') ? 'is-invalid' : '' ?>"
+                                  rows="5" id="Notizen" name="Notizen" placeholder="Weitere Bemerkungen zum Task"
+                                  <?php if ($todo == "delete"): ?>disabled<?php endif; ?>><?= old('Notizen', $selected_task['notizen'] ?? '') ?></textarea>
                         <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
+
+                        <?php if (session('errors.Notizen')): ?>
+                            <div class="invalid-feedback d-block">
+                                <?= esc(session('errors.Notizen')) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 

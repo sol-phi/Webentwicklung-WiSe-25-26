@@ -1,27 +1,12 @@
 <div class="container mt-4 mb-4">
 
     <?php
-    $success = session()->getFlashdata('success');
-    $error = session()->getFlashdata('error');
-    $errors = session('errors');
-    ?>
-
-    <?php if ($success): ?>
-        <div class="alert alert-success"><?= esc($success) ?></div>
-    <?php endif; ?>
-
-    <?php if ($error): ?>
-        <div class="alert alert-danger"><?= esc($error) ?></div>
-    <?php endif; ?>
-
-    <?php if ($errors): ?>
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                <?php foreach ($errors as $err): ?>
-                    <li><?= esc($err) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+    // Zeige Flash-Messages (Bootstrap Alerts) als Bestätigungsmeldung, wenn von einem erfolgreichen Submit von der Erstellen View kommend
+    if (session()->getFlashdata('success')): ?>
+        <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
+    <?php endif;
+    if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= esc(session()->getFlashdata('error')) ?></div>
     <?php endif; ?>
 
     <!-- margin_top-4 -->
@@ -82,7 +67,11 @@
                             <td><?= esc($task['sortid']) ?></td>
                             <td><?= esc($task['tasks']) ?></td>
                             <td><?= esc($task['erstelldatum']) ?></td>
-                            <td><?= esc($task['erinnerungsdatum']) ?></td>
+                            <!--Wenn das Erinnerungsdatum nicht in der CRUD-View gesetzt ist, wird es automatisch auf 0000-00-00 00:00:00 gesetzt.
+                            Hier verstecken wir das stattdessen.-->
+                            <td><?php if (!(empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00')): ?>
+                                    <?= esc($task['erinnerungsdatum']) ?>
+                                <?php endif; ?></td>
                             <td><?= esc($task['erinnerung']) ?></td>
                             <td><?= esc($task['notizen']) ?></td>
                             <td><?= esc($task['erledigt']) ?></td>

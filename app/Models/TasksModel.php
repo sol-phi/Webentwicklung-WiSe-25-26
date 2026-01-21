@@ -47,7 +47,7 @@ class TasksModel extends Model
         $this->tasks = $this->db->table('tasks');
         // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
         $this->tasks->where('id', $taskId)->update([
-            //'id' hat Auto-Increment
+            //'id' nicht nötig, da wir den alten Wert übernehmen
             'personenid'          => $data['PersonID'],
             'taskartenid'         => $data['TaskartID'],
             'spaltenid'           => $data['SpaltenID'],
