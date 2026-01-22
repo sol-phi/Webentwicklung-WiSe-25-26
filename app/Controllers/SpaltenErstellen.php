@@ -63,6 +63,7 @@ class SpaltenErstellen extends BaseController
 //                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
                 return redirect()
                     ->to(base_url('public/spalten-erstellen/' . $todo . (($todo == 'update' || $todo == 'delete') ? '/' . $spaltenId: '')))
+                    ->withInput()  // ← Wichtig für old() in der View
                     ->with('errors', $this->validator->getErrors());
             }
         }
