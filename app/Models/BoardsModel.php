@@ -17,4 +17,12 @@ class BoardsModel extends Model
         $this->boards = $this->db->table('boards');
         return $this->boards->select('*')->where('id', $boardId)->get()->getRowArray();
     }
+
+    // Gibt den einen Board zurück, zu dem diese Spalte gehört, als RowArray (eindimensional)
+    // Wurde in Philips-Version verwendet, nicht in Maxim's, Vollständigkeitshalber da gelassen.
+    public function getDataFromSpalte($spaltenId){
+        $this->boards = $this->db->table('boards');
+        return $this->boards->select('boards.*')->join('spalten', 'boards.id = spalten.boardsid')
+            ->where('spalten.id', $spaltenId)->get()->getRowArray();
+    }
 }

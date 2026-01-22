@@ -60,7 +60,10 @@ class SpaltenErstellen extends BaseController
             $errors = config('MyRules')->spaltenerstellen_errors;
 
             if (!$this->validate($rules, $errors)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+//                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                return redirect()
+                    ->to(base_url('public/spalten-erstellen/' . $todo . (($todo == 'update' || $todo == 'delete') ? '/' . $spaltenId: '')))
+                    ->with('errors', $this->validator->getErrors());
             }
         }
 

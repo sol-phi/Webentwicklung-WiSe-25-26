@@ -122,7 +122,11 @@ class TasksErstellen extends BaseController
             $errors = config('MyRules')->taskserstellen_errors;
 
             if (!$this->validate($rules, $errors)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+//                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+                return redirect()
+                    ->to(base_url('public/tasks-erstellen/' . $view . (($view == "cards") ? '/' . $boardId : '' ) . '/' . $todo . (($todo == 'update' || $todo == 'delete') ? '/' . $taskId: '') ))
+                    ->withInput()
+                    ->with('errors', $this->validator->getErrors());
             }
         }
 

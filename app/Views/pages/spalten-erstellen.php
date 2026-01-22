@@ -37,7 +37,7 @@
                         <!--Im Voraus ausgefüllt, wenn eine Spalte zum Bearbeiten oder Löschen ausgewählt wurde-->
                         <!--Beim Löschen soll das Feld deaktiviert sein-->
                         <!--Class: Wenn ein Fehler auftritt, wird das Feld rot umrandet.-->
-                        <input type="text" class="form-control <?=(isset($error['Bezeichnung']))?'is-invalid':''?>"
+                        <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für die Spalte"
                                value="<?= old('Bezeichnung', $selected_spalte['spalte'] ?? '') ?>"
                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
