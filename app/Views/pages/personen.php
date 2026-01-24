@@ -7,7 +7,7 @@
         </div>
         <div class="card-body">
             <div id="toolbar">
-                <a href="<?= base_url('public/personen-erstellen') ?>" class="btn btn-primary disabled">
+                <a href="<?= base_url('public/personen-erstellen/create') ?>" class="btn btn-primary">
                     Neu
                 </a>
             </div>
@@ -25,6 +25,7 @@
                     <th class="text-nowrap" data-sortable="true">E-Mail</th>
                     <!--Sollte man besser nicht anzeigen-->
                     <!--<th class="text-nowrap" data-sortable="true">Passwort</th>-->
+                    <th class="text-nowrap" data-sortable="true">Aktionen</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,6 +36,19 @@
                         <td><?= esc($person['name']) ?></td>
                         <td><?= esc($person['email']) ?></td>
                         <!--<td><?php /*= esc($person['passwort']) */?></td>-->
+                        <td>
+                            <div class="d-inline-flex gap-2">
+                                <a href="<?= base_url('public/personen-erstellen/copy/' . $person['id'])?>">
+                                    <i class="fa-solid fa-copy text-primary"></i>
+                                </a>
+                                <a href="<?= base_url('public/personen-erstellen/update/' . $person['id'])?>">
+                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                </a>
+                                <a href="<?= base_url('public/personen-erstellen/delete/' . $person['id'])?>">
+                                    <i class="fa-solid fa-trash text-primary"></i>
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

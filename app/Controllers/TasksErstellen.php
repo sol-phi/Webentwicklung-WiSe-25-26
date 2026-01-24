@@ -34,7 +34,7 @@ class TasksErstellen extends BaseController
         // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn kein gültiger Task beim Erstellen/Löschen ausgewählt ist.
         // $data['selected_task'] ist nicht gesetzt, wenn die $taskId ungültig ist.
         // Update und Delete müssen eine *valide* TaskId besitzen, create darf überhaupt keine TaskId besitzen.
-        if ((($todo == "update" || $todo == "delete") && !isset($data['selected_task']))  ||
+        if ((($todo == "copy" || $todo == "update" || $todo == "delete") && !isset($data['selected_task']))  ||
             ($todo == "create" && isset($taskId)) ) {
             return redirect()->to(base_url('public/tasks/table'));
         }
@@ -42,13 +42,13 @@ class TasksErstellen extends BaseController
         if ($todo == "create") {
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
             $data['todo'] = "create";
-        } elseif ($todo == "update" || $todo == "delete") {
+        } elseif ($todo == "copy" || $todo == "update" || $todo == "delete") {
             // Damit die entsprechenden Dropdowns mit den Daten zu dem dazugehörigen Task ausgefüllt werden können.
             $data['selected_spalte'] = $spaltenModel->getDataFromTask($taskId);
             $data['selected_taskart'] = $taskartenModel->getDataFromTask($taskId);
             $data['selected_person'] = $personenModel->getDataFromTask($taskId);
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
-            $data['todo'] = ($todo == "update") ? "update" : "delete";
+            $data['todo'] = $todo;
         } else{ // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn Aktion keine der obigen drei ist.
             return redirect()->to(base_url('public/tasks/table'));
         }
@@ -87,21 +87,21 @@ class TasksErstellen extends BaseController
         if (!isset($data['selected_board'])){
             return redirect()->to(base_url('public/tasks/cards/' . $data['boards'][0]['id']));
         } // Update und Delete müssen eine *valide* TaskId besitzen, create darf überhaupt keine TaskId besitzen.
-        elseif ( (($todo == "update" || $todo == "delete") && !isset($data['selected_task'])) ||
+        elseif ( (($todo == "copy" || $todo == "update" || $todo == "delete") && !isset($data['selected_task'])) ||
                  ($todo == "create" && isset($taskId)) ) {
             return redirect()->to(base_url('public/tasks/cards/' . $data['selected_board']['id']));
         }
 
         if ($todo == "create") {
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
-            $data['todo'] = "create";
-        } elseif ($todo == "update" || $todo == "delete") {
+            $data['todo'] = $todo;
+        } elseif ($todo == "copy" || $todo == "update" || $todo == "delete") {
             // Damit die entsprechenden Dropdowns mit den Daten zu dem dazugehörigen Task ausgefüllt werden können.
             $data['selected_spalte'] = $spaltenModel->getDataFromTask($taskId);
             $data['selected_taskart'] = $taskartenModel->getDataFromTask($taskId);
             $data['selected_person'] = $personenModel->getDataFromTask($taskId);
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
-            $data['todo'] = ($todo == "update") ? "update" : "delete";
+            $data['todo'] = $todo;
         } else{ // Abfangen von URL-Manipulationen: leitet zurück zu dem ersten verfügbaren Board auf der Cards-Ansicht weiter, wenn Aktion keine der obigen drei ist.
             return redirect()->to(base_url('public/tasks/cards/' . $data['selected_board']['id']));
         }
@@ -122,10 +122,10 @@ class TasksErstellen extends BaseController
             $errors = config('MyRules')->taskserstellen_errors;
 
             if (!$this->validate($rules, $errors)) {
-//                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
                 return redirect()
-                    ->to(base_url('public/tasks-erstellen/' . $view . (($view == "cards") ? '/' . $boardId : '' ) . '/' . $todo . (($todo == 'update' || $todo == 'delete') ? '/' . $taskId: '') ))
-                    ->withInput()
+                    ->to(base_url('public/tasks-erstellen/' . $view . (($view == "cards") ? '/' . $boardId : '' ) .
+                        '/' . $todo . (($todo == "copy" || $todo == 'update' || $todo == 'delete') ? '/' . $taskId: '') ))
+                    ->withInput() // ← Wichtig für old() in der View
                     ->with('errors', $this->validator->getErrors());
             }
         }
@@ -147,6 +147,9 @@ class TasksErstellen extends BaseController
         if ($todo == "create") {
             $tasksModel->createTask($data);
             $session->setFlashdata('success', 'Task erstellt!');
+        } elseif ($todo == "copy") { // Wird in der View wie Update behandelt, außer dass der gewählte Task nicht ersetzt, sondern dupliziert wird.
+            $tasksModel->createTask($data);
+            $session->setFlashdata('success', 'Task kopiert.');
         } elseif ($todo == "update") {
             $tasksModel->updateTask($data, $taskId);
             $session->setFlashdata('success', 'Task aktualisiert.');

@@ -23,23 +23,22 @@ class SpaltenErstellen extends BaseController
         // Abfangen von URL-Manipulationen: leitet zurück zu der Spaltenansicht weiter, wenn keine gültige Spalte beim Bearbeiten/Löschen ausgewählt ist.
         // $data['selected_spalte'] ist nicht gesetzt, wenn die $spaltenId ungültig ist.
         // Update und Delete müssen eine *valide* SpaltenId besitzen, create darf überhaupt keine SpaltenId besitzen.
-        if ((($todo == "update" || $todo == "delete") && !isset($data['selected_spalte']))  ||
+        if ((($todo == "copy" || $todo == "update" || $todo == "delete") && !isset($data['selected_spalte']))  ||
             ($todo == "create" && isset($spaltenId)) ) {
             return redirect()->to(base_url('public/spalten'));
         }
 
         if ($todo == "create") {
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
-            $data['todo'] = "create";
-        } elseif ($todo == "update" || $todo == "delete") {
+            $data['todo'] = $todo;
+        } elseif ($todo == "copy" || $todo == "update" || $todo == "delete") {
             // Damit der Board-Dropdown mit den Daten zu der dazugehörigen Spalte ausgefüllt werden kann.
             $data['selected_board'] = $spaltenModel->getDataFromSpalte($spaltenId);
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
-            $data['todo'] = ($todo == "update") ? "update" : "delete";
+            $data['todo'] = $todo;
         } else{ // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn Aktion keine der obigen drei ist.
             return redirect()->to(base_url('public/spalten'));
         }
-
 
         echo view('templates/header');
         echo view('templates/navigation');
@@ -60,9 +59,8 @@ class SpaltenErstellen extends BaseController
             $errors = config('MyRules')->spaltenerstellen_errors;
 
             if (!$this->validate($rules, $errors)) {
-//                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
                 return redirect()
-                    ->to(base_url('public/spalten-erstellen/' . $todo . (($todo == 'update' || $todo == 'delete') ? '/' . $spaltenId: '')))
+                    ->to(base_url('public/spalten-erstellen/' . $todo . (($todo == "copy" || $todo == 'update' || $todo == 'delete') ? '/' . $spaltenId: '')))
                     ->withInput()  // ← Wichtig für old() in der View
                     ->with('errors', $this->validator->getErrors());
             }
@@ -82,6 +80,9 @@ class SpaltenErstellen extends BaseController
         if ($todo == "create") {
             $spaltenModel->createSpalte($data);
             $session->setFlashdata('success', 'Spalte erstellt!');
+        } elseif ($todo == "copy") { // Wird in der View wie Update behandelt, außer dass die gewählte Spalte nicht ersetzt, sondern dupliziert wird.
+            $spaltenModel->createSpalte($data);
+            $session->setFlashdata('success', 'Spalte kopiert.');
         } elseif ($todo == "update") {
             $spaltenModel->updateSpalte($data);
             $session->setFlashdata('success', 'Spalte aktualisiert.');

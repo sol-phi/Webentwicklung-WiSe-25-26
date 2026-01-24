@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\BoardsModel;
 use App\Models\PersonenModel;
 use App\Models\SpaltenModel;
+use App\Models\TaskartenModel;
 use App\Models\TasksModel;
 
 class Tasks extends BaseController
@@ -21,11 +22,18 @@ class Tasks extends BaseController
     // Tasks in Tabellenansicht, im Stil von den Board-, Spalten- und Personenansichten in der Navigation.
     public function getTable(): void
     {
-        // Boards geladen für den Fallback aufs erste verfügbare Board bei URL-Manipulationen bei Redirects zurück zu Cards
+        // Boards geladen für den Fallback aufs erste verfügbare Board bei URL-Manipulationen bei Redirects zurück zu Cards, und zum Anzeigen
         $boardsModel = new BoardsModel();
         $data['boards'] = $boardsModel->getData();
         $tasksModel = new TasksModel();
         $data['tasks'] = $tasksModel->getData();
+        // Folgende Daten geladen, damit dessen Bezeichnungen zu dem Task angezeigt werden können.
+        $spaltenModel = new SpaltenModel();
+        $data['spalten'] = $spaltenModel->getData();
+        $taskartenModel = new TaskartenModel();
+        $data['taskarten'] = $taskartenModel->getData();
+        $personenModel = new PersonenModel();
+        $data['personen'] = $personenModel->getData();
 
         echo view('templates/header');
         echo view('templates/navigation');
@@ -48,6 +56,9 @@ class Tasks extends BaseController
         // Welcher Task zu welcher Spalte gehört, wird in der View gefiltert.
         $tasksModel = new TasksModel();
         $data['tasks'] = $tasksModel->getDataFromBoard($boardId);
+        // Damit in den Task-Cards das dazugehörige Icon der Taskart geladen werden kann.
+        $taskartenModel = new TaskartenModel();
+        $data['taskarten'] = $taskartenModel->getData();
         // Zum Anzeigen bei den Tasks dabei
         $personenModel = new PersonenModel();
         $data['personen'] = $personenModel->getDataFromBoard($boardId);

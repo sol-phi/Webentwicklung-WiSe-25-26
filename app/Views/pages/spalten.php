@@ -49,7 +49,10 @@
                         <td><?= esc($spalte['spalte']) ?></td>
                         <td><?= esc($spalte['spaltenbeschreibung']) ?></td>
                         <td>
-                            <div class="d-inline-flex gap-3">
+                            <div class="d-inline-flex gap-2">
+                                <a href="<?= base_url('public/spalten-erstellen/copy/' . $spalte['id'])?>">
+                                    <i class="fa-solid fa-copy text-primary"></i>
+                                </a>
                                 <a href="<?= base_url('public/spalten-erstellen/update/' . $spalte['id'])?>">
                                     <i class="fa-solid fa-pen-to-square text-primary"></i>
                                 </a>

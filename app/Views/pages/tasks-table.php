@@ -28,6 +28,7 @@
         </div>
 
         <div class="card-body">
+
             <div id="toolbar">
                 <a href="<?= base_url('public/tasks-erstellen/table/create') ?>" class="btn btn-primary">
                     Neu
@@ -43,17 +44,19 @@
                 <thead>
                     <tr>
                         <th class="text-nowrap" data-sortable="true">ID</th>
-                        <th class="text-nowrap" data-sortable="true">Personen-ID</th>
-                        <th class="text-nowrap" data-sortable="true">Taskarten-ID</th>
-                        <th class="text-nowrap" data-sortable="true">Spalten-ID</th>
+                        <th class="text-nowrap" data-sortable="true">Task</th>
+                        <th class="text-nowrap" data-sortable="true">Taskart</th>
+                        <th class="text-nowrap" data-sortable="true">Spalte</th>
+                        <th class="text-nowrap" data-sortable="true">Board</th>
+                        <th class="text-nowrap" data-sortable="true">Person</th>
                         <th class="text-nowrap" data-sortable="true">Sort-ID</th>
-                        <th class="text-nowrap" data-sortable="true">Tasks</th>
+
                         <th class="text-nowrap" data-sortable="true">Erstelldatum</th>
-                        <th class="text-nowrap" data-sortable="true">Erinnerungsdatum</th>
                         <th class="text-nowrap" data-sortable="true">Erinnerung</th>
+                        <th class="text-nowrap" data-sortable="true">Erinnerungsdatum</th>
                         <th class="text-nowrap" data-sortable="true">Notizen</th>
-                        <th class="text-nowrap" data-sortable="true">Erledigt</th>
-                        <th class="text-nowrap" data-sortable="true">Gelöscht</th>
+<!--                        <th class="text-nowrap" data-sortable="true">Erledigt</th>-->
+<!--                        <th class="text-nowrap" data-sortable="true">Gelöscht</th>-->
                         <th class="text-nowrap" data-sortable="true">Aktionen</th>
                     </tr>
                 </thead>
@@ -61,27 +64,68 @@
                     <?php foreach ($tasks as $task): ?>
                         <tr>
                             <td><?= esc($task['id']) ?></td>
-                            <td><?= esc($task['personenid']) ?></td>
-                            <td><?= esc($task['taskartenid']) ?></td>
-                            <td><?= esc($task['spaltenid']) ?></td>
-                            <td><?= esc($task['sortid']) ?></td>
                             <td><?= esc($task['tasks']) ?></td>
-                            <td><?= esc($task['erstelldatum']) ?></td>
+
+                            <?php foreach ($taskarten as $taskart): ?>
+                                <!--Hier durchlaufen wir alle Taskarten, um den passenden Taskart-Namen für den dazugehörigen Task zu laden.-->
+                                <!--Für weitere Einträge analog-->
+                                <?php if ($task['taskartenid'] == $taskart['id']): ?>
+                                    <td>
+                                        <div class="d-flex align-items-baseline gap-2 text-break">
+                                            <i class="fa-solid text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
+                                            <div class="flex-grow-1">
+                                                <?= esc($taskart['taskart']) ?>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <?php break;?>
+                                <?php endif;?>
+                            <?php endforeach;?>
+                            <?php foreach ($spalten as $spalte): ?>
+                                <?php if ($task['spaltenid'] == $spalte['id']): ?>
+                                    <td><?= esc($spalte['spalte']) ?></td>
+                                    <?php foreach ($boards as $board): ?>
+                                        <?php if ($spalte['boardsid'] == $board['id']): ?>
+                                            <td><?= esc($board['board']) ?></td>
+                                            <?php break;?>
+                                        <?php endif;?>
+                                    <?php endforeach;?>
+                                <?php endif;?>
+                            <?php endforeach;?>
+                            <?php foreach ($personen as $person): ?>
+                                <?php if ($task['personenid'] == $person['id']): ?>
+                                    <td><?= esc($person['vorname']) ?> <?= esc($person['name']) ?></td>
+                                    <?php break;?>
+                                <?php endif;?>
+                            <?php endforeach;?>
+
+                            <td><?= esc($task['sortid']) ?></td>
+                            <td><?= esc((new DateTime($task['erstelldatum']))->format('d M Y')) ?></td>
+
+                            <td> <!--Besser als 0 oder 1-->
+                                <?php if ($task['erinnerung'] == 1): ?>
+                                    Ja
+                                <?php else: ?>
+                                    Nein
+                                <?php endif; ?>
+                            </td>
+
                             <!--Wenn das Erinnerungsdatum nicht in der CRUD-View gesetzt ist, wird es automatisch auf 0000-00-00 00:00:00 gesetzt.
                             Hier verstecken wir das stattdessen.-->
                             <td><?php if (!(empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00')): ?>
-                                    <?= esc($task['erinnerungsdatum']) ?>
+                                    <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
                                 <?php endif; ?></td>
-                            <td><?= esc($task['erinnerung']) ?></td>
                             <td><?= esc($task['notizen']) ?></td>
-                            <td><?= esc($task['erledigt']) ?></td>
-                            <td><?= esc($task['geloescht']) ?></td>
+<!--                            <td>--><?php //= esc($task['erledigt']) ?><!--</td>-->
+<!--                            <td>--><?php //= esc($task['geloescht']) ?><!--</td>-->
                             <td>
-                                <div class="d-inline-flex gap-3">
+                                <div class="d-inline-flex gap-2">
+                                    <a href="<?= base_url('public/tasks-erstellen/table/copy/' . $task['id'])?>">
+                                        <i class="fa-solid fa-copy text-primary"></i>
+                                    </a>
                                     <a href="<?= base_url('public/tasks-erstellen/table/update/' . $task['id'])?>">
                                         <i class="fa-solid fa-pen-to-square text-primary"></i>
                                     </a>
-
                                     <a href="<?= base_url('public/tasks-erstellen/table/delete/' . $task['id'])?>">
                                         <i class="fa-solid fa-trash text-primary"></i>
                                     </a>

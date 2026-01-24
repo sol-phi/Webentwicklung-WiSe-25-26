@@ -11,6 +11,7 @@ class TasksModel extends Model
         $this->tasks = $this->db->table('tasks');
         return $this->tasks->select('*')->orderBy('tasks', 'asc')->get()->getResultArray();
     }
+
     // Gibt alle Tasks zurück, die zu dem einen Board gehören.
     // Dafür müssen wir die Spalten mit joinen, um auf den Board zugreifen zu können, zu dem die Tasks alle gehören.
     // Und noch ein orderBy obendrauf, entsprechend Aufgabenstellung von Übung 5
@@ -25,6 +26,8 @@ class TasksModel extends Model
         $this->tasks = $this->db->table('tasks');
         return $this->tasks->select('tasks.*')->where('id', $taskId)->get()->getRowArray();
     }
+
+    // CRUD
     public function createTask($data){
         $this->tasks = $this->db->table('tasks');
         // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und eingefügt.

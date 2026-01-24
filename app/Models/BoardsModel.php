@@ -18,11 +18,22 @@ class BoardsModel extends Model
         return $this->boards->select('*')->where('id', $boardId)->get()->getRowArray();
     }
 
-    // Gibt den einen Board zurück, zu dem diese Spalte gehört, als RowArray (eindimensional)
-    // Wurde in Philips-Version verwendet, nicht in Maxim's, Vollständigkeitshalber da gelassen.
-    public function getDataFromSpalte($spaltenId){
+    // CRUD
+    public function createBoard($data){
         $this->boards = $this->db->table('boards');
-        return $this->boards->select('boards.*')->join('spalten', 'boards.id = spalten.boardsid')
-            ->where('spalten.id', $spaltenId)->get()->getRowArray();
+        $this->boards->insert([
+            //'id' hat Auto-Increment
+            'board' => $data['Bezeichnung'],
+        ]);
+    }
+    public function updateBoard($data){
+        $this->boards = $this->db->table('boards');
+        $this->boards->where('id', $data['boardId'])->update([
+            'board' => $data['Bezeichnung'],
+        ]);
+    }
+    public function deleteBoard($data){
+        $this->boards = $this->db->table('boards');
+        $this->boards->where('id', $data['boardId'])->delete();
     }
 }

@@ -8,6 +8,8 @@
             <?php if (isset($cards)): ?>
                 <?php if ($todo == "create"): ?>
                     <span>Task erstellen - <?= esc($selected_board['board']) ?></span>
+                <?php elseif ($todo == "copy"): ?>
+                    <span>Task kopieren - <?= esc($selected_board['board']) ?></span>
                 <?php elseif ($todo == "update"): ?>
                     <span>Task bearbeiten - <?= esc($selected_board['board']) ?></span>
                 <?php elseif ($todo == "delete"): ?>
@@ -16,6 +18,8 @@
             <?php elseif (isset($table)): ?>
                 <?php if ($todo == "create"): ?>
                     <span>Task erstellen</span>
+                <?php elseif ($todo == "copy"): ?>
+                    <span>Task kopieren</span>
                 <?php elseif ($todo == "update"): ?>
                     <span>Task bearbeiten</span>
                 <?php elseif ($todo == "delete"): ?>
@@ -30,12 +34,16 @@
             <form method="POST"
                 <?php if (isset($cards) && $todo == "create"): ?>
                     action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/create') ?>"
+                <?php elseif (isset($cards) && $todo == "copy"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/copy/' . $selected_task['id']) ?>"
                 <?php elseif (isset($cards) && $todo == "update"): ?>
                     action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/update/' . $selected_task['id']) ?>"
                 <?php elseif (isset($cards) && $todo == "delete"): ?>
                     action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/delete/' . $selected_task['id']) ?>"
                 <?php elseif (isset($table) && $todo == "create"): ?>
                     action="<?= base_url('public/tasks-erstellen/submit/table/0/create') ?>"
+                <?php elseif (isset($table) && $todo == "copy"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/table/0/copy/' . $selected_task['id']) ?>"
                 <?php elseif (isset($table) && $todo == "update"): ?>
                     action="<?= base_url('public/tasks-erstellen/submit/table/0/update/' . $selected_task['id']) ?>"
                 <?php elseif (isset($table) && $todo == "delete"): ?>
@@ -43,18 +51,21 @@
                 <?php endif; ?>>
 
                 <div class="form-group row mb-3">
+                    <!-- mb-3 als Abstand nach unten zum nächsten Element -->
                     <!-- col-md: 2 Spalten von dem Bootstrap-Grid für die Beschreibung vorgesehen, die anderen 10 für den Input -->
                     <!-- col-md kann nicht in die class von <input> und <textarea> gepackt werden, daher hier für Konsistenz überall außen -->
-                    <!-- mb-3 als Abstand nach unten zum nächsten Element -->
                     <!-- Für die anderen Elemente analog -->
                     <div class="col-md-2">
                         <label for="Bezeichnung" class="col-form-label">Bezeichnung</label>
                     </div>
                     <!--Für die anderen Felder analog-->
                     <div class="col-md-10">
-                        <!--Im Voraus ausgefüllt, wenn ein Task zum Bearbeiten oder Löschen ausgewählt wurde-->
-                        <!--Beim Löschen soll das Feld deaktiviert sein-->
-                        <!--Für die anderen Felder analog-->
+                        <!--Class: Wenn ein Fehler auftritt, wird das Feld rot umrandet.-->
+                        <!--old(): Priorität in der Reihenfolge:-->
+                        <!--    Falls Validierung fehlgeschlagen, dann vorherige Werte. -->
+                        <!--    Wenn Copy, Update oder Delete, dann Daten von der DB.-->
+                        <!--    Als Default '' für Create-->
+                        <!--Bei Delete soll das Feld deaktiviert sein-->
                         <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für den Task"
                                value="<?= old('Bezeichnung', $selected_task['tasks'] ?? '') ?>"
@@ -193,17 +204,37 @@
 
                 <div class="form-group row mb-3">
                     <div class="col-md-2">
+                        <label for="Erinnerung" class="col-form-label">Erinnerung</label>
+                    </div>
+                    <div class="col-md-10 d-flex align-items-center">
+                        <!--Der versteckte Input sendet normalerweise den Wert "0".-->
+                        <!--Wenn die Checkbox angehakt ist, wird die PHP-Bedingung getriggert,-->
+                        <!--und je nach $selected_task['erinnerung'] aus der Datenbank ein 'checked' gesetzt,-->
+                        <!--was den Wert 1 sendet, welcher den Wert 0 vom versteckten Input überschreibt.-->
+                        <!--Hacky workaround, da unchecked Checkboxes keinen Wert senden.-->
+                        <input type="hidden" name="Erinnerung" value="0">
+                        <input type="checkbox" class="form-check-input" id="Erinnerung" name="Erinnerung"
+                               value="1"
+                                <?= (($todo == "copy" || $todo === "update" || $todo === "delete") && !empty($selected_task['erinnerung'])) ? 'checked' : '' ?>
+                                <?php if ($todo == "delete"): ?>
+                                    disabled
+                                <?php endif; ?>>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-2">
                         <label for="Erinnerungsdatum" class="col-form-label">Erinnerungsdatum</label>
                     </div>
                     <div class="col-md-10">
-                        <!--Zu Beginn beim Erstellen ist es leer und ausgegraut.-->
-                        <!--Beim Bearbeiten/Löschen ist es schon befüllt, daher immer schwarz als Default.-->
-                        <!--Sobald ein Datum komplett eingegeben wurde, wird die Schrift schwarz. Wenn nicht mehr vollständig, wird es wieder grau.-->
+                        <!--Bei Create ist es ausgegraut, da leer.-->
+                        <!--Beim Kopieren/Bearbeiten/Löschen so wie auch nach einer gescheiterten Validierung ist es schon befüllt, daher schwarz.-->
+                        <!--onInput: Sobald ein Datum komplett eingegeben wurde, wird die Schrift schwarz. Wenn nicht mehr vollständig, wird es wieder grau.-->
                         <input type="datetime-local" class="form-control <?= session('errors.Erinnerungsdatum') ? 'is-invalid' : '' ?>"
                                id="Erinnerungsdatum" name="Erinnerungsdatum"
-                               oninput="this.style.color = this.value ? '#212529' : '#6c757d'"
                                value="<?= old('Erinnerungsdatum', $selected_task['erinnerungsdatum'] ?? '') ?>"
-                                <?= ($todo === "create") ? 'style="color:#6c757d;"' : '' ?>
+                               style="color:<?= !empty(old('Erinnerungsdatum', $selected_task['erinnerungsdatum'] ?? '')) ? '#212529' : '#6c757d' ?>;"
+                               oninput="this.style.color = this.value ? '#212529' : '#6c757d'"
                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
                         <?php if (session('errors.Erinnerungsdatum')): ?>
                             <div class="invalid-feedback d-block">
@@ -215,34 +246,13 @@
 
                 <div class="form-group row mb-3">
                     <div class="col-md-2">
-                        <label for="Erinnerung" class="col-form-label">Erinnerung</label>
-                    </div>
-                    <div class="col-md-10 d-flex align-items-center">
-                        <!--Der versteckte Input sendet normalerweise den Wert "0".-->
-                        <!--Wenn die Checkbox angehakt ist, wird die PHP-Bedingung getriggert,-->
-                        <!--und je nach $selected_task['erinnerung'] aus der Datenbank ein 'checked' gesetzt,-->
-                        <!--was den Wert 1 sendet, welcher den Wert 0 vom versteckten Input überschreibt.-->
-                        <!--Hacky workaround, da unchecked Checkboxes keinen Wert senden.-->
-                        <input type="hidden" name="Erinnerung" value="0">
-                        <input type="checkbox" class="form-check-input" id="Erinnerung" name="Erinnerung"
-                                value="1"
-                                <?= (($todo === "update" || $todo === "delete") && !empty($selected_task['erinnerung'])) ? 'checked' : '' ?>
-                                <?php if ($todo == "delete"): ?>
-                                    disabled
-                                <?php endif; ?>>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <div class="col-md-2">
                         <label for="Notizen" class="col-form-label">Notizen</label>
                     </div>
                     <div class="col-md-10"> <!-- rows="5" macht die textarea höher. So formatiert, damit in der Textarea keine Einschübe auftauchen -->
                         <textarea class="form-control <?= session('errors.Notizen') ? 'is-invalid' : '' ?>"
                                   rows="5" id="Notizen" name="Notizen" placeholder="Weitere Bemerkungen zum Task"
                                   <?php if ($todo == "delete"): ?>disabled<?php endif; ?>><?= old('Notizen', $selected_task['notizen'] ?? '') ?></textarea>
-                        <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
-
+                                  <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
                         <?php if (session('errors.Notizen')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Notizen')) ?>
@@ -254,7 +264,7 @@
                 <!--Verschiedene Buttons je nach Aktion-->
                 <?php if ($todo == "delete"): ?>
                     <button type="submit" class="btn btn-danger">Löschen</button>
-                <?php elseif ($todo == "create" || $todo == "update"): ?>
+                <?php elseif ($todo == "create" || $todo == "copy" || $todo == "update"): ?>
                     <button type="submit" class="btn btn-success">Speichern</button>
                 <?php endif; ?>
 

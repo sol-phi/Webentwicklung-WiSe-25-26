@@ -28,7 +28,6 @@ class SpaltenModel extends Model
     //Gibt die die passende Spalte zur übergebenen SpaltenID zurück
     public function getDataFromSpalte($spaltenId){
         $this->spalten = $this->db->table('spalten');
-
         return $this->spalten
             ->select('spalten.*')
             ->where('id', $spaltenId)
@@ -50,8 +49,7 @@ class SpaltenModel extends Model
             ->where('tasks.id', $taskId)->get()->getRowArray();
     }
 
-    //CRUD
-
+    // CRUD
     public function createSpalte($data){
         $this->spalten = $this->db->table('spalten');
         $this->spalten->insert([
@@ -62,7 +60,6 @@ class SpaltenModel extends Model
             'spaltenbeschreibung' => $data['Beschreibung'],
         ]);
     }
-
     public function updateSpalte($data){
         $this->spalten = $this->db->table('spalten');
         $this->spalten->where('id', $data['spaltenId'])->update([
@@ -72,7 +69,6 @@ class SpaltenModel extends Model
             'spaltenbeschreibung' => $data['Beschreibung'],
         ]);
     }
-
     public function deleteSpalte($data){
         $this->spalten = $this->db->table('spalten');
         $this->spalten->where('id', $data['spaltenId'])->delete();

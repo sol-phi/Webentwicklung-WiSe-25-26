@@ -6,6 +6,8 @@
             <!--Bestimmt Titel des Formulars je nach Aktion-->
             <?php if ($todo == "create"): ?>
                 <span>Spalte erstellen</span>
+            <?php elseif ($todo == "copy"): ?>
+                <span>Spalte kopieren</span>
             <?php elseif ($todo == "update"): ?>
                 <span>Spalte bearbeiten</span>
             <?php elseif ($todo == "delete"): ?>
@@ -18,6 +20,8 @@
             <form method="POST"
                     <?php if ($todo == "create"): ?>
                         action="<?= base_url('public/spalten-erstellen/submit/create') ?>"
+                    <?php elseif ($todo == "copy"): ?>
+                        action="<?= base_url('public/spalten-erstellen/submit/copy/' . $selected_spalte['id']) ?>"
                     <?php elseif ($todo == "update"): ?>
                         action="<?= base_url('public/spalten-erstellen/submit/update/' . $selected_spalte['id']) ?>"
                     <?php elseif ($todo == "delete"): ?>
@@ -25,18 +29,21 @@
                     <?php endif; ?>>
 
                 <div class="form-group row mb-3">
-                    <!-- col-sm: 2 Spalten von dem Bootstrap-Grid für die Beschreibung vorgesehen, die anderen 10 für den Input -->
-                    <!-- col-sm kann nicht in die class von <input> und <textarea> gepackt werden, daher hier für Konsistenz überall außen -->
                     <!-- mb-3 als Abstand nach unten zum nächsten Element -->
+                    <!-- col-md: 2 Spalten von dem Bootstrap-Grid für die Beschreibung vorgesehen, die anderen 10 für den Input -->
+                    <!-- col-md kann nicht in die class von <input> und <textarea> gepackt werden, daher hier für Konsistenz überall außen -->
                     <!-- Für die anderen Elemente analog -->
                     <div class="col-md-2">
                         <label for="Bezeichnung" class="col-form-label">Bezeichnung</label>
                     </div>
                     <!--Für die anderen Felder analog-->
                     <div class="col-md-10">
-                        <!--Im Voraus ausgefüllt, wenn eine Spalte zum Bearbeiten oder Löschen ausgewählt wurde-->
-                        <!--Beim Löschen soll das Feld deaktiviert sein-->
                         <!--Class: Wenn ein Fehler auftritt, wird das Feld rot umrandet.-->
+                        <!--old(): Priorität in der Reihenfolge:-->
+                        <!--    Falls Validierung fehlgeschlagen, dann vorherige Werte. -->
+                        <!--    Wenn Copy, Update oder Delete, dann Daten von der DB.-->
+                        <!--    Als Default '' für Create-->
+                        <!--Bei Delete soll das Feld deaktiviert sein-->
                         <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für die Spalte"
                                value="<?= old('Bezeichnung', $selected_spalte['spalte'] ?? '') ?>"
@@ -58,6 +65,7 @@
                                   rows="5" id="Beschreibung" name="Beschreibung"
                                   placeholder="Weitere Bemerkungen zur Spalte"
                                   <?= ($todo === "delete") ? 'disabled' : '' ?>><?= old('Beschreibung', $selected_spalte['spaltenbeschreibung'] ?? '') ?></textarea>
+                                  <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
                         <?php if (session('errors.Beschreibung')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Beschreibung')) ?>
@@ -88,7 +96,6 @@
                     <div class="col-md-2">
                         <label for="Board" class="col-form-label">Board auswählen</label>
                     </div>
-                    <!--Für die anderen Dropdowns analog-->
                     <div class="col-md-10">
                         <!--Bei Create wird der Dropdown leer und ausgegraut angezeigt, wenn der Benutzer keine Probleme bei der Validierung kriegt.-->
                         <!--Sobald etwas ausgewählt wird, ändert sich die Schriftfarbe zu schwarz.-->
@@ -120,10 +127,11 @@
                         <?php endif; ?>
                     </div>
                 </div>
+
                 <!--Verschiedene Buttons je nach Aktion-->
                 <?php if ($todo == "delete"): ?>
                     <button type="submit" class="btn btn-danger">Löschen</button>
-                <?php elseif ($todo == "create" || $todo == "update"): ?>
+                <?php elseif ($todo == "create" || $todo == "copy" || $todo == "update"): ?>
                     <button type="submit" class="btn btn-success">Speichern</button>
                 <?php endif; ?>
                 <!-- Abbrechen soll wie erwartet das Formular schließen -->
