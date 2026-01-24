@@ -70,4 +70,9 @@ class TasksModel extends Model
         $this->tasks = $this->db->table('tasks');
         $this->tasks->where('id', $taskId)->delete();
     }
+
+    public function updateSpalte($taskId, $spaltenId){
+        $this->tasks = $this->db->table('tasks');
+        $this->tasks->where('id', $taskId)->update(['spaltenid' => $spaltenId]);
+    }
 }

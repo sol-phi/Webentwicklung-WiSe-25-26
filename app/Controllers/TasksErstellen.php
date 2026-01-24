@@ -95,6 +95,11 @@ class TasksErstellen extends BaseController
         if ($todo == "create") {
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
             $data['todo'] = $todo;
+            $preselectedSpalteId = $this->request->getGet('spalte');
+            if ($preselectedSpalteId && $spaltenModel->getDataFromSpalte($preselectedSpalteId)) {
+                $data['selected_spalte'] = $spaltenModel->getDataFromSpalte($preselectedSpalteId);
+            }
+            $data['todo'] = $todo;
         } elseif ($todo == "copy" || $todo == "update" || $todo == "delete") {
             // Damit die entsprechenden Dropdowns mit den Daten zu dem dazugehörigen Task ausgefüllt werden können.
             $data['selected_spalte'] = $spaltenModel->getDataFromTask($taskId);

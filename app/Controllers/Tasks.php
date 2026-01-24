@@ -74,4 +74,12 @@ class Tasks extends BaseController
         echo view('pages/tasks-cards', $data);
         echo view('templates/footer');
     }
+
+    public function getMove($taskId, $newSpaltenId)
+    {
+        $tasksModel = new TasksModel();
+        $tasksModel->updateSpalte($taskId, $newSpaltenId);
+
+        return redirect()->back()->with('success', 'Task verschoben');
+    }
 }

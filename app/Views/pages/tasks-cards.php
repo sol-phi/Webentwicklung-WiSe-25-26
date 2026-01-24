@@ -83,27 +83,38 @@
 
                                 <!--d-flex flex-column, zusammen mit align-items-stretch außen sorgt dafür,
                                 dass alle Spalten in der div nach unten auf Höhe der längsten Spalte gezogen werden-->
-                                <div class="card-body d-flex flex-column gap-3">
+                                <div class="card-body d-flex flex-column gap-3 bg-light">
                                     <?php foreach ($tasks as $task): ?>
                                         <!--In tasks sind alle Tasks für das ausgewählte Board enthalten, daher müssen wir hier nochmal explizit nach Spalte filtern-->
                                         <?php if ($task['spaltenid'] == $spalte['id']): ?>
 
                                             <!--Jeder Task wird als kleine Card innerhalb der Spalte dargestellt-->
                                             <div class="card">
-                                                <div class="card-header bg-light-subtle fw-semibold d-flex align-items-start justify-content-between">
+                                                <div class="card-header bg-light-subtle fw-semibold p-0 d-flex align-items-start justify-content-between overflow-hidden">
                                                     <?php foreach ($taskarten as $taskart): ?>
-                                                        <!--Hier durchlaufen wir alle Taskarten, um das passende Icon für den Task Card Header zu laden-->
                                                         <?php if ($task['taskartenid'] == $taskart['id']): ?>
-                                                            <div class="d-flex align-items-baseline gap-2 text-break">
-                                                                <i class="fa-solid text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
-                                                                <div class="flex-grow-1">
-                                                                    <?= esc($task['tasks']) ?>
+                                                            <div class="d-flex align-items-stretch text-break flex-grow-1">
+                                                                <div class="flex-grow-1 bg-primary bg-opacity-50 py-1 px-2 d-flex align-items-center justify-content-center text-center position-relative">
+                                                                    <div class="card bg-white text-dark small position-absolute start-0 ms-2">
+                                                                        <div class="card-body px-1 py-0">
+                                                                            #<?= str_pad(esc($task['id']), 3, '0', STR_PAD_LEFT) ?>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="ps-5">
+                                                                        <span><?= esc($task['tasks']) ?></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center justify-content-center text-nowrap bg-primary bg-opacity-25 p-2">
+                                                                    <div class="d-flex flex-column align-items-center">
+                                                                        <i class="fa-solid <?= esc($taskart['taskartenicon']) ?>"></i>
+                                                                        <small><?= esc($taskart['taskart']) ?></small>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <?php break;?>
                                                         <?php endif;?>
                                                     <?php endforeach;?>
-                                                    <div class="d-inline-flex gap-2 ms-2">
+                                                    <div class="d-inline-flex gap-2 p-2 ps-3">
                                                         <a href="<?= base_url('public/tasks-erstellen/cards/' . $selected_board['id'] . '/copy/' . $task['id'])?>">
                                                             <i class="fa-solid fa-copy text-primary"></i>
                                                         </a>
@@ -118,7 +129,6 @@
 
                                                 <!--Folgende row/col Struktur sorgt für eine saubere Ausrichtung der Icons und Texte-->
                                                 <div class="card-body">
-                                                    <!--Ineffizient, aber bietet somit auch Support für mehrere Personen für einen Task-->
                                                     <?php foreach ($personen as $person): ?>
                                                         <?php if ($person['id'] == $task['personenid']): ?>
                                                             <div class="row mb-2">
@@ -136,7 +146,6 @@
                                                             <i class="fa-solid fa-calendar text-muted"></i>
                                                         </div>
                                                         <div class="col">
-                                                            <!--DateTime wird nur der Formatierung wegen on the fly erzeugt-->
                                                             <?= esc((new DateTime($task['erstelldatum']))->format('d M Y')) ?>
                                                         </div>
                                                     </div>
@@ -145,37 +154,73 @@
                                                             <i class="fa-solid fa-bell text-muted"></i>
                                                         </div>
                                                         <div class="col">
-                                                            <!--Leere Werte werden in Erinnerungsdatum als '0000-00-00 00:00:00' in der DB gespeichert,
-                                                            daher müssen wir danach testen.-->
                                                             <?php if (empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00'): ?>
                                                                 -
-                                                            <?php else: ?> <!--DateTime wird nur der Formatierung wegen on the fly erzeugt-->
+                                                            <?php else: ?>
                                                                 <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
                                                             <?php endif; ?>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-1">
+
+                                                    <?php if (!empty($task['notizen'])): ?>
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
                                                             <i class="fa-solid fa-sticky-note text-muted"></i>
+                                                            <span class="text-muted small">Notiz</span>
                                                         </div>
-                                                        <div class="col">
-                                                            <?php if (empty($task['notizen'])): ?>
-                                                                -
-                                                            <?php else: ?>
+                                                        <div class="card bg-light">
+                                                            <div class="card-body p-2">
                                                                 <?= esc($task['notizen']) ?>
-                                                            <?php endif; ?>
+                                                            </div>
                                                         </div>
+                                                    <?php endif; ?>
+
+                                                    <!-- Pfeile zum Verschieben der Task -->
+                                                    <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                                                        <?php
+                                                        $current_index = array_search($spalte['id'], array_column($spalten, 'id'));
+                                                        $prev_spalte = $current_index > 0 ? $spalten[$current_index - 1] : null;
+                                                        $next_spalte = $current_index < count($spalten) - 1 ? $spalten[$current_index + 1] : null;
+                                                        ?>
+
+                                                        <?php if ($prev_spalte): ?>
+                                                            <a href="<?= base_url('public/tasks/move/' . $task['id'] . '/' . $prev_spalte['id']) ?>"
+                                                               class="text-secondary"
+                                                               title="← <?= esc($prev_spalte['spalte']) ?>">
+                                                                <i class="fa-solid fa-arrow-left"></i>
+                                                            </a>
+                                                        <?php else: ?>
+                                                            <span class="text-muted opacity-25"><i class="fa-solid fa-arrow-left"></i></span>
+                                                        <?php endif; ?>
+
+                                                        <small class="text-muted">Spalte verschieben</small>
+
+                                                        <?php if ($next_spalte): ?>
+                                                            <a href="<?= base_url('public/tasks/move/' . $task['id'] . '/' . $next_spalte['id']) ?>"
+                                                               class="text-secondary"
+                                                               title="→ <?= esc($next_spalte['spalte']) ?>">
+                                                                <i class="fa-solid fa-arrow-right"></i>
+                                                            </a>
+                                                        <?php else: ?>
+                                                            <span class="text-muted opacity-25"><i class="fa-solid fa-arrow-right"></i></span>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         <?php endif; ?>
                                     <?php endforeach; ?>
+
+                                    <!-- Button zum Erstellen einer neuen Task in dieser Spalte -->
+                                    <a href="<?= base_url('public/tasks-erstellen/cards/' . $selected_board['id'] . '/create?spalte=' . $spalte['id']) ?>"
+                                       class="btn btn-primary w-100">
+                                        <i class="fa-solid fa-plus me-2"></i>Neue Task
+                                    </a>
                                 </div>
 
                             </div>
                         </div>
                     <?php endforeach; ?>
+
 
                     <!--Hacky workaround für Scrollbar an äußerster Card. Damit wird ein weiteres, sehr enges "Spaltenelement" erzeugt, sodass gap-3 nach rechts greift-->
                     <div class="d-flex flex-column flex-shrink-0 gap-3" style="width: 0.001rem;"></div>

@@ -158,7 +158,7 @@
                         <select class="form-select <?= session('errors.SpaltenID') ? 'is-invalid' : '' ?>"
                                 id="SpaltenID" name="SpaltenID"
                                 <?php if ($todo === "create"): ?>
-                                    style="color:<?= old('SpaltenID') ? '#212529' : '#6c757d' ?>;"
+                                    style="color:<?= (old('SpaltenID') || isset($selected_spalte['id'])) ? '#212529' : '#6c757d' ?>;"
                                     onchange="this.style.color='#212529'"
                                 <?php else: ?>
                                     style="color:#212529;"
