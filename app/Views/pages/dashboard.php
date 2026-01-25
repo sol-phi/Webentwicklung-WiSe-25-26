@@ -10,15 +10,16 @@
     <?php endif; ?>
 
     <!-- margin_top-4 -->
-    <div class="card">
+    <div class="card blue-gradient-boards-card">
         <!-- font_size-4 -->
-        <div class="card-header fs-4 d-flex justify-content-between align-items-center fw-semibold">
+        <div class="card-header fs-4 d-flex justify-content-between align-items-center fw-semibold blue-gradient-boards-header"
+             >
             <!--Die data-Werte sollten allesamt datensicher sein, durch vorherige Abfänge von URL-Manipulationen.-->
-            <span>Tasks - <?= esc($selected_board['board']) ?></span>
+            <span><?= esc($selected_board['board']) ?></span>
 
             <div class="d-flex justify-content-between align-items-center">
                 <div class="dropdown me-2">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn blue-gradient-buttons dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         Boards
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -26,22 +27,11 @@
                         <?php foreach ($boards as $board): ?>
                             <li>
                                 <!--URL wird generiert basierend auf der Board-ID, jeder einzelne Board ist seine eigene Unterseite-->
-                                <a class="dropdown-item" href="<?= base_url('public/tasks/cards/' . $board['id']) ?>">
+                                <a class="dropdown-item" href="<?= base_url('public/dashboard/' . $board['id']) ?>">
                                     <?= esc($board['board']) ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
-                    </ul>
-                </div>
-
-                <!--Kleines Extra, um zur alten Tabellenansicht wechseln zu können-->
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Ansicht
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="<?= base_url('public/tasks/cards/'  . $selected_board['id']) ?>">Cards</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url('public/tasks/table') ?>">Tabelle</a></li>
                     </ul>
                 </div>
             </div>
@@ -52,13 +42,15 @@
 
             <div class="px-3">
                 <div id="toolbar" class="d-flex justify-content-between align-items-center">
-                    <a href="<?= base_url('public/tasks-erstellen/cards/' . $selected_board['id'] . '/create')?>" class="btn btn-primary">
-                        Neu
-                    </a>
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <a href="<?= base_url('public/tasks-erstellen/dashboard/' . $selected_board['id'] . '/create')?>" class="btn blue-gradient-buttons">
+                            <i class="fa-solid fa-plus"></i> Neu
+                        </a>
+                    </div>
                     <!--Funktioniert nicht, sollte aber auf jeder Seite drauf sein. Vielleicht für später?-->
                     <div class="input-group ms-3" style="max-width: 250px;">
-                        <input id="taskSearch" type="search" class="form-control" placeholder="Suchen... (WIP)">
-                        <button class="btn btn-outline-primary" type="button" id="button-search">
+                        <input id="taskSearch" type="search" class="form-control blue-gradient-boards-card" placeholder="Suchen... (WIP)">
+                        <button class="btn blue-gradient-buttons" type="button" id="button-search">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
@@ -70,14 +62,16 @@
             <div class="kanban-scroll overflow-x-auto mt-3 px-3">
                 <div class="d-flex flex-nowrap gap-3 align-items-stretch mb-3">
                     <?php foreach ($spalten as $spalte): ?>
-                        <!--Width ist sehr genau gewählt, sodass die 4. Spalte in der Desktop-Sicht gerade so weit reinclippt,
+                        <!--Width ist sehr genau gewählt, sodass die 5. Spalte in der Desktop-Sicht gerade so weit reinclippt,
                         dass Benutzer verstehen, dass sie horizontal scrollen können, auch wenn die Scrollbar nicht direkt sichtbar ist-->
-                        <div class="d-flex flex-column flex-shrink-0 gap-3" style="width: 405px;">
+                        <div class="d-flex flex-column flex-shrink-0 gap-3" style="width: 300px;">
                             <!--Jede Spalte wird in einer vertikalen Card dargestellt-->
-                            <div class="card h-100 w-100">
+                            <div class="card h-100 w-100 blue-gradient-spalten-card">
 
-                                <div class="card-header">
+                                <div class="card-header blue-gradient-spalten-header">
                                     <div class="fs-5 fw-semibold"><?= esc($spalte['spalte']) ?></div>
+                                </div>
+                                <div class="card-header blue-gradient-spalten-beschreibung">
                                     <div class="small"><?= esc($spalte['spaltenbeschreibung']) ?></div>
                                 </div>
 
@@ -89,62 +83,76 @@
                                         <?php if ($task['spaltenid'] == $spalte['id']): ?>
 
                                             <!--Jeder Task wird als kleine Card innerhalb der Spalte dargestellt-->
-                                            <div class="card">
-                                                <div class="card-header bg-light-subtle fw-semibold d-flex align-items-start justify-content-between">
+                                            <div class="card blue-gradient-tasks-card">
+                                                <div class="card-header fw-semibold d-flex align-items-start justify-content-between blue-gradient-tasks-header">
+                                                    <div class="flex-grow-1">
+                                                        <?= esc($task['tasks']) ?>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-header p-0 d-flex align-items-start justify-content-between overflow-hidden">
                                                     <?php foreach ($taskarten as $taskart): ?>
-                                                        <!--Hier durchlaufen wir alle Taskarten, um das passende Icon für den Task Card Header zu laden-->
                                                         <?php if ($task['taskartenid'] == $taskart['id']): ?>
-                                                            <div class="d-flex align-items-baseline gap-2 text-break">
-                                                                <i class="fa-solid text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
-                                                                <div class="flex-grow-1">
-                                                                    <?= esc($task['tasks']) ?>
+                                                            <div class="d-flex align-items-stretch text-break flex-grow-1 blue-gradient-taskarten">
+                                                                <div class="flex-grow-1 py-2 ps-3 d-flex align-items-center justify-content-between text-start position-relative">
+                                                                    <div class="d-flex align-items-baseline gap-2 text-break">
+                                                                        <div class="tasks-align-icons">
+                                                                            <i class="fa-solid text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
+                                                                        </div>
+
+                                                                        <div class="flex-grow-1">
+                                                                            <?= esc($taskart['taskart']) ?>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <?php break;?>
                                                         <?php endif;?>
                                                     <?php endforeach;?>
-                                                    <div class="d-inline-flex gap-2 ms-2">
-                                                        <a href="<?= base_url('public/tasks-erstellen/cards/' . $selected_board['id'] . '/copy/' . $task['id'])?>">
-                                                            <i class="fa-solid fa-copy text-primary"></i>
-                                                        </a>
-                                                        <a href="<?= base_url('public/tasks-erstellen/cards/' . $selected_board['id'] . '/update/' . $task['id'])?>">
-                                                            <i class="fa-solid fa-pen-to-square text-primary"></i>
-                                                        </a>
-                                                        <a href="<?= base_url('public/tasks-erstellen/cards/' . $selected_board['id'] . '/delete/' . $task['id'])?>">
-                                                            <i class="fa-solid fa-trash text-primary"></i>
-                                                        </a>
+                                                    <div class="d-flex align-items-center justify-content-center text-nowrap py-2 px-3 blue-gradient-aktionen">
+                                                        <div class="d-inline-flex gap-2">
+                                                            <a href="<?= base_url('public/tasks-erstellen/dashboard/' . $selected_board['id'] . '/copy/' . $task['id'])?>">
+                                                                <i class="fa-solid fa-copy blue-gradient-icons"></i>
+                                                            </a>
+                                                            <a href="<?= base_url('public/tasks-erstellen/dashboard/' . $selected_board['id'] . '/update/' . $task['id'])?>">
+                                                                <i class="fa-solid fa-pen-to-square blue-gradient-icons"></i>
+                                                            </a>
+                                                            <a href="<?= base_url('public/tasks-erstellen/dashboard/' . $selected_board['id'] . '/delete/' . $task['id'])?>">
+                                                                <i class="fa-solid fa-trash blue-gradient-icons"></i>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <!--Folgende row/col Struktur sorgt für eine saubere Ausrichtung der Icons und Texte-->
-                                                <div class="card-body">
+                                                <div class="card-body pt-2 ps-3 pe-3 pb-3 blue-gradient-tasks-body">
                                                     <!--Ineffizient, aber bietet somit auch Support für mehrere Personen für einen Task-->
                                                     <?php foreach ($personen as $person): ?>
                                                         <?php if ($person['id'] == $task['personenid']): ?>
-                                                            <div class="row mb-2">
-                                                                <div class="col-1">
+                                                            <div class="d-flex align-items-start gap-2 mb-2">
+                                                                <div class="tasks-align-icons">
                                                                     <i class="fa-solid fa-user text-muted"></i>
                                                                 </div>
-                                                                <div class="col">
+                                                                <div class="flex-grow-1">
                                                                     <?= esc($person['vorname']) ?> <?= esc($person['name']) ?>
                                                                 </div>
                                                             </div>
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
-                                                    <div class="row mb-2">
-                                                        <div class="col-1">
+                                                    <div class="d-flex align-items-start gap-2 mb-2">
+                                                        <div class="tasks-align-icons">
                                                             <i class="fa-solid fa-calendar text-muted"></i>
                                                         </div>
-                                                        <div class="col">
+                                                        <div class="flex-grow-1">
                                                             <!--DateTime wird nur der Formatierung wegen on the fly erzeugt-->
                                                             <?= esc((new DateTime($task['erstelldatum']))->format('d M Y')) ?>
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-2">
-                                                        <div class="col-1">
+                                                    <div class="d-flex align-items-start gap-2 mb-2">
+                                                        <div class="tasks-align-icons">
                                                             <i class="fa-solid fa-bell text-muted"></i>
                                                         </div>
-                                                        <div class="col">
+                                                        <div class="flex-grow-1">
                                                             <!--Leere Werte werden in Erinnerungsdatum als '0000-00-00 00:00:00' in der DB gespeichert,
                                                             daher müssen wir danach testen.-->
                                                             <?php if (empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00'): ?>
@@ -154,11 +162,11 @@
                                                             <?php endif; ?>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-1">
+                                                    <div class="d-flex align-items-start gap-2">
+                                                        <div class="tasks-align-icons">
                                                             <i class="fa-solid fa-sticky-note text-muted"></i>
                                                         </div>
-                                                        <div class="col">
+                                                        <div class="flex-grow-1 text-break">
                                                             <?php if (empty($task['notizen'])): ?>
                                                                 -
                                                             <?php else: ?>

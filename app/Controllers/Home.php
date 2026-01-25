@@ -9,7 +9,7 @@ class Home extends BaseController
     // Der Punkt des Home-Controllers ist es, die Startseite (/) auf die eigentliche Seite (/tasks) weiterzuleiten.
     public function getIndex()
     {
-        return redirect()->to(base_url('public/tasks'));
+        return redirect()->to(base_url('public/dashboard'));
     }
 
 

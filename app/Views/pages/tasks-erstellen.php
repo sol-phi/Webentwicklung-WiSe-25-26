@@ -1,11 +1,11 @@
 <div class="container mt-4 mb-4">
     <!-- margin_top-4 -->
-    <div class="card">
+    <div class="card blue-gradient-boards-card">
         <!-- font_size-4 -->
-        <div class="card-header fs-4 fw-semibold">
+        <div class="card-header fs-4 fw-semibold blue-gradient-boards-header">
             <!--Die data-Werte sollten allesamt datensicher sein, durch vorherige Abfänge von URL-Manipulationen.-->
             <!--Bestimmt Titel des Formulars je nach Herkunft und Aktion-->
-            <?php if (isset($cards)): ?>
+            <?php if ($view == 'dashboard'): ?>
                 <?php if ($todo == "create"): ?>
                     <span>Task erstellen - <?= esc($selected_board['board']) ?></span>
                 <?php elseif ($todo == "copy"): ?>
@@ -15,7 +15,7 @@
                 <?php elseif ($todo == "delete"): ?>
                     <span>Task löschen - <?= esc($selected_board['board']) ?></span>
                 <?php endif; ?>
-            <?php elseif (isset($table)): ?>
+            <?php elseif ($view == 'tasks'): ?>
                 <?php if ($todo == "create"): ?>
                     <span>Task erstellen</span>
                 <?php elseif ($todo == "copy"): ?>
@@ -30,24 +30,24 @@
 
         <div class="card-body">
             <!--Je nach Ursprungsort wird der submit-Befehl anders gestaltet, damit dieser weiß, wohin anschließend zurückgeleitet werden soll.-->
-            <!--Für Table dient die Board-ID von 0 dazu, dass die Parameterreihenfolge in der submit-Funktion konsistent bleibt.-->
+            <!--Für Tasks dient die Board-ID von 0 dazu, dass die Parameterreihenfolge in der submit-Funktion konsistent bleibt.-->
             <form method="POST"
-                <?php if (isset($cards) && $todo == "create"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/create') ?>"
-                <?php elseif (isset($cards) && $todo == "copy"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/copy/' . $selected_task['id']) ?>"
-                <?php elseif (isset($cards) && $todo == "update"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/update/' . $selected_task['id']) ?>"
-                <?php elseif (isset($cards) && $todo == "delete"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/cards/' . $selected_board['id'] . '/delete/' . $selected_task['id']) ?>"
-                <?php elseif (isset($table) && $todo == "create"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/table/0/create') ?>"
-                <?php elseif (isset($table) && $todo == "copy"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/table/0/copy/' . $selected_task['id']) ?>"
-                <?php elseif (isset($table) && $todo == "update"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/table/0/update/' . $selected_task['id']) ?>"
-                <?php elseif (isset($table) && $todo == "delete"): ?>
-                    action="<?= base_url('public/tasks-erstellen/submit/table/0/delete/' . $selected_task['id']) ?>"
+                <?php if ($view == 'dashboard' && $todo == "create"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/dashboard/' . $selected_board['id'] . '/create') ?>"
+                <?php elseif ($view == 'dashboard' && $todo == "copy"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/dashboard/' . $selected_board['id'] . '/copy/' . $selected_task['id']) ?>"
+                <?php elseif ($view == 'dashboard' && $todo == "update"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/dashboard/' . $selected_board['id'] . '/update/' . $selected_task['id']) ?>"
+                <?php elseif ($view == 'dashboard' && $todo == "delete"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/dashboard/' . $selected_board['id'] . '/delete/' . $selected_task['id']) ?>"
+                <?php elseif ($view == 'tasks' && $todo == "create"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/tasks/0/create') ?>"
+                <?php elseif ($view == 'tasks' && $todo == "copy"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/tasks/0/copy/' . $selected_task['id']) ?>"
+                <?php elseif ($view == 'tasks' && $todo == "update"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/tasks/0/update/' . $selected_task['id']) ?>"
+                <?php elseif ($view == 'tasks' && $todo == "delete"): ?>
+                    action="<?= base_url('public/tasks-erstellen/submit/tasks/0/delete/' . $selected_task['id']) ?>"
                 <?php endif; ?>>
 
                 <div class="form-group row mb-3">
@@ -169,7 +169,7 @@
                             <?php endif; ?>
 
                             <?php foreach ($spalten as $spalte): ?>
-                                <?php if (isset($table) || (isset($cards) && $spalte['boardsid'] == $selected_board['id'])): ?>
+                                <?php if ($view == 'tasks' || ($view == 'dashboard' && $spalte['boardsid'] == $selected_board['id'])): ?>
                                     <option value="<?= esc($spalte['id']) ?>" style="color:#000;"
                                             <?= (old('SpaltenID', $selected_spalte['id'] ?? '') == $spalte['id']) ? 'selected' : '' ?>>
                                         <?= esc($spalte['spalte']) ?>
@@ -269,10 +269,10 @@
                 <?php endif; ?>
 
                 <!--Verschiedene Abbrechen-Weiterleitungen je nach Ursprungsort-->
-                <?php if (isset($table)): ?>
-                    <a href="<?= base_url('public/tasks/table/') ?>" class="btn btn-secondary">Abbrechen</a>
-                <?php elseif (isset($cards)): ?>
-                    <a href="<?= base_url('public/tasks/cards/' . $selected_board['id']) ?>" class="btn btn-secondary">Abbrechen</a>
+                <?php if ($view == 'tasks'): ?>
+                    <a href="<?= base_url('public/tasks/') ?>" class="btn btn-secondary">Abbrechen</a>
+                <?php elseif ($view == 'dashboard'): ?>
+                    <a href="<?= base_url('public/dashboard/' . $selected_board['id']) ?>" class="btn btn-secondary">Abbrechen</a>
                 <?php endif; ?>
             </form>
         </div>

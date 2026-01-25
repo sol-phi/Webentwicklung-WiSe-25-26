@@ -1,3 +1,4 @@
+/*** Navigation ***/
 .bg-blue{
     background-color: #002060;
 }
@@ -14,6 +15,96 @@
 /*Damit die Nav-Elemente nicht so nah am Logo sind*/
 .spacing{
     margin:10px;
+}
+
+/*** Dashboard ***/
+/* Entfernt hartnäckige graue Linie zwischen zweitem Header und Body durch Resetten der Bootstrap-Defaults.
+Unten werden die borders dann entsprechend überschrieben.*/
+.card-header {
+    border: none;
+}
+/*Rand der äußersten Card*/
+.blue-gradient-boards-card{
+    border: 1px solid #7a95c3;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+/*Header der äußersten Card*/
+.blue-gradient-boards-header{
+    background-color: #9bb2e1;
+    border-bottom: 1px solid #7a95c3;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+/*Rand der Spalten-Cards*/
+.blue-gradient-spalten-card{
+    border: 1px solid #8aa9d6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+/*Erster Header der Spalten-Cards*/
+.blue-gradient-spalten-header{
+    background-color: #abbee7;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom: 1px solid #8aa9d6;
+}
+/*Zweiter Header der Spalten-Cards*/
+.blue-gradient-spalten-beschreibung{
+    background-color: #bacbed;
+    border-bottom: 1px solid #8aa9d6;
+}
+/*Rand der Tasks-Cards*/
+.blue-gradient-tasks-card {
+    border: 1px solid #99c0e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+/*Erster Header der Tasks-Cards*/
+.blue-gradient-tasks-header{
+    background-color: #cad8f3;
+    border-bottom: 1px solid #99c0e6;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+/*Zweiter Header der Tasks-Cards*/
+.blue-gradient-taskarten{
+    background-color: #d9e5f9;
+    border-right: 1px solid #99c0e6;
+    border-bottom: 1px solid #99c0e6;
+}
+.blue-gradient-aktionen{
+    background-color: #e9f2ff;
+    border-bottom: 1px solid #99c0e6;
+}
+/*Sorgt dafür, dass innerhalb der Tasks-Card-Bodies die Icons richtig ausgerichtet sind.*/
+.tasks-align-icons{
+    width: 1.25rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+/*Dezentere Farben für die Knöpfe und Icons*/
+.blue-gradient-buttons{
+    --bs-btn-bg: #2c54c0;
+    --bs-btn-hover-bg: #3b6fd6;
+    --bs-btn-active-bg: #1f3fa3;
+
+    --bs-btn-border-color: #2c54c0;
+    --bs-btn-hover-border-color: #3b6fd6;
+    --bs-btn-active-border-color: #1f3fa3;
+
+    --bs-btn-color: #ffffff;
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-active-color: #ffffff;
+}
+.blue-gradient-icons {
+    color: #3b6fd6;
+}
+.blue-gradient-icons:hover {
+    color: #5a87ed;
+}
+.blue-gradient-icons:active {
+    color: #1f3fa3;
 }
 
 body {

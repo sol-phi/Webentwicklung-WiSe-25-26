@@ -10,28 +10,18 @@
     <?php endif; ?>
 
     <!-- margin_top-4 -->
-    <div class="card">
+    <div class="card blue-gradient-boards-card">
         <!-- font_size-4 -->
-        <div class="card-header fs-4 d-flex justify-content-between align-items-center fw-semibold">
+        <div class="card-header fs-4 d-flex justify-content-between align-items-center fw-semibold blue-gradient-boards-header">
             <!--Die data-Werte sollten allesamt datensicher sein, durch vorherige Abfänge von URL-Manipulationen.-->
             <span>Tasks</span>
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Ansicht
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <!--Cards sendet zu der Cards-Ansicht auf dem ersten verfügbaren Board.-->
-                    <li><a class="dropdown-item" href="<?= base_url('public/tasks/cards/' . $boards[0]['id']) ?>">Cards</a></li>
-                    <li><a class="dropdown-item" href="<?= base_url('public/tasks/table') ?>">Tabelle</a></li>
-                </ul>
-            </div>
         </div>
 
         <div class="card-body">
 
             <div id="toolbar">
-                <a href="<?= base_url('public/tasks-erstellen/table/create') ?>" class="btn btn-primary">
-                    Neu
+                <a href="<?= base_url('public/tasks-erstellen/tasks/create') ?>" class="btn blue-gradient-buttons">
+                    <i class="fa-solid fa-plus"></i> Neu
                 </a>
             </div>
 
@@ -120,14 +110,14 @@
 <!--                            <td>--><?php //= esc($task['geloescht']) ?><!--</td>-->
                             <td>
                                 <div class="d-inline-flex gap-2">
-                                    <a href="<?= base_url('public/tasks-erstellen/table/copy/' . $task['id'])?>">
-                                        <i class="fa-solid fa-copy text-primary"></i>
+                                    <a href="<?= base_url('public/tasks-erstellen/tasks/copy/' . $task['id'])?>">
+                                        <i class="fa-solid fa-copy blue-gradient-icons"></i>
                                     </a>
-                                    <a href="<?= base_url('public/tasks-erstellen/table/update/' . $task['id'])?>">
-                                        <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                    <a href="<?= base_url('public/tasks-erstellen/tasks/update/' . $task['id'])?>">
+                                        <i class="fa-solid fa-pen-to-square blue-gradient-icons"></i>
                                     </a>
-                                    <a href="<?= base_url('public/tasks-erstellen/table/delete/' . $task['id'])?>">
-                                        <i class="fa-solid fa-trash text-primary"></i>
+                                    <a href="<?= base_url('public/tasks-erstellen/tasks/delete/' . $task['id'])?>">
+                                        <i class="fa-solid fa-trash blue-gradient-icons"></i>
                                     </a>
                                 </div>
                             </td>

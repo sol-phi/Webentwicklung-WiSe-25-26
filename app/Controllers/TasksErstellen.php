@@ -14,7 +14,7 @@ class TasksErstellen extends BaseController
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
     // Falls von der Tabelle kommend. $tod0 und $taskId werden in der URL als Parameter übergeben, und darauf kann mit AutoRouting direkt hier zugegriffen werden.
-    public function getTable($todo = null, $taskId = null)
+    public function getTasks($todo = null, $taskId = null)
     {
         // Es werden immer alle Spalten für den Spalten Dropdown geladen.
         $spaltenModel = new SpaltenModel();
@@ -29,14 +29,14 @@ class TasksErstellen extends BaseController
         $personenModel = new PersonenModel();
         $data['personen'] = $personenModel->getData();
         // Damit die Erstellen View weiß, von wo sie herkam.
-        $data['table'] = "Table";
+        $data['view'] = "tasks";
 
         // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn kein gültiger Task beim Erstellen/Löschen ausgewählt ist.
         // $data['selected_task'] ist nicht gesetzt, wenn die $taskId ungültig ist.
         // Update und Delete müssen eine *valide* TaskId besitzen, create darf überhaupt keine TaskId besitzen.
         if ((($todo == "copy" || $todo == "update" || $todo == "delete") && !isset($data['selected_task']))  ||
             ($todo == "create" && isset($taskId)) ) {
-            return redirect()->to(base_url('public/tasks/table'));
+            return redirect()->to(base_url('public/tasks'));
         }
 
         if ($todo == "create") {
@@ -50,7 +50,7 @@ class TasksErstellen extends BaseController
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
             $data['todo'] = $todo;
         } else{ // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn Aktion keine der obigen drei ist.
-            return redirect()->to(base_url('public/tasks/table'));
+            return redirect()->to(base_url('public/tasks'));
         }
 
         echo view('templates/header');
@@ -59,8 +59,8 @@ class TasksErstellen extends BaseController
         echo view('templates/footer');
     }
 
-    // Falls von den Cards kommend. $boardId, $tod0 und $taskId werden in der URL als Parameter übergeben, und darauf kann mit AutoRouting direkt hier zugegriffen werden.
-    public function getCards($boardId = null, $todo = null, $taskId = null)
+    // Falls von dem Dashboard kommend. $boardId, $tod0 und $taskId werden in der URL als Parameter übergeben, und darauf kann mit AutoRouting direkt hier zugegriffen werden.
+    public function getDashboard($boardId = null, $todo = null, $taskId = null)
     {
         // Alle Boards geladen für den Fallback aufs erste verfügbare Board bei URL-Manipulationen, siehe unten.
         // Zusätzlich wird der gerade ausgewählte Board gespeichert, fürs korrekte Zurückleiten nach Abschließen der Aktion in der Erstellen View
@@ -80,16 +80,16 @@ class TasksErstellen extends BaseController
         $personenModel = new PersonenModel();
         $data['personen'] = $personenModel->getData();
         // Damit die Erstellen View weiß, von wo sie herkam.
-        $data['cards'] = "Cards";
+        $data['view'] = "dashboard";
 
-        // Abfangen von URL-Manipulationen: leitet zurück zu dem ersten verfügbaren Board auf der Cards-Ansicht weiter, wenn kein gültiger Task/Board beim Erstellen/Löschen ausgewählt ist.
+        // Abfangen von URL-Manipulationen: leitet zurück zu dem ersten verfügbaren Board auf der Dashboard-Ansicht weiter, wenn kein gültiger Task/Board beim Kopieren/Erstellen/Löschen ausgewählt ist.
         // $data['selected_task'] und $data['selected_board'] sind nicht gesetzt, wenn die entsprechenden $taskId oder $boardId ungültig sind.
         if (!isset($data['selected_board'])){
-            return redirect()->to(base_url('public/tasks/cards/' . $data['boards'][0]['id']));
+            return redirect()->to(base_url('public/dashboard/' . $data['boards'][0]['id']));
         } // Update und Delete müssen eine *valide* TaskId besitzen, create darf überhaupt keine TaskId besitzen.
         elseif ( (($todo == "copy" || $todo == "update" || $todo == "delete") && !isset($data['selected_task'])) ||
                  ($todo == "create" && isset($taskId)) ) {
-            return redirect()->to(base_url('public/tasks/cards/' . $data['selected_board']['id']));
+            return redirect()->to(base_url('public/dashboard/' . $data['selected_board']['id']));
         }
 
         if ($todo == "create") {
@@ -102,8 +102,8 @@ class TasksErstellen extends BaseController
             $data['selected_person'] = $personenModel->getDataFromTask($taskId);
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
             $data['todo'] = $todo;
-        } else{ // Abfangen von URL-Manipulationen: leitet zurück zu dem ersten verfügbaren Board auf der Cards-Ansicht weiter, wenn Aktion keine der obigen drei ist.
-            return redirect()->to(base_url('public/tasks/cards/' . $data['selected_board']['id']));
+        } else{ // Abfangen von URL-Manipulationen: leitet zurück zu dem ersten verfügbaren Board auf der Dashboard-Ansicht weiter, wenn Aktion keine der obigen drei ist.
+            return redirect()->to(base_url('public/dashboard/' . $data['selected_board']['id']));
         }
 
         echo view('templates/header');
@@ -116,14 +116,14 @@ class TasksErstellen extends BaseController
     // und $boardId, $tod0 und $taskId. werden in der URL als Parameter übergeben, und darauf kann mit AutoRouting direkt hier zugegriffen werden.
     public function postSubmit($view = null, $boardId = null, $todo = null, $taskId = null)
     {
-        // Validierung nur bei Create und Update
+        // Validierung nur bei Create, Copy und Update
         if ($todo !== "delete") {
             $rules = config('MyRules')->taskserstellen;
             $errors = config('MyRules')->taskserstellen_errors;
 
             if (!$this->validate($rules, $errors)) {
                 return redirect()
-                    ->to(base_url('public/tasks-erstellen/' . $view . (($view == "cards") ? '/' . $boardId : '' ) .
+                    ->to(base_url('public/tasks-erstellen/' . $view . (($view == "dashboard") ? '/' . $boardId : '' ) .
                         '/' . $todo . (($todo == "copy" || $todo == 'update' || $todo == 'delete') ? '/' . $taskId: '') ))
                     ->withInput() // ← Wichtig für old() in der View
                     ->with('errors', $this->validator->getErrors());
@@ -158,6 +158,12 @@ class TasksErstellen extends BaseController
             $session->setFlashdata('error', 'Task gelöscht.');
         }
 
-        return redirect()->to(base_url('public/tasks/' . $view . (($view == "cards") ? '/' . $boardId : '')));
+        if ($view == "dashboard") {
+            return redirect()->to(base_url('public/dashboard/' . $boardId));
+        }
+        elseif ($view == "tasks") {
+            return redirect()->to(base_url('public/tasks/'));
+        }
+
     }
 }

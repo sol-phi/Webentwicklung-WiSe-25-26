@@ -10,15 +10,15 @@
     <?php endif; ?>
 
     <!-- margin_top-4 -->
-    <div class="card">
+    <div class="card blue-gradient-boards-card">
         <!-- font_size-4 -->
-        <div class="card-header fs-4 fw-semibold">
+        <div class="card-header fs-4 fw-semibold blue-gradient-boards-header">
             Boards
         </div>
         <div class="card-body">
             <div id="toolbar">
-                <a href="<?= base_url('public/boards-erstellen/create') ?>" class="btn btn-primary">
-                    Neu
+                <a href="<?= base_url('public/boards-erstellen/create') ?>" class="btn blue-gradient-buttons">
+                    <i class="fa-solid fa-plus"></i> Neu
                 </a>
             </div>
             <table class="table table-responsive table-bordered table-striped table-hover d-table"
@@ -42,13 +42,13 @@
                         <td>
                             <div class="d-inline-flex gap-2">
                                 <a href="<?= base_url('public/boards-erstellen/copy/' . $board['id'])?>">
-                                    <i class="fa-solid fa-copy text-primary"></i>
+                                    <i class="fa-solid fa-copy blue-gradient-icons"></i>
                                 </a>
                                 <a href="<?= base_url('public/boards-erstellen/update/' . $board['id'])?>">
-                                    <i class="fa-solid fa-pen-to-square text-primary"></i>
+                                    <i class="fa-solid fa-pen-to-square blue-gradient-icons"></i>
                                 </a>
                                 <a href="<?= base_url('public/boards-erstellen/delete/' . $board['id'])?>">
-                                    <i class="fa-solid fa-trash text-primary"></i>
+                                    <i class="fa-solid fa-trash blue-gradient-icons"></i>
                                 </a>
                             </div>
                         </td>
