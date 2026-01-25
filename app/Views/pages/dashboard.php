@@ -124,7 +124,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!--Folgende row/col Struktur sorgt für eine saubere Ausrichtung der Icons und Texte-->
                                                 <div class="card-body pt-2 ps-3 pe-3 pb-3 blue-gradient-tasks-body">
                                                     <!--Ineffizient, aber bietet somit auch Support für mehrere Personen für einen Task-->
                                                     <?php foreach ($personen as $person): ?>
@@ -148,7 +147,7 @@
                                                             <?= esc((new DateTime($task['erstelldatum']))->format('d M Y')) ?>
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex align-items-start gap-2 mb-2">
+                                                    <div class="d-flex align-items-start gap-2">
                                                         <div class="tasks-align-icons">
                                                             <i class="fa-solid fa-bell text-muted"></i>
                                                         </div>
@@ -162,18 +161,18 @@
                                                             <?php endif; ?>
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex align-items-start gap-2">
-                                                        <div class="tasks-align-icons">
-                                                            <i class="fa-solid fa-sticky-note text-muted"></i>
-                                                        </div>
-                                                        <div class="flex-grow-1 text-break">
-                                                            <?php if (empty($task['notizen'])): ?>
-                                                                -
-                                                            <?php else: ?>
-                                                                <?= esc($task['notizen']) ?>
-                                                            <?php endif; ?>
-                                                        </div>
+                                                </div>
+                                                <div class="card-footer d-flex align-items-start gap-2 blue-gradient-notizen">
+                                                    <div class="tasks-align-icons">
+                                                        <i class="fa-solid fa-sticky-note text-muted"></i>
                                                     </div>
+                                                    <div class="flex-grow-1">
+                                                        Notizen:
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer blue-gradient-tasks-footer">
+                                                    <!--Verhindert komische Zeilenumbrüche-->
+                                                    <div class="task-note"><?=empty($task['notizen']) ? '-' : esc($task['notizen'])?></div>
                                                 </div>
                                             </div>
 

@@ -77,11 +77,34 @@ Unten werden die borders dann entsprechend überschrieben.*/
     background-color: #e9f2ff;
     border-bottom: 1px solid #99c0e6;
 }
+.blue-gradient-notizen{
+    background-color: #e9f2ff;
+    border-top: 1px solid #99c0e6;
+    border-bottom: 1px solid #99c0e6;
+}
+.blue-gradient-tasks-footer{
+    background-color: white;
+    border-top: none;
+}
 /*Sorgt dafür, dass innerhalb der Tasks-Card-Bodies die Icons richtig ausgerichtet sind.*/
 .tasks-align-icons{
     width: 1.25rem;
     text-align: center;
     flex-shrink: 0;
+}
+/*Sorgt dafür, dass innerhalb der Tasks-Card-Bodies die Notizen richtig angezeigt werden.*/
+.task-note {
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-line;
+}
+
+.task-note-icon {
+    float: left;
+    width: 20px;          /* gleiche Breite wie deine anderen Icons */
+    margin-right: 0.5rem;
+    margin-top: 0.15rem;  /* feines vertikales Tuning */
+    text-align: center;
 }
 /*Dezentere Farben für die Knöpfe und Icons*/
 .blue-gradient-buttons{
