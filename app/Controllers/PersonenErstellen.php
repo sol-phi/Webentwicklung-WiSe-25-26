@@ -10,11 +10,17 @@ class PersonenErstellen extends BaseController
     // Hier werden die einzelnen PHP-Dateien wortwörtlich aneinandergepappt.
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
+    private PersonenModel $personenModel;
+
+    public function __construct()
+    {
+        $this->personenModel = new PersonenModel();
+    }
+
     public function getIndex($todo = null, $personId = null)
     {
         // Fürs Kopieren, Bearbeiten und Löschen wird die betroffene Person geladen.
-        $personenModel = new PersonenModel();
-        $data['selected_person'] = $personenModel->getDataFromPerson($personId);
+        $data['selected_person'] = $this->personenModel->getDataFromPerson($personId);
 
         // Abfangen von URL-Manipulationen: leitet zurück zu der Personenansicht weiter, wenn keine gültige Person beim Kopieren/Bearbeiten/Löschen ausgewählt ist.
         // $data['selected_person'] ist nicht gesetzt, wenn die $personId ungültig ist.
@@ -65,20 +71,19 @@ class PersonenErstellen extends BaseController
             'Passwort'   => $this->request->getPost('Passwort'),
         ];
 
-        $personenModel = new PersonenModel();
         $session = session();
 
         if ($todo == "create") {
-            $personenModel->createPerson($data);
+            $this->personenModel->createPerson($data);
             $session->setFlashdata('success', 'Person erstellt!');
         } elseif ($todo == "copy") { // Wird in der View wie Update behandelt, außer dass die gewählte Person nicht ersetzt, sondern dupliziert wird.
-            $personenModel->createPerson($data);
+            $this->personenModel->createPerson($data);
             $session->setFlashdata('success', 'Person kopiert.');
         } elseif ($todo == "update") {
-            $personenModel->updatePerson($data);
+            $this->personenModel->updatePerson($data);
             $session->setFlashdata('success', 'Person aktualisiert.');
         } elseif ($todo == "delete") {
-            $personenModel->deletePerson($data);
+            $this->personenModel->deletePerson($data);
             $session->setFlashdata('error', 'Person gelöscht.');
         }
 
