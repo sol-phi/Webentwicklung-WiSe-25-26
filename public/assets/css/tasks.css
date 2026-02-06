@@ -135,3 +135,35 @@ body {
     display: flex; /*Body wird zum Flex-Container, d.h. die Elemente werden langgezogen, bis der Viewport voll ist*/
     flex-direction: column; /*Elemente werden vertikal langgezogen*/
 }
+
+/*Für Drag-and-Drop notwendig*/
+.blue-gradient-drag-icon {
+    color: #2c54c0;
+}
+.grabbable {
+    cursor: grab;
+}
+
+.task-title {
+    cursor: text;
+}
+/* Überschreibe den Default von Browsern für alle anderen Elemente (Links bspw.), damit beim Draggen der Cursor dragging bleibt und sich nicht zu link ändert*/
+body.dragging * {
+    cursor: grabbing !important;
+}
+.gu-mirror {
+    cursor: grabbing;
+    position: fixed !important; /* statt absolute */
+    top: 0; left: 0;
+    z-index: 9999 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 0.5rem;
+    pointer-events: none; /* verhindert, dass Ghost Mausinteraktionen blockiert */
+}
+
+/* Platzhalter, der während Dragging angezeigt wird */
+.gu-transit {
+    opacity: 0.4;           /* Task ausgegraut */
+    /*filter: grayscale(60%);*/
+    /*background-color: #e0e0e0; !* optional hellgrau *!*/
+}

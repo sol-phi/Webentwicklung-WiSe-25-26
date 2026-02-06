@@ -35,4 +35,26 @@ class Tasks extends BaseController
         echo view('pages/tasks', $data);
         echo view('templates/footer');
     }
+
+    // Von Ajax nach einem erfolgreichem Drop aufgerufen
+    public function postUpdatePosition()
+    {
+        $data = json_decode($this->request->getBody(), true);
+
+        if(!$data){ // Wenn aus irgendeinem Grund nichts seitens Ajax ankommt
+            return $this->response->setJSON(['success' => false, 'message' => 'No data']);
+        }
+
+        // $data beinhält TaskID, SpaltenID und den Array Order, welcher aber hier nicht genutzt wird.
+        $tasksModel = new TasksModel();
+        $tasksModel->updateTaskWithSpaltenId($data, $data['TaskID']);
+
+        // Alle Tasks in der Zielspalte werden geupdatet, durch Lesen aus dem Order Array. $item beinhält TaskID und SortID.
+        foreach($data['Order'] as $item){
+            $tasksModel->updateTasksWithOrder($item, $item['TaskID']);
+        }
+
+        // Falls wir bis hier keine Fehler kriegen, muss es geklappt haben
+        return $this->response->setJSON(['success' => true]);
+    }
 }

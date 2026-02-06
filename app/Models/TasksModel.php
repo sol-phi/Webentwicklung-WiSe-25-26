@@ -14,11 +14,11 @@ class TasksModel extends Model
 
     // Gibt alle Tasks zurück, die zu dem einen Board gehören.
     // Dafür müssen wir die Spalten mit joinen, um auf den Board zugreifen zu können, zu dem die Tasks alle gehören.
-    // Und noch ein orderBy obendrauf, entsprechend Aufgabenstellung von Übung 5
+    // Und noch ein orderBy nach sortID obendrauf, für die Drag-und-Drop-Funktionalität.
     public function getDataFromBoard($boardId){
         $this->tasks = $this->db->table('tasks');
         return $this->tasks->select('tasks.*')->join('spalten', 'tasks.spaltenid = spalten.id')
-            ->where('boardsid', $boardId)->orderBy('tasks', 'asc')->get()->getResultArray();
+            ->where('boardsid', $boardId)->orderBy('sortid', 'asc')->get()->getResultArray();
     }
 
     // Gibt alle Daten zu dem einen Task zurück, welcher der übergebenen Task-ID entspricht, als RowArray (eindimensional)
@@ -65,9 +65,28 @@ class TasksModel extends Model
             //'geloescht'           => 0,
         ]);
     }
+
+    // Äquivalent zu updateTask, aber einfach mit weniger Daten. Von der Drag-and-Drop-Funktionalität verwendet
+    public function updateTaskWithSpaltenId($data, $taskId){
+        $this->tasks = $this->db->table('tasks');
+        // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
+        $this->tasks->where('id', $taskId)->update([
+            'spaltenid'           => $data['SpaltenID'],
+        ]);
+    }
+    // Analog
+    public function updateTasksWithOrder($data, $taskId){
+        $this->tasks = $this->db->table('tasks');
+        // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
+        $this->tasks->where('id', $taskId)->update([
+            'sortid'              => $data['SortID'],
+        ]);
+    }
+
     public function deleteTask($taskId){
         // Es wird nur nach der Task-ID gesucht, und dann die entsprechende Zeile gelöscht.
         $this->tasks = $this->db->table('tasks');
         $this->tasks->where('id', $taskId)->delete();
     }
+
 }

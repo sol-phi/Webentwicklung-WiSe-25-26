@@ -76,16 +76,25 @@
                                 </div>
 
                                 <!--d-flex flex-column, zusammen mit align-items-stretch außen sorgt dafür,
-                                dass alle Spalten in der div nach unten auf Höhe der längsten Spalte gezogen werden-->
-                                <div class="card-body d-flex flex-column gap-3">
+                                dass alle Spalten in der div nach unten auf Höhe der längsten Spalte gezogen werden
+                                draggable-container ist der Rahmen, in dem Elemente hin-und-her gezogen werden können, also die Spalte.
+                                data-spalten-id ist für das Updaten der Spalte innerhalb der Task-Daten nach einem erfolgreichem Drop zuständig.-->
+                                <div class="card-body d-flex flex-column gap-3 draggable-container" data-spalten-id="<?= $spalte['id'] ?>">
                                     <?php foreach ($tasks as $task): ?>
                                         <!--In tasks sind alle Tasks für das ausgewählte Board enthalten, daher müssen wir hier nochmal explizit nach Spalte filtern-->
                                         <?php if ($task['spaltenid'] == $spalte['id']): ?>
 
                                             <!--Jeder Task wird als kleine Card innerhalb der Spalte dargestellt-->
-                                            <div class="card blue-gradient-tasks-card">
-                                                <div class="card-header fw-semibold d-flex align-items-start justify-content-between blue-gradient-tasks-header">
-                                                    <div class="flex-grow-1">
+                                            <!--draggable ist der Teil, der beim Drag mitkommt. data-task-id zur Identifikation des gezogenen ELements.-->
+                                            <div class="card blue-gradient-tasks-card draggable" data-task-id="<?= $task['id'] ?>">
+
+                                                <!--grabbable ist der Teil, über den man für einen Drag hovern muss.-->
+                                                <div class="card-header fw-semibold blue-gradient-tasks-header position-relative grabbable">
+                                                    <!--Hack, um das Icon oben zentriert anzuzeigen-->
+                                                    <i class="fa-solid fa-grip blue-gradient-drag-icon"
+                                                       style="position: absolute; top: 0px; left: 50%; transform: translateX(-50%);"></i>
+
+                                                    <div class="task-title" style="display: inline-block; margin-top: 10px;">
                                                         <?= esc($task['tasks']) ?>
                                                     </div>
                                                 </div>
@@ -194,6 +203,14 @@
     </div>
 </div>
 
+<!--Lädt die notwendige Dragula (Drag-and-Drop Funktionalität) Bibliothek, -->
+<!--und übergibt die BaseURL (muss in PHP sein), um mit Ajax nachträglich das Verschieben von Tasks an den Server zu schicken und die DB zu updaten-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script>
+<script>
+    // Quirk von Auto-Routing. update-position == postUpdatePosition
+    updateTaskPositionUrl = "<?= base_url('public/tasks/update-position') ?>"
+</script>
+<script src="<?= base_url('public/assets/js/drag-and-drop.js') ?>"></script>
 
 
 
