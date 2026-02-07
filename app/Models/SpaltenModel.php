@@ -63,4 +63,11 @@ class SpaltenModel extends Model
     public function deleteSpalte($data){
         $this->db->table('spalten')->where('id', $data['spaltenId'])->delete();
     }
+
+    // Zum Abfangen von Deletes, wenn in der Spalte noch Tasks drin sind (Datenbank Referenzintegrität ist Restrict anstatt Cascade)
+    public function hasTasks($spaltenId): bool {
+        return $this->db->table('tasks')
+                ->where('spaltenid', $spaltenId)
+                ->countAllResults() > 0;
+    }
 }

@@ -26,13 +26,21 @@ class TasksModel extends Model
 
     // CRUD
     public function createTask($data){
+
+        // Ermittelt die höchste SortID in der Spalte, und macht die SortID dann um eins höher, sodass neue Tasks immer unten dran gehangen werden.
+        $maxSortId = $this->db->table('tasks')
+            ->selectMax('sortid')
+            ->where('spaltenid', $data['SpaltenID'])
+            ->get()
+            ->getRowArray()['sortid'];
+
         // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und eingefügt.
         $this->db->table('tasks')->insert([
             //'id' hat Auto-Increment
             'personenid'          => $data['PersonID'],
             'taskartenid'         => $data['TaskartID'],
             'spaltenid'           => $data['SpaltenID'],
-            'sortid'              => $data['SortID'],
+            'sortid'              => empty($maxSortId) ? 0 : $maxSortId + 1,
             'tasks'               => $data['Bezeichnung'],
             'erstelldatum'        => date('Y-m-d'), // Timestamp des aktuellen Datums
             'erinnerungsdatum'    => $data['Erinnerungsdatum'],
@@ -49,7 +57,8 @@ class TasksModel extends Model
             'personenid'          => $data['PersonID'],
             'taskartenid'         => $data['TaskartID'],
             'spaltenid'           => $data['SpaltenID'],
-            'sortid'              => $data['SortID'],
+            // SortID ist eine interne Variable für Drag und Drop, der Benutzer kann sie gar nicht ändern
+            //'sortid'              => $data['SortID'],
             'tasks'               => $data['Bezeichnung'],
             // Erstelldatum soll sich beim Bearbeiten nicht ändern. Vielleicht stattdessen ein 'Letztes Update' Feld hinzufügen?
             //'erstelldatum'        => date('Y-m-d'),

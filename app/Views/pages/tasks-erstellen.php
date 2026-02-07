@@ -187,23 +187,6 @@
 
                 <div class="form-group row mb-3">
                     <div class="col-md-2">
-                        <label for="SortID" class="col-form-label">SortID</label>
-                    </div>
-                    <div class="col-md-10">
-                        <input type="number" class="form-control <?= session('errors.SortID') ? 'is-invalid' : '' ?>"
-                               id="SortID" name="SortID" placeholder="ID zum Sortieren"
-                               value="<?= old('SortID', $selected_task['sortid'] ?? '') ?>"
-                               <?= $todo == "delete" ? 'disabled' : '' ?>>
-                        <?php if (session('errors.SortID')): ?>
-                            <div class="invalid-feedback d-block">
-                                <?= esc(session('errors.SortID')) ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <div class="col-md-2">
                         <label for="Erinnerung" class="col-form-label">Erinnerung</label>
                     </div>
                     <div class="col-md-10 d-flex align-items-center">

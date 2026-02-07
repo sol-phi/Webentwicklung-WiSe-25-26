@@ -74,8 +74,13 @@ class BoardsErstellen extends BaseController
             $boardsModel->updateBoard($data);
             $session->setFlashdata('success', 'Board aktualisiert.');
         } elseif ($todo == "delete") {
-            $boardsModel->deleteBoard($data);
-            $session->setFlashdata('error', 'Board gelöscht.');
+            // Wenn das Board noch Spalten in sich drin hat, dann Delete verhindern
+            if ($boardsModel->hasSpalten($boardId)) {
+                session()->setFlashdata('error', 'Das Board kann nicht gelöscht werden, da noch Spalten innerhalb diesem Board existieren.');
+            } else {
+                $boardsModel->deleteBoard($data);
+                $session->setFlashdata('error', 'Board gelöscht.');
+            }
         }
 
         return redirect()->to(base_url('public/boards/'));

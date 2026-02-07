@@ -39,14 +39,9 @@
                         <th class="text-nowrap" data-sortable="true">Spalte</th>
                         <th class="text-nowrap" data-sortable="true">Board</th>
                         <th class="text-nowrap" data-sortable="true">Person</th>
-                        <th class="text-nowrap" data-sortable="true">Sort-ID</th>
-
                         <th class="text-nowrap" data-sortable="true">Erstelldatum</th>
-                        <th class="text-nowrap" data-sortable="true">Erinnerung</th>
                         <th class="text-nowrap" data-sortable="true">Erinnerungsdatum</th>
                         <th class="text-nowrap" data-sortable="true">Notizen</th>
-<!--                        <th class="text-nowrap" data-sortable="true">Erledigt</th>-->
-<!--                        <th class="text-nowrap" data-sortable="true">Gelöscht</th>-->
                         <th class="text-nowrap" data-sortable="true">Aktionen</th>
                     </tr>
                 </thead>
@@ -61,11 +56,11 @@
                                 <!--Für weitere Einträge analog-->
                                 <?php if ($task['taskartenid'] == $taskart['id']): ?>
                                     <td>
-                                        <div class="d-flex align-items-baseline gap-2 text-break">
-                                            <i class="fa-solid text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
-                                            <div class="flex-grow-1">
-                                                <?= esc($taskart['taskart']) ?>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="tasks-align-icons">
+                                                <i class="fa-solid fa-fw text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
                                             </div>
+                                            <span><?= esc($taskart['taskart']) ?></span>
                                         </div>
                                     </td>
                                     <?php break;?>
@@ -89,25 +84,23 @@
                                 <?php endif;?>
                             <?php endforeach;?>
 
-                            <td><?= esc($task['sortid']) ?></td>
                             <td><?= esc((new DateTime($task['erstelldatum']))->format('d M Y')) ?></td>
 
-                            <td> <!--Besser als 0 oder 1-->
-                                <?php if ($task['erinnerung'] == 1): ?>
-                                    Ja
+                            <!--Typsicherheit des Erinnerungsdatums durch Default in der View task-erstellen garantiert.
+                            Wenn Erinnerung == 0, dann hat es den Default-Wert, sollte aber nicht angezeigt werden.-->
+                            <td><?php if ($task['erinnerung'] == 1): ?>
+                                    <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
                                 <?php else: ?>
-                                    Nein
-                                <?php endif; ?>
+                                    -
+                                <?php endif; ?></td>
+
+                            <td> <!--Sorgt dafür, dass Notizen abgeschnitten und in title komplett angezeigt werden, wenn sie zu lang sind-->
+                                <div style="width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                            title="<?= esc($task['notizen']) ?>">
+                                    <?= esc($task['notizen']) ?>
+                                </div>
                             </td>
 
-                            <!--Wenn das Erinnerungsdatum nicht in der CRUD-View gesetzt ist, wird es automatisch auf 0000-00-00 00:00:00 gesetzt.
-                            Hier verstecken wir das stattdessen.-->
-                            <td><?php if (!(empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00')): ?>
-                                    <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
-                                <?php endif; ?></td>
-                            <td><?= esc($task['notizen']) ?></td>
-<!--                            <td>--><?php //= esc($task['erledigt']) ?><!--</td>-->
-<!--                            <td>--><?php //= esc($task['geloescht']) ?><!--</td>-->
                             <td>
                                 <div class="d-inline-flex gap-2">
                                     <a href="<?= base_url('public/tasks-erstellen/tasks/copy/' . $task['id'])?>">

@@ -11,21 +11,14 @@ class MyRules extends BaseConfig
         'TaskartID'         => 'required',
         'PersonID'          => 'required',
         'SpaltenID'         => 'required',
-        'SortID'            => 'required|integer',
         'Erinnerungsdatum'  => 'valid_date',
-//    'Erinnerung'        => '',
-//    'Notizen'             => 'required',
     ];
     public $taskserstellen_errors = [
         'Bezeichnung'       => ['required' => 'Die Bezeichnung des Tasks ist ein Pflichtfeld.'],
         'TaskartID'         => ['required' => 'Die Auswahl einer Taskart ist ein Pflichtfeld.'],
         'PersonID'          => ['required' => 'Die Auswahl einer Person ist ein Pflichtfeld.'],
         'SpaltenID'         => ['required' => 'Die Auswahl einer Spalte ist ein Pflichtfeld.'],
-        'SortID'            => ['required' => 'Die SortID des Tasks ist ein Pflichtfeld.', 'integer' => 'Die SortID muss eine ganze Zahl sein.'],
-        //Mit permit_empty wird es nervig, da leer == "0000-00-00 00:00:00" in der Datenbank
         'Erinnerungsdatum'  => ['valid_date' => 'Das Erinnerungsdatum muss ein gültiges Datum sein.'],
-//    'Erinnerung'        => ['' => ''],
-//    'Notizen'           => ['required' => 'Die Notizen zum Task sind ein Pflichtfeld.'],
     ];
 
     // Regeln für das Spalten-Formular

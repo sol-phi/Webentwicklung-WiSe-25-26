@@ -11,6 +11,7 @@
     --bs-btn-color: #ffffff;
     --bs-btn-hover-color: #ffffff;
     --bs-btn-active-color: #ffffff;
+    border-radius: 0.4rem;
 }
 .blue-gradient-icons {
     color: #3b6fd6;

@@ -87,8 +87,13 @@ class SpaltenErstellen extends BaseController
             $spaltenModel->updateSpalte($data);
             $session->setFlashdata('success', 'Spalte aktualisiert.');
         } elseif ($todo == "delete") {
-            $spaltenModel->deleteSpalte($data);
-            $session->setFlashdata('error', 'Spalte gelöscht.');
+            // Wenn die Spalte noch Tasks in sich drin hat, dann Delete verhindern
+            if ($spaltenModel->hasTasks($spaltenId)) {
+                session()->setFlashdata('error', 'Die Spalte kann nicht gelöscht werden, da noch Tasks innerhalb dieser Spalte existieren.');
+            } else {
+                $spaltenModel->deleteSpalte($data);
+                $session->setFlashdata('error', 'Spalte gelöscht.');
+            }
         }
 
         return redirect()->to(base_url('public/spalten/'));
