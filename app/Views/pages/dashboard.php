@@ -147,7 +147,7 @@
                                                             </div>
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
-                                                    <div class="d-flex align-items-start gap-2 mb-2">
+                                                    <div class="d-flex align-items-start gap-2 <?= ($task['erinnerung'] == 1) ? "mb-2" : ""?> ">
                                                         <div class="tasks-align-icons">
                                                             <i class="fa-solid fa-calendar text-muted"></i>
                                                         </div>
@@ -156,20 +156,18 @@
                                                             <?= esc((new DateTime($task['erstelldatum']))->format('d M Y')) ?>
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex align-items-start gap-2">
-                                                        <div class="tasks-align-icons">
-                                                            <i class="fa-solid fa-bell text-muted"></i>
-                                                        </div>
-                                                        <div class="flex-grow-1">
-                                                            <!--Leere Werte werden in Erinnerungsdatum als '0000-00-00 00:00:00' in der DB gespeichert,
-                                                            daher müssen wir danach testen.-->
-                                                            <?php if (empty($task['erinnerungsdatum']) || $task['erinnerungsdatum'] == '0000-00-00 00:00:00'): ?>
-                                                                -
-                                                            <?php else: ?> <!--DateTime wird nur der Formatierung wegen on the fly erzeugt-->
+                                                    <!--Nur wenn der Benutzer haben möchte, dass man erinnert wird, wird das entsprechende Datum angezeigt-->
+                                                    <?php if ($task['erinnerung'] == 1): ?>
+                                                        <div class="d-flex align-items-start gap-2">
+                                                            <div class="tasks-align-icons">
+                                                                <i class="fa-solid fa-bell text-muted"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <!--DateTime wird nur der Formatierung wegen on the fly erzeugt-->
                                                                 <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
-                                                            <?php endif; ?>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="card-footer d-flex align-items-start gap-2 blue-gradient-notizen">
                                                     <div class="tasks-align-icons">

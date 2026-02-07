@@ -1,0 +1,15 @@
+.bg-blue{
+    background-color: #002060;
+}
+/* Überschreibt die Bootstrap-Attribute*/
+.text-white .nav-link.text-white .active.text-white{
+    color: #ffffff;
+}
+/*Für die gerade ausgewählte Unterseite*/
+.active {
+    font-weight: bold;
+}
+/*Damit die Nav-Elemente nicht so nah am Logo sind*/
+.spacing{
+    margin:10px;
+}

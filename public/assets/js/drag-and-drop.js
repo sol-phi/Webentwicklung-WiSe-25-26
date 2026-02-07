@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Wenn in dem drag-State (Maus gedrückt), dann füge die dragging-Klasse zu dem Body Element hinzu.
-    // In tasks.css sorgt das für cursor: grabbing, und überschreibt alle anderen cursor-Zustände.
+    // In main.css sorgt das für cursor: grabbing, und überschreibt alle anderen cursor-Zustände.
     // Speziell Body, um alle Elemente abzudecken und Edge Cases zu verhindern, da es das äußerste Element ist.
     drake.on('drag', () => {
         document.body.classList.add('dragging');

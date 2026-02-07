@@ -1,0 +1,30 @@
+/*Die 6 Punkte ganz oben am Task Card Header*/
+.blue-gradient-drag-icon {
+    color: #2c54c0;
+}
+/*Innerhalb des Task Headers...*/
+.grabbable {
+    cursor: grab;
+}
+/*... außer auf dem Text*/
+.task-title {
+    cursor: text;
+}
+/* Überschreibe den Default von Browsern für alle anderen Elemente (Links bspw.), damit beim Draggen der Cursor dragging bleibt und sich nicht zu link ändert*/
+body.dragging * {
+    cursor: grabbing !important;
+}
+/*Sorgt für die Task Card, die beim Draggen an der Maus klebt*/
+.gu-mirror {
+    cursor: grabbing;
+    position: fixed !important;
+    top: 0; left: 0;
+    z-index: 9999 !important; /*liegt über allen anderen Elementen*/
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 0.5rem;
+    pointer-events: none; /* verhindert, dass Ghost Mausinteraktionen blockiert */
+}
+/* Ghost-Effekt, der den Zielort der Task Card repräsentierts */
+.gu-transit {
+    opacity: 0.4;
+}

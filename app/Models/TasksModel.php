@@ -8,30 +8,26 @@ class TasksModel extends Model
 {
     // Gibt alle Tasks zurück, als Default
     public function getData(){
-        $this->tasks = $this->db->table('tasks');
-        return $this->tasks->select('*')->orderBy('tasks', 'asc')->get()->getResultArray();
+        return $this->db->table('tasks')->select('*')->orderBy('tasks', 'asc')->get()->getResultArray();
     }
 
     // Gibt alle Tasks zurück, die zu dem einen Board gehören.
     // Dafür müssen wir die Spalten mit joinen, um auf den Board zugreifen zu können, zu dem die Tasks alle gehören.
     // Und noch ein orderBy nach sortID obendrauf, für die Drag-und-Drop-Funktionalität.
     public function getDataFromBoard($boardId){
-        $this->tasks = $this->db->table('tasks');
-        return $this->tasks->select('tasks.*')->join('spalten', 'tasks.spaltenid = spalten.id')
+        return $this->db->table('tasks')->select('tasks.*')->join('spalten', 'tasks.spaltenid = spalten.id')
             ->where('boardsid', $boardId)->orderBy('sortid', 'asc')->get()->getResultArray();
     }
 
     // Gibt alle Daten zu dem einen Task zurück, welcher der übergebenen Task-ID entspricht, als RowArray (eindimensional)
     public function getDataFromTask($taskId){
-        $this->tasks = $this->db->table('tasks');
-        return $this->tasks->select('tasks.*')->where('id', $taskId)->get()->getRowArray();
+        return $this->db->table('tasks')->select('tasks.*')->where('id', $taskId)->get()->getRowArray();
     }
 
     // CRUD
     public function createTask($data){
-        $this->tasks = $this->db->table('tasks');
         // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und eingefügt.
-        $this->tasks->insert([
+        $this->db->table('tasks')->insert([
             //'id' hat Auto-Increment
             'personenid'          => $data['PersonID'],
             'taskartenid'         => $data['TaskartID'],
@@ -47,9 +43,8 @@ class TasksModel extends Model
         ]);
     }
     public function updateTask($data, $taskId){
-        $this->tasks = $this->db->table('tasks');
         // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
-        $this->tasks->where('id', $taskId)->update([
+        $this->db->table('tasks')->where('id', $taskId)->update([
             //'id' nicht nötig, da wir den alten Wert übernehmen
             'personenid'          => $data['PersonID'],
             'taskartenid'         => $data['TaskartID'],
@@ -68,25 +63,20 @@ class TasksModel extends Model
 
     // Äquivalent zu updateTask, aber einfach mit weniger Daten. Von der Drag-and-Drop-Funktionalität verwendet
     public function updateTaskWithSpaltenId($data, $taskId){
-        $this->tasks = $this->db->table('tasks');
-        // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
-        $this->tasks->where('id', $taskId)->update([
+        $this->db->table('tasks')->where('id', $taskId)->update([
             'spaltenid'           => $data['SpaltenID'],
         ]);
     }
     // Analog
     public function updateTasksWithOrder($data, $taskId){
-        $this->tasks = $this->db->table('tasks');
-        // Die übergebenen Daten werden an die entsprechenden Spalten der Tabelle 'tasks' in der Datenbank zugewiesen und ersetzt.
-        $this->tasks->where('id', $taskId)->update([
+        $this->db->table('tasks')->where('id', $taskId)->update([
             'sortid'              => $data['SortID'],
         ]);
     }
 
     public function deleteTask($taskId){
         // Es wird nur nach der Task-ID gesucht, und dann die entsprechende Zeile gelöscht.
-        $this->tasks = $this->db->table('tasks');
-        $this->tasks->where('id', $taskId)->delete();
+        $this->db->table('tasks')->where('id', $taskId)->delete();
     }
 
 }

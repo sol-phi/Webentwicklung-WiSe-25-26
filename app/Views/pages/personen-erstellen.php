@@ -47,7 +47,7 @@
                         <input type="text" class="form-control <?= session('errors.Vorname') ? 'is-invalid' : '' ?>"
                                id="Vorname" name="Vorname" placeholder="Vorname(n) für die Person"
                                value="<?= old('Vorname', $selected_person['vorname'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Vorname')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Vorname')) ?>
@@ -64,7 +64,7 @@
                         <input type="text" class="form-control <?= session('errors.Nachname') ? 'is-invalid' : '' ?>"
                                id="Nachname" name="Nachname" placeholder="Nachname(n) für die Person"
                                value="<?= old('Nachname', $selected_person['name'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Nachname')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Nachname')) ?>
@@ -82,7 +82,7 @@
                         <input type="text" class="form-control <?= session('errors.EMail') ? 'is-invalid' : '' ?>"
                                id="EMail" name="EMail" placeholder="E-Mail für die Person"
                                value="<?= old('EMail', $selected_person['email'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.EMail')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.EMail')) ?>
@@ -100,7 +100,7 @@
                         <input type="text" class="form-control <?= session('errors.Passwort') ? 'is-invalid' : '' ?>"
                                id="Passwort" name="Passwort" placeholder="Passwort für die Person"
                                value="<?= old('Passwort', $selected_person['passwort'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Passwort')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Passwort')) ?>

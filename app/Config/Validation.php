@@ -67,7 +67,7 @@ class Validation extends BaseConfig
     'PersonID'          => 'required',
     'SpaltenID'         => 'required',
     'SortID'            => 'required|integer',
-    'Erinnerungsdatum'  => 'permit_empty|valid_date',
+    'Erinnerungsdatum'  => 'valid_date',
 //    'Erinnerung'        => '',
 //    'Notizen'             => 'required',
     ];

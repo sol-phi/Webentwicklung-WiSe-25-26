@@ -8,32 +8,27 @@ class BoardsModel extends Model
 {
     // Gibt alle Boards zurück, als Default
     public function getData(){
-        $this->boards = $this->db->table('boards');
-        return $this->boards->select('*')->get()->getResultArray();
+        return $this->db->table('boards')->select('*')->get()->getResultArray();
     }
 
     // Gibt nur den einen Board mit der entsprechenden ID als RowArray (eindimensional) zurück
     public function getDataFromBoard($boardId){
-        $this->boards = $this->db->table('boards');
-        return $this->boards->select('*')->where('id', $boardId)->get()->getRowArray();
+        return $this->db->table('boards')->select('*')->where('id', $boardId)->get()->getRowArray();
     }
 
     // CRUD
     public function createBoard($data){
-        $this->boards = $this->db->table('boards');
-        $this->boards->insert([
+        $this->db->table('boards')->insert([
             //'id' hat Auto-Increment
             'board' => $data['Bezeichnung'],
         ]);
     }
     public function updateBoard($data){
-        $this->boards = $this->db->table('boards');
-        $this->boards->where('id', $data['boardId'])->update([
+        $this->db->table('boards')->where('id', $data['boardId'])->update([
             'board' => $data['Bezeichnung'],
         ]);
     }
     public function deleteBoard($data){
-        $this->boards = $this->db->table('boards');
-        $this->boards->where('id', $data['boardId'])->delete();
+        $this->db->table('boards')->where('id', $data['boardId'])->delete();
     }
 }

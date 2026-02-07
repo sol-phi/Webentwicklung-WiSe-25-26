@@ -69,7 +69,7 @@
                         <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für den Task"
                                value="<?= old('Bezeichnung', $selected_task['tasks'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Bezeichnung')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Bezeichnung')) ?>
@@ -97,7 +97,7 @@
                                 <?php else: ?>
                                     style="color:#212529;"
                                 <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                             <?php if ($todo == "create"): ?>
                                 <option value="" disabled <?= !old('TaskartID') ? 'selected' : '' ?> hidden>Bitte Taskart wählen</option>
                             <?php endif; ?>
@@ -130,7 +130,7 @@
                                 <?php else: ?>
                                     style="color:#212529;"
                                 <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                             <?php if ($todo == "create"): ?>
                                 <option value="" disabled <?= !old('PersonID') ? 'selected' : '' ?> hidden>Bitte Person wählen</option>
                             <?php endif; ?>
@@ -163,7 +163,7 @@
                                 <?php else: ?>
                                     style="color:#212529;"
                                 <?php endif; ?>
-                                <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                             <?php if ($todo == "create"): ?>
                                 <option value="" disabled <?= !old('SpaltenID') ? 'selected' : '' ?> hidden>Bitte Spalte wählen</option>
                             <?php endif; ?>
@@ -193,7 +193,7 @@
                         <input type="number" class="form-control <?= session('errors.SortID') ? 'is-invalid' : '' ?>"
                                id="SortID" name="SortID" placeholder="ID zum Sortieren"
                                value="<?= old('SortID', $selected_task['sortid'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.SortID')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.SortID')) ?>
@@ -209,33 +209,32 @@
                     <div class="col-md-10 d-flex align-items-center">
                         <!--Der versteckte Input sendet normalerweise den Wert "0".-->
                         <!--Wenn die Checkbox angehakt ist, wird die PHP-Bedingung getriggert,-->
-                        <!--und je nach $selected_task['erinnerung'] aus der Datenbank ein 'checked' gesetzt,-->
+                        <!--und je nach $selected_task['erinnerung'] aus der Datenbank oder nach old() aus der vorherigen Validierung ein 'checked' gesetzt,-->
                         <!--was den Wert 1 sendet, welcher den Wert 0 vom versteckten Input überschreibt.-->
                         <!--Hacky workaround, da unchecked Checkboxes keinen Wert senden.-->
                         <input type="hidden" name="Erinnerung" value="0">
                         <input type="checkbox" class="form-check-input" id="Erinnerung" name="Erinnerung"
                                value="1"
-                                <?= (($todo == "copy" || $todo === "update" || $todo === "delete") && !empty($selected_task['erinnerung'])) ? 'checked' : '' ?>
-                                <?php if ($todo == "delete"): ?>
-                                    disabled
-                                <?php endif; ?>>
+                               <?= old('Erinnerung', $selected_task['erinnerung'] ?? 0) ? 'checked' : '' ?>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                     </div>
                 </div>
 
-                <div class="form-group row mb-3">
+                <!--Beim ersten Laden der Seite (um Flashes durch JavaScript zu verhindern): Verstecke Erinnerungsdatum, wenn Erinnerung == 0-->
+                <div class="form-group row mb-3" id="erinnerungsdatum-container"
+                     style="display: <?= old('Erinnerung', $selected_task['erinnerung'] ?? 0) == 1 ? 'flex' : 'none' ?>;">
                     <div class="col-md-2">
                         <label for="Erinnerungsdatum" class="col-form-label">Erinnerungsdatum</label>
                     </div>
                     <div class="col-md-10">
-                        <!--Bei Create ist es ausgegraut, da leer.-->
-                        <!--Beim Kopieren/Bearbeiten/Löschen so wie auch nach einer gescheiterten Validierung ist es schon befüllt, daher schwarz.-->
-                        <!--onInput: Sobald ein Datum komplett eingegeben wurde, wird die Schrift schwarz. Wenn nicht mehr vollständig, wird es wieder grau.-->
-                        <input type="datetime-local" class="form-control <?= session('errors.Erinnerungsdatum') ? 'is-invalid' : '' ?>"
-                               id="Erinnerungsdatum" name="Erinnerungsdatum"
-                               value="<?= old('Erinnerungsdatum', $selected_task['erinnerungsdatum'] ?? '') ?>"
-                               style="color:<?= !empty(old('Erinnerungsdatum', $selected_task['erinnerungsdatum'] ?? '')) ? '#212529' : '#6c757d' ?>;"
-                               oninput="this.style.color = this.value ? '#212529' : '#6c757d'"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                        <!--value: Falls nix in vorheriger Validation und DB, erzeuge Default-Wert, das aktuelle Datum.
+                         So werden Probleme mit 00:00:00 vermieden, Erinnerungsdatum besitzt immer einen Wert.-->
+                        <input type="datetime-local"
+                               class="form-control <?= session('errors.Erinnerungsdatum') ? 'is-invalid' : '' ?>"
+                               id="Erinnerungsdatum"
+                               name="Erinnerungsdatum"
+                               value="<?= esc(old('Erinnerungsdatum', $selected_task['erinnerungsdatum'] ?? date('Y-m-d\TH:i'))) ?>"
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Erinnerungsdatum')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Erinnerungsdatum')) ?>
@@ -248,11 +247,13 @@
                     <div class="col-md-2">
                         <label for="Notizen" class="col-form-label">Notizen</label>
                     </div>
-                    <div class="col-md-10"> <!-- rows="5" macht die textarea höher. So formatiert, damit in der Textarea keine Einschübe auftauchen -->
+                    <div class="col-md-10">
+                        <!-- rows="5" macht die textarea höher. Komische Einschübe hier, damit in der Textarea keine Einschübe auftauchen.
+                        Bei Delete sollte der Placeholder nicht auftauchen, daher der if-else-Block-->
                         <textarea class="form-control <?= session('errors.Notizen') ? 'is-invalid' : '' ?>"
-                                  rows="5" id="Notizen" name="Notizen" placeholder="Weitere Bemerkungen zum Task"
-                                  <?php if ($todo == "delete"): ?>disabled<?php endif; ?>><?= old('Notizen', $selected_task['notizen'] ?? '') ?></textarea>
-                                  <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
+                                  rows="5" id="Notizen" name="Notizen"
+                                  <?php if ($todo == "delete"): ?>disabled<?php else: ?>placeholder="Weitere Bemerkungen zum Task"<?php endif; ?>
+                                  ><?= old('Notizen', $selected_task['notizen'] ?? '') ?></textarea>
                         <?php if (session('errors.Notizen')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Notizen')) ?>
@@ -278,3 +279,5 @@
         </div>
     </div>
 </div>
+
+<script src="<?= base_url('public/assets/js/erinnerungsdatum.js') ?>"></script>

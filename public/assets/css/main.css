@@ -1,0 +1,30 @@
+/*Dezentere Farben für die Knöpfe und Icons*/
+.blue-gradient-buttons{
+    --bs-btn-bg: #2c54c0;
+    --bs-btn-hover-bg: #3b6fd6;
+    --bs-btn-active-bg: #1f3fa3;
+
+    --bs-btn-border-color: #2c54c0;
+    --bs-btn-hover-border-color: #3b6fd6;
+    --bs-btn-active-border-color: #1f3fa3;
+
+    --bs-btn-color: #ffffff;
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-active-color: #ffffff;
+}
+.blue-gradient-icons {
+    color: #3b6fd6;
+}
+.blue-gradient-icons:hover {
+    color: #5a87ed;
+}
+.blue-gradient-icons:active {
+    color: #1f3fa3;
+}
+
+/*Sorgt fürs Stretchen des Body, sodass der Footer in allen Fällen ganz unten auf der Seite landet*/
+body {
+    min-height: 100vh; /*100% von der Höhe des Viewports*/
+    display: flex; /*Body wird zum Flex-Container, d.h. die Elemente werden langgezogen, bis der Viewport voll ist*/
+    flex-direction: column; /*Elemente werden vertikal langgezogen*/
+}
