@@ -9,17 +9,11 @@ class BoardsErstellen extends BaseController
     // Hier werden die einzelnen PHP-Dateien wortwörtlich aneinandergepappt.
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
-    private BoardsModel $boardsModel;
-
-    public function __construct()
-    {
-        $this->boardsModel = new BoardsModel();
-    }
-
     public function getIndex($todo = null, $boardId = null)
     {
         // Fürs Kopieren, Bearbeiten und Löschen wird das betroffene Board geladen.
-        $data['selected_board'] = $this->boardsModel->getDataFromBoard($boardId);
+        $boardsModel = new BoardsModel();
+        $data['selected_board'] = $boardsModel->getDataFromBoard($boardId);
 
         // Abfangen von URL-Manipulationen: leitet zurück zu der Board-Ansicht weiter, wenn kein gültiges Board beim Kopieren/Bearbeiten/Löschen ausgewählt ist.
         // $data['selected_board'] ist nicht gesetzt, wenn die $boardId ungültig ist.
@@ -67,20 +61,26 @@ class BoardsErstellen extends BaseController
             'Bezeichnung'   => $this->request->getPost('Bezeichnung'),
         ];
 
+        $boardsModel = new BoardsModel();
         $session = session();
 
         if ($todo == "create") {
-            $this->boardsModel->createBoard($data);
+            $boardsModel->createBoard($data);
             $session->setFlashdata('success', 'Board erstellt!');
         } elseif ($todo == "copy") { // Wird in der View wie Update behandelt, außer dass das gewählte Board nicht ersetzt, sondern dupliziert wird.
-            $this->boardsModel->createBoard($data);
+            $boardsModel->createBoard($data);
             $session->setFlashdata('success', 'Board kopiert.');
         } elseif ($todo == "update") {
-            $this->boardsModel->updateBoard($data);
+            $boardsModel->updateBoard($data);
             $session->setFlashdata('success', 'Board aktualisiert.');
         } elseif ($todo == "delete") {
-            $this->boardsModel->deleteBoard($data);
-            $session->setFlashdata('error', 'Board gelöscht.');
+            // Wenn das Board noch Spalten in sich drin hat, dann Delete verhindern
+            if ($boardsModel->hasSpalten($boardId)) {
+                session()->setFlashdata('error', 'Das Board kann nicht gelöscht werden, da noch Spalten innerhalb diesem Board existieren.');
+            } else {
+                $boardsModel->deleteBoard($data);
+                $session->setFlashdata('error', 'Board gelöscht.');
+            }
         }
 
         return redirect()->to(base_url('public/boards/'));

@@ -47,7 +47,7 @@
                         <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für die Spalte"
                                value="<?= old('Bezeichnung', $selected_spalte['spalte'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Bezeichnung')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Bezeichnung')) ?>
@@ -82,7 +82,7 @@
                         <input type="number" class="form-control <?= session('errors.SortID') ? 'is-invalid' : '' ?>"
                                id="SortID" name="SortID" placeholder="ID zum Sortieren"
                                value="<?= old('SortID', $selected_spalte['sortid'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                               <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.SortID')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.SortID')) ?>

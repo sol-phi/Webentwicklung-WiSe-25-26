@@ -1,22 +1,3 @@
-/*** Navigation ***/
-.bg-blue{
-    background-color: #002060;
-}
-
-/* Überschreibt die Bootstrap-Attribute*/
-.text-white .nav-link.text-white .active.text-white{
-    color: #ffffff;
-}
-
-.active {
-    font-weight: bold;
-}
-
-/*Damit die Nav-Elemente nicht so nah am Logo sind*/
-.spacing{
-    margin:10px;
-}
-
 /*** Dashboard ***/
 /* Entfernt hartnäckige graue Linie zwischen zweitem Header und Body durch Resetten der Bootstrap-Defaults.
 Unten werden die borders dann entsprechend überschrieben.*/
@@ -26,27 +7,25 @@ Unten werden die borders dann entsprechend überschrieben.*/
 /*Rand der äußersten Card*/
 .blue-gradient-boards-card{
     border: 1px solid #7a95c3;
-    border-radius: 0.5rem;
-    overflow: hidden;
+    border-radius: 0.4rem;
 }
 /*Header der äußersten Card*/
 .blue-gradient-boards-header{
     background-color: #9bb2e1;
     border-bottom: 1px solid #7a95c3;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
 }
 /*Rand der Spalten-Cards*/
 .blue-gradient-spalten-card{
     border: 1px solid #8aa9d6;
-    border-radius: 0.5rem;
-    overflow: hidden;
+    border-radius: 0.4rem;
 }
 /*Erster Header der Spalten-Cards*/
 .blue-gradient-spalten-header{
     background-color: #abbee7;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
     border-bottom: 1px solid #8aa9d6;
 }
 /*Zweiter Header der Spalten-Cards*/
@@ -57,15 +36,15 @@ Unten werden die borders dann entsprechend überschrieben.*/
 /*Rand der Tasks-Cards*/
 .blue-gradient-tasks-card {
     border: 1px solid #99c0e6;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     overflow: hidden;
 }
 /*Erster Header der Tasks-Cards*/
 .blue-gradient-tasks-header{
     background-color: #cad8f3;
     border-bottom: 1px solid #99c0e6;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
 }
 /*Zweiter Header der Tasks-Cards*/
 .blue-gradient-taskarten{
@@ -74,7 +53,7 @@ Unten werden die borders dann entsprechend überschrieben.*/
     border-bottom: 1px solid #99c0e6;
 }
 .blue-gradient-aktionen{
-    background-color: #e9f2ff;
+    background-color: #d9e5f9;
     border-bottom: 1px solid #99c0e6;
 }
 .blue-gradient-notizen{
@@ -99,39 +78,32 @@ Unten werden die borders dann entsprechend überschrieben.*/
     white-space: pre-line;
 }
 
-.task-note-icon {
-    float: left;
-    width: 20px;          /* gleiche Breite wie deine anderen Icons */
-    margin-right: 0.5rem;
-    margin-top: 0.15rem;  /* feines vertikales Tuning */
-    text-align: center;
-}
-/*Dezentere Farben für die Knöpfe und Icons*/
-.blue-gradient-buttons{
-    --bs-btn-bg: #2c54c0;
-    --bs-btn-hover-bg: #3b6fd6;
-    --bs-btn-active-bg: #1f3fa3;
-
-    --bs-btn-border-color: #2c54c0;
-    --bs-btn-hover-border-color: #3b6fd6;
-    --bs-btn-active-border-color: #1f3fa3;
-
-    --bs-btn-color: #ffffff;
-    --bs-btn-hover-color: #ffffff;
-    --bs-btn-active-color: #ffffff;
-}
-.blue-gradient-icons {
-    color: #3b6fd6;
-}
-.blue-gradient-icons:hover {
-    color: #5a87ed;
-}
-.blue-gradient-icons:active {
-    color: #1f3fa3;
+/*Sorgt dafür, dass die Scrollbar unten nicht aus den Ecken rausclippt*/
+.boards-scroll-wrapper{
+    overflow-x: auto;
+    border-bottom-left-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    overflow-y: hidden;
 }
 
-body {
-    min-height: 100vh; /*100% von der Höhe des Viewports*/
-    display: flex; /*Body wird zum Flex-Container, d.h. die Elemente werden langgezogen, bis der Viewport voll ist*/
-    flex-direction: column; /*Elemente werden vertikal langgezogen*/
+/* Suche - Textfeld: ändere Rahmen nicht, und mach rechten Rahmen an dem Button unsichtbar */
+.input-group .form-control,
+.input-group .form-control:focus {
+    border-color: #7a95c3;
+    border-right: 1px solid transparent;
+    outline: none;
+    box-shadow: none;
 }
+/* erzeugt animierten Glow */
+.input-group {
+    border-radius: 0.4rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    overflow: hidden;
+}
+.input-group:focus-within {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+
+

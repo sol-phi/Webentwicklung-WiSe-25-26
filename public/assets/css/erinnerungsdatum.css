@@ -1,0 +1,4 @@
+/*Wenn Erinnerungsdatum nicht vollständig, mache Text grau*/
+.input-empty {
+    color: #6c757d !important;
+}

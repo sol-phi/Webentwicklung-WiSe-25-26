@@ -135,7 +135,6 @@ class TasksErstellen extends BaseController
             'TaskartID'        => $this->request->getPost('TaskartID'),
             'PersonID'         => $this->request->getPost('PersonID'),
             'SpaltenID'        => $this->request->getPost('SpaltenID'),
-            'SortID'           => $this->request->getPost('SortID'),
             'Erinnerungsdatum' => $this->request->getPost('Erinnerungsdatum'),
             'Erinnerung'       => $this->request->getPost('Erinnerung') ? 1 : 0,
             'Notizen'          => $this->request->getPost('Notizen'),

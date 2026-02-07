@@ -10,23 +10,15 @@ class SpaltenErstellen extends BaseController
     // Hier werden die einzelnen PHP-Dateien wortwörtlich aneinandergepappt.
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
-    // Modell-Instanzen zur Wiederverwendung
-    private BoardsModel $boardsModel;
-    private SpaltenModel $spaltenModel;
-
-    public function __construct()
-    {
-        $this->boardsModel = new BoardsModel();
-        $this->spaltenModel = new SpaltenModel();
-    }
-
     public function getIndex($todo = null, $spaltenId = null)
     {
         // Daten aus dem Model zum Erzeugen des Dropdowns für die Board-Auswahl
-        $data['boards'] = $this->boardsModel->getData();
+        $boardsModel = new BoardsModel();
+        $data['boards'] = $boardsModel->getData();
 
         // Fürs Bearbeiten und Löschen wird die betroffene Spalte geladen.
-        $data['selected_spalte'] = $this->spaltenModel->getDataFromSpalte($spaltenId);
+        $spaltenModel = new SpaltenModel();
+        $data['selected_spalte'] = $spaltenModel->getDataFromSpalte($spaltenId);
 
         // Abfangen von URL-Manipulationen: leitet zurück zu der Spaltenansicht weiter, wenn keine gültige Spalte beim Bearbeiten/Löschen ausgewählt ist.
         // $data['selected_spalte'] ist nicht gesetzt, wenn die $spaltenId ungültig ist.
@@ -41,7 +33,7 @@ class SpaltenErstellen extends BaseController
             $data['todo'] = $todo;
         } elseif ($todo == "copy" || $todo == "update" || $todo == "delete") {
             // Damit der Board-Dropdown mit den Daten zu der dazugehörigen Spalte ausgefüllt werden kann.
-            $data['selected_board'] = $this->spaltenModel->getDataFromSpalte($spaltenId);
+            $data['selected_board'] = $spaltenModel->getDataFromSpalte($spaltenId);
             // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
             $data['todo'] = $todo;
         } else{ // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn Aktion keine der obigen drei ist.
@@ -82,20 +74,26 @@ class SpaltenErstellen extends BaseController
             'Beschreibung'=> $this->request->getPost('Beschreibung'),
         ];
 
+        $spaltenModel = new SpaltenModel();
         $session = session();
 
         if ($todo == "create") {
-            $this->spaltenModel->createSpalte($data);
+            $spaltenModel->createSpalte($data);
             $session->setFlashdata('success', 'Spalte erstellt!');
         } elseif ($todo == "copy") { // Wird in der View wie Update behandelt, außer dass die gewählte Spalte nicht ersetzt, sondern dupliziert wird.
-            $this->spaltenModel->createSpalte($data);
+            $spaltenModel->createSpalte($data);
             $session->setFlashdata('success', 'Spalte kopiert.');
         } elseif ($todo == "update") {
-            $this->spaltenModel->updateSpalte($data);
+            $spaltenModel->updateSpalte($data);
             $session->setFlashdata('success', 'Spalte aktualisiert.');
         } elseif ($todo == "delete") {
-            $this->spaltenModel->deleteSpalte($data);
-            $session->setFlashdata('error', 'Spalte gelöscht.');
+            // Wenn die Spalte noch Tasks in sich drin hat, dann Delete verhindern
+            if ($spaltenModel->hasTasks($spaltenId)) {
+                session()->setFlashdata('error', 'Die Spalte kann nicht gelöscht werden, da noch Tasks innerhalb dieser Spalte existieren.');
+            } else {
+                $spaltenModel->deleteSpalte($data);
+                $session->setFlashdata('error', 'Spalte gelöscht.');
+            }
         }
 
         return redirect()->to(base_url('public/spalten/'));

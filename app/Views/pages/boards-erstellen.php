@@ -48,7 +48,7 @@
                         <input type="text" class="form-control <?= session('errors.Bezeichnung') ? 'is-invalid' : '' ?>"
                                id="Bezeichnung" name="Bezeichnung" placeholder="Bezeichnung für das Board"
                                value="<?= old('Bezeichnung', $selected_board['board'] ?? '') ?>"
-                               <?php if ($todo == "delete"): ?>disabled<?php endif; ?>>
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                         <?php if (session('errors.Bezeichnung')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Bezeichnung')) ?>

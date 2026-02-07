@@ -14,6 +14,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.23.5/bootstrap-table.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-        <link href="<?= base_url('public/assets/css/tasks.css') ?>" rel="stylesheet">
+        <link href="<?= base_url('public/assets/css/main.css') ?>" rel="stylesheet">
+        <link href="<?= base_url('public/assets/css/navigation.css') ?>" rel="stylesheet">
+        <link href="<?= base_url('public/assets/css/dashboard.css') ?>" rel="stylesheet">
+        <link href="<?= base_url('public/assets/css/drag-and-drop.css') ?>" rel="stylesheet">
+        <link href="<?= base_url('public/assets/css/erinnerungsdatum.css') ?>" rel="stylesheet">
     </head>
 </html>
