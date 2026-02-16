@@ -33,7 +33,12 @@ class SpaltenModel extends Model
 
     // Gibt alle Spalten zurück, die zu dem einen Board gehören.
     public function getDataFromBoard($boardId){
-        return $this->db->table('spalten')->select('*')->where('boardsid', $boardId)->get()->getResultArray();
+        return $this->db->table('spalten')
+            ->select('*')
+            ->where('boardsid', $boardId)
+            ->orderBy('sortid', 'ASC') // <-- Sortierung für Drag & Drop
+            ->get()
+            ->getResultArray();
     }
 
     // Gibt die eine Spalte zurück, zu der dieser Task gehört, als RowArray (eindimensional)
@@ -69,5 +74,10 @@ class SpaltenModel extends Model
         return $this->db->table('tasks')
                 ->where('spaltenid', $spaltenId)
                 ->countAllResults() > 0;
+    }
+
+    public function updateSpalteSortId($id, $sortId)
+    {
+        return $this->db->table('spalten')->where('id', $id)->update(['sortid' => $sortId]);
     }
 }

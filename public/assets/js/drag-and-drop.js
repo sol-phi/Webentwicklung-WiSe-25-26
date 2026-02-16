@@ -75,4 +75,50 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Drag & Drop für Spalten
+    const drakeColumns = dragula(Array.from($(".columns-container")), {
+        direction: 'horizontal',
+        moves: function (el, source, handle) {
+            return handle.closest('.column-handle') !== null;
+        },
+        // Akzeptiere Drop nur, wenn es keine "ignore-drag" Klasse ist
+        accepts: function (el, target, source, sibling) {
+            // Verhindert, dass man Dinge hinter das Spacer-Div droppt oder das Spacer-Div selbst bewegt wird
+            return !el.classList.contains('ignore-drag') && (!sibling || !sibling.classList.contains('ignore-drag'));
+        },
+        invalid: function (el, handle) {
+            return el.classList.contains('ignore-drag');
+        }
+    });
+
+    drakeColumns.on('drop', function (el, target, source, sibling) {
+        const order = [];
+
+        // Durch alle Spalten iterieren und neue Reihenfolge bauen
+        $(target).children('.draggable-column').each(function(index, child){
+            order.push({
+                SpaltenID: $(child).data('col-id'),
+                SortID: index + 1
+            });
+        });
+
+        // AJAX an den Server senden
+        $.ajax({
+            url: updateColumnPositionUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                Order: order
+            }),
+            success: function(response){
+                console.log('Spalten neu sortiert!');
+            },
+            error: function(xhr, status, error){
+                console.error('AJAX error:', error);
+            }
+        });
+    });
+
+
 });

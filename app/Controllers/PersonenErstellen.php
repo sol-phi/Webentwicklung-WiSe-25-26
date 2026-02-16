@@ -10,10 +10,12 @@ class PersonenErstellen extends BaseController
     // Hier werden die einzelnen PHP-Dateien wortwörtlich aneinandergepappt.
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
+    private BoardsModel $boardsModel;
     private PersonenModel $personenModel;
 
     public function __construct()
     {
+        $this->boardsModel = new BoardsModel();
         $this->personenModel = new PersonenModel();
     }
 

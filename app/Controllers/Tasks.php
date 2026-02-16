@@ -13,22 +13,32 @@ class Tasks extends BaseController
     // Hier werden die einzelnen PHP-Dateien wortwörtlich aneinandergepappt.
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
+    private BoardsModel $boardsModel;
+    private TasksModel $tasksModel;
+    private SpaltenModel $spaltenModel;
+    private TaskartenModel $taskartenModel;
+    private PersonenModel $personenModel;
+
+    public function __construct()
+    {
+        $this->boardsModel = new BoardsModel();
+        $this->tasksModel = new TasksModel();
+        $this->spaltenModel = new SpaltenModel();
+        $this->taskartenModel = new TaskartenModel();
+        $this->personenModel = new PersonenModel();
+    }
+
     // Wenn nur /tasks aufgerufen wird, wird man automatisch zur Card-Ansicht des ersten Boards weitergeleitet.
     // Tasks in Tabellenansicht, im Stil von den Board-, Spalten- und Personenansichten in der Navigation.
     public function getIndex()
     {
         // Boards geladen für den Fallback aufs erste verfügbare Board bei URL-Manipulationen bei Redirects zurück zu Cards, und zum Anzeigen
-        $boardsModel = new BoardsModel();
-        $data['boards'] = $boardsModel->getData();
-        $tasksModel = new TasksModel();
-        $data['tasks'] = $tasksModel->getData();
+        $data['boards'] = $this->boardsModel->getData();
+        $data['tasks'] = $this->tasksModel->getData();
         // Folgende Daten geladen, damit dessen Bezeichnungen zu dem Task angezeigt werden können.
-        $spaltenModel = new SpaltenModel();
-        $data['spalten'] = $spaltenModel->getData();
-        $taskartenModel = new TaskartenModel();
-        $data['taskarten'] = $taskartenModel->getData();
-        $personenModel = new PersonenModel();
-        $data['personen'] = $personenModel->getData();
+        $data['spalten'] = $this->spaltenModel->getData();
+        $data['taskarten'] = $this->taskartenModel->getData();
+        $data['personen'] = $this->personenModel->getData();
 
         echo view('templates/header');
         echo view('templates/navigation');
@@ -46,12 +56,11 @@ class Tasks extends BaseController
         }
 
         // $data beinhält TaskID, SpaltenID und den Array Order, welcher aber hier nicht genutzt wird.
-        $tasksModel = new TasksModel();
-        $tasksModel->updateTaskWithSpaltenId($data, $data['TaskID']);
+        $this->tasksModel->updateTaskWithSpaltenId($data, $data['TaskID']);
 
         // Alle Tasks in der Zielspalte werden geupdatet, durch Lesen aus dem Order Array. $item beinhält TaskID und SortID.
         foreach($data['Order'] as $item){
-            $tasksModel->updateTasksWithOrder($item, $item['TaskID']);
+            $this->tasksModel->updateTasksWithOrder($item, $item['TaskID']);
         }
 
         // Falls wir bis hier keine Fehler kriegen, muss es geklappt haben

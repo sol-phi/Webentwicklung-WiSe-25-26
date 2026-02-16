@@ -49,7 +49,7 @@
                     </div>
                     <!--Funktioniert nicht, sollte aber auf jeder Seite drauf sein. Vielleicht für später?-->
                     <div class="input-group ms-3" style="max-width: 250px;">
-                        <input id="taskSearch" type="search" class="form-control blue-gradient-boards-card" placeholder="Suchen... (WIP)">
+                        <input id="taskSearch" type="search" class="form-control blue-gradient-boards-card" placeholder="Suchen...">
                         <button class="btn blue-gradient-buttons" type="button" id="button-search">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -67,16 +67,19 @@
                         <div class="alert alert-danger text-center">Keine Spalten vorhanden...</div>
                     <?php else: ?>
 
-                        <div class="d-flex flex-nowrap gap-3 align-items-stretch mb-3">
+                        <div class="d-flex flex-nowrap gap-3 align-items-stretch mb-3 columns-container">
                             <?php foreach ($spalten as $spalte): ?>
                                 <!--Width ist sehr genau gewählt, sodass die 5. Spalte in der Desktop-Sicht gerade so weit reinclippt,
                                 dass Benutzer verstehen, dass sie horizontal scrollen können, auch wenn die Scrollbar nicht direkt sichtbar ist-->
-                                <div class="d-flex flex-column flex-shrink-0 gap-3" style="width: 300px;">
+                                <div class="d-flex flex-column flex-shrink-0 gap-3 draggable-column"  style="width: 300px;"
+                                     data-col-id="<?= $spalte['id'] ?>">
                                     <!--Jede Spalte wird in einer vertikalen Card dargestellt-->
                                     <div class="card h-100 w-100 blue-gradient-spalten-card">
 
-                                        <div class="card-header blue-gradient-spalten-header">
-                                            <div class="fs-5 fw-semibold"><?= esc($spalte['spalte']) ?></div>
+                                        <div class="card-header blue-gradient-spalten-header column-handle position-relative" style="cursor: grab">
+                                            <i class="fa-solid fa-grip blue-gradient-drag-icon"
+                                               style="position: absolute; top: 0px; left: 50%; transform: translateX(-50%);"></i>
+                                            <div class="fs-5 fw-semibold mt-2"><?= esc($spalte['spalte']) ?></div>
                                         </div>
                                         <div class="card-header blue-gradient-spalten-beschreibung">
                                             <div class="small"><?= esc($spalte['spaltenbeschreibung']) ?></div>
@@ -203,8 +206,9 @@
                                 </div>
                             <?php endforeach; ?>
 
-                            <!--Hacky workaround für Scrollbar an äußerster Card. Damit wird ein weiteres, sehr enges "Spaltenelement" erzeugt, sodass gap-3 nach rechts greift-->
-                            <div class="d-flex flex-column flex-shrink-0 gap-3" style="width: 0.001rem;"></div>
+                            <!--Hacky workaround für Scrollbar an äußerster Card. Damit wird ein weiteres, sehr enges "Spaltenelement" erzeugt, sodass gap-3 nach rechts greift
+                            Ignore-Drag damit man nicht auf diese Spalte droppen kann-->
+                            <div class="d-flex flex-column flex-shrink-0 gap-3 ignore-drag" style="width: 0.001rem;"></div>
                         </div>
 
                     <?php endif; ?>
@@ -222,8 +226,11 @@
 <script>
     // Quirk von Auto-Routing. update-position == postUpdatePosition
     updateTaskPositionUrl = "<?= base_url('public/tasks/update-position') ?>"
+    // URL für Spalten
+    updateColumnPositionUrl = "<?= base_url('public/spalten/update-position') ?>";
 </script>
 <script src="<?= base_url('public/assets/js/drag-and-drop.js') ?>"></script>
+<script src="<?= base_url('public/assets/js/search.js') ?>"></script>
 
 
 

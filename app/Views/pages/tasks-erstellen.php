@@ -152,6 +152,39 @@
 
                 <div class="form-group row mb-3">
                     <div class="col-md-2">
+                        <label for="BoardUpdate" class="col-form-label">Board</label>
+                    </div>
+                    <div class="col-md-10">
+                        <!-- Standardmäßig das Board der aktuellen Spalte oder das erste verfügbare auswählen -->
+                        <select class="form-select" id="BoardUpdate" <?= $todo == "delete" ? 'disabled' : '' ?>>
+                            <?php
+                            // Bestimme die aktuelle BoardID (entweder von der selected_spalte oder Fallback)
+                            $currentBoardId = '';
+                            if(isset($selected_task['spaltenid'])) {
+                                // Finde Board ID anhand Spalten ID
+                                foreach($spalten as $spalte) {
+                                    if($spalte['id'] == $selected_task['spaltenid']) {
+                                        $currentBoardId = $spalte['boardsid'];
+                                        break;
+                                    }
+                                }
+                            } elseif (isset($selected_board['id'])) {
+                                // Falls beim Erstellen (vom Dashboard kommend) eine BoardID bekannt ist
+                                $currentBoardId = $selected_board['id'];
+                            }
+                            ?>
+                            <?php foreach ($boards as $board): ?>
+                                <option value="<?= esc($board['id']) ?>"
+                                        <?= ($currentBoardId == $board['id']) ? 'selected' : '' ?>>
+                                    <?= esc($board['board']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <div class="col-md-2">
                         <label for="SpaltenID" class="col-form-label">Spalte</label>
                     </div>
                     <div class="col-md-10">
@@ -169,12 +202,14 @@
                             <?php endif; ?>
 
                             <?php foreach ($spalten as $spalte): ?>
-                                <?php if ($view == 'tasks' || ($view == 'dashboard' && $spalte['boardsid'] == $selected_board['id'])): ?>
-                                    <option value="<?= esc($spalte['id']) ?>" style="color:#000;"
-                                            <?= (old('SpaltenID', $selected_spalte['id'] ?? '') == $spalte['id']) ? 'selected' : '' ?>>
-                                        <?= esc($spalte['spalte']) ?>
-                                    </option>
-                                <?php endif; ?>
+                                <!-- Keine IF-Bedingung, die Spalten anderer Boards ausblendet.
+                                     Das Filtern übernimmt jetzt JavaScript anhand von data-board-id. -->
+                                <option value="<?= esc($spalte['id']) ?>"
+                                        data-board-id="<?= esc($spalte['boardsid']) ?>"
+                                        style="color:#000;"
+                                        <?= (old('SpaltenID', $selected_task['spaltenid'] ?? '') == $spalte['id']) ? 'selected' : '' ?>>
+                                    <?= esc($spalte['spalte']) ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <?php if (session('errors.SpaltenID')): ?>
@@ -264,3 +299,4 @@
 </div>
 
 <script src="<?= base_url('public/assets/js/erinnerungsdatum.js') ?>"></script>
+<script src="<?= base_url('public/assets/js/boardswechseln.js') ?>"></script>

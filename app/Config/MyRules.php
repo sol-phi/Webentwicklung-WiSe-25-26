@@ -78,4 +78,22 @@ class MyRules extends BaseConfig
         ],
     ];
 
+    public array $taskarten = [
+        'Taskart' => [
+            'label'  => 'Bezeichnung',
+            'rules'  => 'required|min_length[3]|max_length[50]',
+            'errors' => [
+                'required' => 'Die Bezeichnung der Taskart ist erforderlich.',
+                'min_length' => 'Die Bezeichnung muss mindestens {param} Zeichen lang sein.'
+            ],
+        ],
+        'TaskartenIcon' => [
+            'label'  => 'Icon',
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'Das Icon-Kürzel ist erforderlich.'
+            ],
+        ],
+    ];
+
 }

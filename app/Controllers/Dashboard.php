@@ -10,6 +10,21 @@ use App\Models\TasksModel;
 
 class Dashboard extends BaseController
 {
+    private BoardsModel $boardsModel;
+    private SpaltenModel $spaltenModel;
+    private TasksModel $tasksModel;
+    private TaskartenModel $taskartenModel;
+    private PersonenModel $personenModel;
+
+    public function __construct()
+    {
+        $this->boardsModel = new BoardsModel();
+        $this->spaltenModel = new SpaltenModel();
+        $this->tasksModel = new TasksModel();
+        $this->taskartenModel = new TaskartenModel();
+        $this->personenModel = new PersonenModel();
+    }
+
     // Hier werden die einzelnen PHP-Dateien wortwörtlich aneinandergepappt.
     // Man sollte daher die Code-Ausschnitte aus den jeweils vier einzelnen Dateien als ein großes HTML-Dokument betrachten.
 
@@ -18,22 +33,17 @@ class Dashboard extends BaseController
     {
         // Es werden immer alle Boards für den Boards Dropdown geladen.
         // Zusätzlich wird gespeichert, welcher Board aktuell ausgewählt ist, fürs Filtern der Spalten und Tasks.
-        $boardsModel = new BoardsModel();
-        $data['boards'] = $boardsModel->getData();
-        $data['selected_board'] = $boardsModel->getDataFromBoard($boardId);
+        $data['boards'] = $this->boardsModel->getData();
+        $data['selected_board'] = $this->boardsModel->getDataFromBoard($boardId);
         // Es werden immer alle Spalten geladen, die zu dem ausgewählten Board gehören.
-        $spaltenModel = new SpaltenModel();
-        $data['spalten'] = $spaltenModel->getDataFromBoard($boardId);
+        $data['spalten'] = $this->spaltenModel->getDataFromBoard($boardId);
         // Es werden immer alle Tasks geladen, die zu dem ausgewählten Board gehören.
         // Welcher Task zu welcher Spalte gehört, wird in der View gefiltert.
-        $tasksModel = new TasksModel();
-        $data['tasks'] = $tasksModel->getDataFromBoard($boardId);
+        $data['tasks'] = $this->tasksModel->getDataFromBoard($boardId);
         // Damit in den Task-Cards das dazugehörige Icon der Taskart geladen werden kann.
-        $taskartenModel = new TaskartenModel();
-        $data['taskarten'] = $taskartenModel->getData();
+        $data['taskarten'] = $this->taskartenModel->getData();
         // Zum Anzeigen bei den Tasks dabei
-        $personenModel = new PersonenModel();
-        $data['personen'] = $personenModel->getDataFromBoard($boardId);
+        $data['personen'] = $this->personenModel->getDataFromBoard($boardId);
 
         // Abfangen von URL-Manipulationen: leitet zu dem ersten verfügbaren Board weiter, wenn kein gültiges Board ausgewählt ist.
         // $data['selected_board'] ist nicht gesetzt, wenn die $boardId ungültig ist.

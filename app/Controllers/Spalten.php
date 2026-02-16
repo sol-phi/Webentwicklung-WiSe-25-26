@@ -26,4 +26,21 @@ class Spalten extends BaseController
         echo view('pages/spalten', $data);
         echo view('templates/footer');
     }
+
+
+    // Von Ajax nach einem erfolgreichem Drop aufgerufen
+    public function postUpdatePosition()
+    {
+        $data = json_decode($this->request->getBody(), true);
+
+        if(!$data || !isset($data['Order'])){
+            return $this->response->setJSON(['success' => false, 'message' => 'No data received']);
+        }
+
+        foreach($data['Order'] as $item){
+            $this->spaltenModel->updateSpalteSortId($item['SpaltenID'], $item['SortID']);
+        }
+
+        return $this->response->setJSON(['success' => true]);
+    }
 }
