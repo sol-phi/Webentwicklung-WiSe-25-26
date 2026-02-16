@@ -79,12 +79,18 @@
                                         <div class="card-header blue-gradient-spalten-header column-handle position-relative">
                                             <i class="fa-solid fa-grip blue-gradient-drag-icon"
                                                style="position: absolute; top: 0px; left: 50%; transform: translateX(-50%);"></i>
-                                            <div class="fs-5 fw-semibold mt-2 spalten-title" style="display: inline-block; margin-top: 10px;">
+                                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                            <div class="fs-5 fw-semibold mt-2 spalten-title flex-grow-1 text-truncate" style="min-width: 0; max-width: 275px; vertical-align: top; margin-top: 10px;"
+                                                 title="<?= esc($spalte['spalte']) ?>">
                                                 <?= esc($spalte['spalte']) ?>
                                             </div>
                                         </div>
                                         <div class="card-header blue-gradient-spalten-beschreibung">
-                                            <div class="small"><?= esc($spalte['spaltenbeschreibung']) ?></div>
+                                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                            <div class="small flex-grow-1 text-truncate" style="min-width: 0; max-width: 275px; vertical-align: top;"
+                                                 title="<?= esc($spalte['spaltenbeschreibung']) ?>">
+                                                <?= esc($spalte['spaltenbeschreibung']) ?>
+                                            </div>
                                         </div>
 
                                         <!--d-flex flex-column, zusammen mit align-items-stretch außen sorgt dafür,
@@ -106,7 +112,9 @@
                                                             <i class="fa-solid fa-grip blue-gradient-drag-icon"
                                                                style="position: absolute; top: 0px; left: 50%; transform: translateX(-50%);"></i>
 
-                                                            <div class="task-title" style="display: inline-block; margin-top: 10px;">
+                                                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                                            <div class="task-title flex-grow-1 text-truncate" style="min-width: 0; max-width: 250px; vertical-align: top; margin-top: 10px;"
+                                                                 title="<?= esc($task['tasks']) ?>">
                                                                 <?= esc($task['tasks']) ?>
                                                             </div>
                                                         </div>
@@ -155,7 +163,9 @@
                                                                         <div class="tasks-align-icons">
                                                                             <i class="fa-solid fa-user text-muted"></i>
                                                                         </div>
-                                                                        <div class="flex-grow-1">
+                                                                        <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                                                        <div class="flex-grow-1 text-truncate" style="min-width: 0;"
+                                                                             title="<?= esc($person['vorname']) ?> <?= esc($person['name']) ?>">
                                                                             <?= esc($person['vorname']) ?> <?= esc($person['name']) ?>
                                                                         </div>
                                                                     </div>

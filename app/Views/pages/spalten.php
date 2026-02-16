@@ -43,9 +43,27 @@
                 <?php foreach ($spalten as $spalte): ?>
                     <tr>
                         <td><?= esc($spalte['id']) ?></td>
-                        <td><?= esc($spalte['spalte']) ?></td>
-                        <td><?= esc($spalte['spaltenbeschreibung']) ?></td>
-                        <td><?= esc($spalte['board']) ?></td>
+                        <td>
+                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 200px;"
+                                 title="<?= esc($spalte['spalte']) ?>">
+                                <?= esc($spalte['spalte']) ?>
+                            </div>
+                        </td>
+                        <td>
+                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 600px;"
+                                 title="<?= esc($spalte['spaltenbeschreibung']) ?>">
+                                <?= esc($spalte['spaltenbeschreibung']) ?>
+                            </div>
+                        </td>
+                        <td>
+                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 200px;"
+                                 title="<?= esc($spalte['board']) ?>">
+                                <?= esc($spalte['board']) ?>
+                            </div>
+                        </td>
                         <td>
                             <div class="d-inline-flex gap-2">
                                 <a href="<?= base_url('public/spalten-erstellen/copy/' . $spalte['id'])?>">

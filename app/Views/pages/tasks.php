@@ -49,13 +49,31 @@
                     <?php foreach ($tasks as $task): ?>
                         <tr>
                             <td><?= esc($task['id']) ?></td>
-                            <td><?= esc($task['tasks']) ?></td>
+                            <td>
+                                <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 200px;"
+                                     title="<?= esc($task['tasks']) ?>">
+                                    <?= esc($task['tasks']) ?>
+                                </div>
+                            </td>
                             <?php foreach ($spalten as $spalte): ?>
                                 <?php if ($task['spaltenid'] == $spalte['id']): ?>
-                                    <td><?= esc($spalte['spalte']) ?></td>
+                                    <td>
+                                        <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                        <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 200px;"
+                                             title="<?= esc($spalte['spalte']) ?>">
+                                            <?= esc($spalte['spalte']) ?>
+                                        </div>
+                                    </td>
                                     <?php foreach ($boards as $board): ?>
                                         <?php if ($spalte['boardsid'] == $board['id']): ?>
-                                            <td><?= esc($board['board']) ?></td>
+                                            <td>
+                                                <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                                <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 200px;"
+                                                     title="<?= esc($board['board']) ?>">
+                                                    <?= esc($board['board']) ?>
+                                                </div>
+                                            </td>
                                             <?php break;?>
                                         <?php endif;?>
                                     <?php endforeach;?>
@@ -70,7 +88,11 @@
                                             <div class="tasks-align-icons">
                                                 <i class="fa-solid fa-fw text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
                                             </div>
-                                            <span><?= esc($taskart['taskart']) ?></span>
+                                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 125px;"
+                                                 title="<?= esc($taskart['taskart']) ?>">
+                                                <?= esc($taskart['taskart']) ?>
+                                            </div>
                                         </div>
                                     </td>
                                     <?php break;?>
@@ -78,7 +100,13 @@
                             <?php endforeach;?>
                             <?php foreach ($personen as $person): ?>
                                 <?php if ($task['personenid'] == $person['id']): ?>
-                                    <td><?= esc($person['vorname']) ?> <?= esc($person['name']) ?></td>
+                                    <td>
+                                        <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                                        <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 225px;"
+                                             title="<?= esc($person['vorname']) ?> <?= esc($person['name']) ?>">
+                                            <?= esc($person['vorname']) ?> <?= esc($person['name']) ?>
+                                        </div>
+                                    </td>
                                     <?php break;?>
                                 <?php endif;?>
                             <?php endforeach;?>
@@ -96,7 +124,7 @@
 
                             <td> <!--Sorgt dafür, dass Notizen abgeschnitten und in title komplett angezeigt werden, wenn sie zu lang sind-->
                                 <?php if (!empty($task['notizen'])): ?>
-                                    <div style="width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                    <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 300px;"
                                          title="<?= esc($task['notizen']) ?>">
                                         <?= esc($task['notizen']) ?>
                                     </div>

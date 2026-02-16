@@ -32,9 +32,27 @@
                 <?php foreach ($personen as $person): ?>
                     <tr>
                         <td><?= esc($person['id']) ?></td>
-                        <td><?= esc($person['vorname']) ?></td>
-                        <td><?= esc($person['name']) ?></td>
-                        <td><?= esc($person['email']) ?></td>
+                        <td>
+                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 300px;"
+                                 title="<?= esc($person['vorname']) ?>">
+                                <?= esc($person['vorname']) ?>
+                            </div>
+                        </td>
+                        <td>
+                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 300px;"
+                                 title="<?= esc($person['name']) ?>">
+                                <?= esc($person['name']) ?>
+                            </div>
+                        </td>
+                        <td>
+                            <!--Verhindert, dass extrem lange Strings das Layout zerstören-->
+                            <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 300px;"
+                                 title="<?= esc($person['email']) ?>">
+                                <?= esc($person['email']) ?>
+                            </div>
+                        </td>
                         <!--<td><?php /*= esc($person['passwort']) */?></td>-->
                         <td>
                             <div class="d-inline-flex gap-2">
