@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Man kann Tasks-Cards nur am Header packen, und auch da nicht am Text
         moves: function (el, source, handle) {
             // Nur Header der Task draggable
-            return handle.closest('.grabbable') !== null && handle.closest('.task-title') == null;
+            return handle.closest('.task-handle') !== null && handle.closest('.task-title') == null;
         }
     });
 
@@ -79,16 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Drag & Drop für Spalten
     const drakeColumns = dragula(Array.from($(".columns-container")), {
         direction: 'horizontal',
+        // Man kann Spalten-Cards nur am Header packen, und auch da nicht am Text
         moves: function (el, source, handle) {
-            return handle.closest('.column-handle') !== null;
-        },
-        // Akzeptiere Drop nur, wenn es keine "ignore-drag" Klasse ist
-        accepts: function (el, target, source, sibling) {
-            // Verhindert, dass man Dinge hinter das Spacer-Div droppt oder das Spacer-Div selbst bewegt wird
-            return !el.classList.contains('ignore-drag') && (!sibling || !sibling.classList.contains('ignore-drag'));
-        },
-        invalid: function (el, handle) {
-            return el.classList.contains('ignore-drag');
+            // Nur Header der Task draggable
+            return handle.closest('.column-handle') !== null && handle.closest('.spalten-title') == null;
         }
     });
 
@@ -118,6 +112,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('AJAX error:', error);
             }
         });
+    });
+
+    // Wenn in dem drag-State (Maus gedrückt), dann füge die dragging-Klasse zu dem Body Element hinzu.
+    // In main.css sorgt das für cursor: grabbing, und überschreibt alle anderen cursor-Zustände.
+    // Speziell Body, um alle Elemente abzudecken und Edge Cases zu verhindern, da es das äußerste Element ist.
+    drakeColumns.on('drag', () => {
+        document.body.classList.add('dragging');
+    });
+    // Analog, aber anstatt die dragging-Klasse hinzuzufügen, wird sie entfernt.
+    drakeColumns.on('dragend', () => {
+        document.body.classList.remove('dragging');
+    });
+
+    // Stoppt Drag, wenn die Maus das Fenster verlässt und man dann den Klick loslässt
+    window.addEventListener('mouseout', function(e) {
+        if (!e.relatedTarget && drakeColumns.dragging) {
+            drakeColumns.cancel();
+        }
+    });
+
+    // Wenn das Browserfenster den Fokus verliert, Drag abbrechen, bspw. durch Windows-Taste oder Alt & Tab
+    window.addEventListener('blur', () => {
+        if (drakeColumns.dragging) {
+            drakeColumns.cancel();
+        }
     });
 
 

@@ -61,11 +61,10 @@
                         <label for="Beschreibung" class="col-form-label">Beschreibung</label>
                     </div>
                     <div class="col-md-10">
-                        <textarea class="form-control <?= session('errors.Beschreibung') ? 'is-invalid' : '' ?>"
-                                  rows="5" id="Beschreibung" name="Beschreibung"
-                                  placeholder="Weitere Bemerkungen zur Spalte"
-                                  <?= ($todo === "delete") ? 'disabled' : '' ?>><?= old('Beschreibung', $selected_spalte['spaltenbeschreibung'] ?? '') ?></textarea>
-                                  <!--Auf einer Zeile, damit keine Einschübe in der Textarea entstehen-->
+                        <input type="text" class="form-control <?= session('errors.Beschreibung') ? 'is-invalid' : '' ?>"
+                                  id="Beschreibung" name="Beschreibung" placeholder="Weitere Bemerkungen zur Spalte"
+                                  value="<?= old('Beschreibung', $selected_spalte['spaltenbeschreibung'] ?? '') ?>"
+                                  <?= ($todo === "delete") ? 'disabled' : '' ?>>
                         <?php if (session('errors.Beschreibung')): ?>
                             <div class="invalid-feedback d-block">
                                 <?= esc(session('errors.Beschreibung')) ?>
@@ -74,24 +73,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row mb-3">
-                    <div class="col-md-2">
-                        <label for="SortID" class="col-form-label">SortID</label>
-                    </div>
-                    <div class="col-md-10">
-                        <input type="number" class="form-control <?= session('errors.SortID') ? 'is-invalid' : '' ?>"
-                               id="SortID" name="SortID" placeholder="ID zum Sortieren"
-                               value="<?= old('SortID', $selected_spalte['sortid'] ?? '') ?>"
-                               <?= $todo == "delete" ? 'disabled' : '' ?>>
-                        <?php if (session('errors.SortID')): ?>
-                            <div class="invalid-feedback d-block">
-                                <?= esc(session('errors.SortID')) ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <!--Mit Dropdowns gelöst, sodass nur IDs ausgewählt werden können, die auch existieren. Für die nächsten ID-Felder analog-->
+                <!--Mit Dropdowns gelöst, sodass nur IDs ausgewählt werden können, die auch existieren.-->
                 <div class="form-group row mb-3">
                     <div class="col-md-2">
                         <label for="Board" class="col-form-label">Board auswählen</label>

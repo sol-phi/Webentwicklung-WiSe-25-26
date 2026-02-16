@@ -25,16 +25,16 @@
                            href="<?= base_url('public/tasks') ?>">Tasks</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white <?= ($segment1 === 'taskarten' || ($segment1 === 'taskarten-erstellen' && $segment2 === 'taskarten')) ? 'active' : '' ?>"
-                           href="<?= base_url('public/taskarten') ?>">Task-Arten</a>
+                        <a class="nav-link text-white <?= ($segment1 === 'spalten' || $segment1 === 'spalten-erstellen') ? 'active' : '' ?>"
+                           href="<?= base_url('public/spalten') ?>">Spalten</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white <?= ($segment1 === 'boards' || $segment1 === 'boards-erstellen') ? 'active' : '' ?>"
                            href="<?= base_url('public/boards') ?>">Boards</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white <?= ($segment1 === 'spalten' || $segment1 === 'spalten-erstellen') ? 'active' : '' ?>"
-                           href="<?= base_url('public/spalten') ?>">Spalten</a>
+                        <a class="nav-link text-white <?= ($segment1 === 'taskarten' || $segment1 === 'taskarten-erstellen') ? 'active' : '' ?>"
+                           href="<?= base_url('public/taskarten') ?>">Taskarten</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white <?= ($segment1 === 'personen' || $segment1 === 'personen-erstellen') ? 'active' : '' ?>"

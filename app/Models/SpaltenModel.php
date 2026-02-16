@@ -49,10 +49,16 @@ class SpaltenModel extends Model
 
     // CRUD
     public function createSpalte($data){
+        // Ermittelt die höchste SortID von allen Spalten, und macht die SortID dann um eins höher, sodass neue Spalten immer hinten dran gehangen werden.
+        $maxSortId = $this->db->table('spalten')
+            ->selectMax('sortid')
+            ->get()
+            ->getRowArray()['sortid'];
+
         $this->db->table('spalten')->insert([
             //'id' hat Auto-Increment
             'boardsid'            => $data['Board'],
-            'sortid'              => $data['SortID'],
+            'sortid'              => empty($maxSortId) ? 0 : $maxSortId + 1,
             'spalte'              => $data['Bezeichnung'],
             'spaltenbeschreibung' => $data['Beschreibung'],
         ]);
@@ -60,7 +66,6 @@ class SpaltenModel extends Model
     public function updateSpalte($data){
         $this->db->table('spalten')->where('id', $data['spaltenId'])->update([
             'boardsid'            => $data['Board'],
-            'sortid'              => $data['SortID'],
             'spalte'              => $data['Bezeichnung'],
             'spaltenbeschreibung' => $data['Beschreibung'],
         ]);
@@ -76,7 +81,7 @@ class SpaltenModel extends Model
                 ->countAllResults() > 0;
     }
 
-    public function updateSpalteSortId($id, $sortId)
+    public function updateSpaltenOrder($id, $sortId)
     {
         return $this->db->table('spalten')->where('id', $id)->update(['sortid' => $sortId]);
     }

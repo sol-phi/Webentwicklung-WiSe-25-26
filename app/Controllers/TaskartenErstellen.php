@@ -13,19 +13,26 @@ class TaskartenErstellen extends BaseController
         $this->taskartenModel = new TaskartenModel();
     }
 
-    public function getIndex($todo, $id = null)
+    public function getIndex($todo = null, $taskartenId = null)
     {
-        $data = [
-            'todo' => $todo,
-            'selected_taskart' => null
-        ];
+        // Fürs Kopieren, Bearbeiten und Löschen wird das betroffene Board geladen.
+        $data['selected_taskart'] = $this->taskartenModel->getDataFromTaskart($taskartenId);
 
-        if ($id) {
-            $data['selected_taskart'] = $this->taskartenModel->getDataFromTaskart($id);
-            if (!$data['selected_taskart']) {
-                return redirect()->to(base_url('public/taskarten'));
-            }
+        // Abfangen von URL-Manipulationen: leitet zurück zu der Board-Ansicht weiter, wenn kein gültiges Board beim Kopieren/Bearbeiten/Löschen ausgewählt ist.
+        // $data['selected_board'] ist nicht gesetzt, wenn die $boardId ungültig ist.
+        // Copy, Update und Delete müssen eine *valide* BoardID besitzen, Create darf überhaupt keine BoardID besitzen.
+        if ((($todo == "copy" || $todo == "update" || $todo == "delete") && !isset($data['selected_taskart']))  ||
+            ($todo == "create" && isset($taskartenId)) ) {
+            return redirect()->to(base_url('public/taskarten'));
         }
+
+        // Abfangen von URL-Manipulationen: leitet zurück zu der Tabellenansicht weiter, wenn Aktion keine der vier unten aufgeführten ist.
+        if (!($todo == "create" || $todo == "copy" || $todo == "update" || $todo == "delete")) {
+            return redirect()->to(base_url('public/taskarten'));
+        }
+
+        // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
+        $data['todo'] = $todo;
 
         echo view('templates/header');
         echo view('templates/navigation');

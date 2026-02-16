@@ -7,13 +7,13 @@
             <!--Bestimmt Titel des Formulars je nach Herkunft und Aktion-->
             <?php if ($view == 'dashboard'): ?>
                 <?php if ($todo == "create"): ?>
-                    <span>Task erstellen - <?= esc($selected_board['board']) ?></span>
+                    <span>Task erstellen</span>
                 <?php elseif ($todo == "copy"): ?>
-                    <span>Task kopieren - <?= esc($selected_board['board']) ?></span>
+                    <span>Task kopieren</span>
                 <?php elseif ($todo == "update"): ?>
-                    <span>Task bearbeiten - <?= esc($selected_board['board']) ?></span>
+                    <span>Task bearbeiten</span>
                 <?php elseif ($todo == "delete"): ?>
-                    <span>Task löschen - <?= esc($selected_board['board']) ?></span>
+                    <span>Task löschen</span>
                 <?php endif; ?>
             <?php elseif ($view == 'tasks'): ?>
                 <?php if ($todo == "create"): ?>
@@ -150,40 +150,62 @@
                     </div>
                 </div>
 
+                <?php
+                // Bestimme die aktuelle BoardID (entweder von der selected_spalte oder Fallback)
+                $currentBoardId = '';
+                // Prüft, ob von leerem Board kommend oder nach Validierung auf leerem Board, damit es direkt so geladen werden kann (keine JS-Flashes)
+                // Wird in den Board- und Spalten-Dropdowns verwendet
+                $hasColumns = false;
+                if(isset($selected_task['spaltenid'])) {
+                    // Finde Board ID anhand Spalten ID
+                    foreach($spalten as $spalte) {
+                        if($spalte['id'] == $selected_task['spaltenid']) {
+                            $currentBoardId = $spalte['boardsid'];
+                            if (old('BoardID', $currentBoardId ?? '') == $currentBoardId) {
+                                $hasColumns = true; // Keine Fehlermeldung
+                            }
+                            break;
+                        }
+                    }
+                } elseif (isset($selected_board['id'])) {
+                    // Falls beim Erstellen (vom Dashboard kommend) eine BoardID bekannt ist
+                    $currentBoardId = $selected_board['id'];
+                    foreach ($spalten as $spalte) {
+                        if (old('BoardID', $currentBoardId ?? '') == $spalte['boardsid']) {
+                            $hasColumns = true; // Keine Fehlermeldung
+                            break;
+                        }
+                    }
+                }
+                ?>
                 <div class="form-group row mb-3">
                     <div class="col-md-2">
-                        <label for="BoardUpdate" class="col-form-label">Board</label>
+                        <label for="BoardID" class="col-form-label">Board</label>
                     </div>
                     <div class="col-md-10">
                         <!-- Standardmäßig das Board der aktuellen Spalte oder das erste verfügbare auswählen -->
-                        <select class="form-select" id="BoardUpdate" <?= $todo == "delete" ? 'disabled' : '' ?>>
-                            <?php
-                            // Bestimme die aktuelle BoardID (entweder von der selected_spalte oder Fallback)
-                            $currentBoardId = '';
-                            if(isset($selected_task['spaltenid'])) {
-                                // Finde Board ID anhand Spalten ID
-                                foreach($spalten as $spalte) {
-                                    if($spalte['id'] == $selected_task['spaltenid']) {
-                                        $currentBoardId = $spalte['boardsid'];
-                                        break;
-                                    }
-                                }
-                            } elseif (isset($selected_board['id'])) {
-                                // Falls beim Erstellen (vom Dashboard kommend) eine BoardID bekannt ist
-                                $currentBoardId = $selected_board['id'];
-                            }
-                            ?>
+                        <select class="form-select <?= !$hasColumns ? 'is-invalid' : '' ?>"
+                                id="BoardID" name="BoardID"
+                                <?= $todo == "delete" ? 'disabled' : '' ?>>
                             <?php foreach ($boards as $board): ?>
                                 <option value="<?= esc($board['id']) ?>"
-                                        <?= ($currentBoardId == $board['id']) ? 'selected' : '' ?>>
-                                    <?= esc($board['board']) ?>
+                                        <?= (old('BoardID', $currentBoardId ?? '') == $board['id']) ? 'selected' : '' ?>>
+                                <?= esc($board['board']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <!-- Wenn von einem leeren Board kommend, oder nach einer Validierung, direkt geladen -->
+                        <div id="boardNoColumnsError"
+                             class="invalid-feedback d-block <?= $hasColumns ? 'd-none' : '' ?>">
+                            Das Board besitzt keine Spalten.
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="form-group row mb-3">
+                <!-- Komplett ausgeblendet, wenn Board leer -->
+                <div class="form-group row mb-3" id="SpaltenBlock"
+                     style="<?= !$hasColumns ? 'display:none;' : '' ?>">
                     <div class="col-md-2">
                         <label for="SpaltenID" class="col-form-label">Spalte</label>
                     </div>
@@ -192,7 +214,6 @@
                                 id="SpaltenID" name="SpaltenID"
                                 <?php if ($todo === "create"): ?>
                                     style="color:<?= (old('SpaltenID') || isset($selected_spalte['id'])) ? '#212529' : '#6c757d' ?>;"
-                                    onchange="this.style.color='#212529'"
                                 <?php else: ?>
                                     style="color:#212529;"
                                 <?php endif; ?>

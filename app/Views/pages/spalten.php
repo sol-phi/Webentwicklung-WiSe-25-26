@@ -33,10 +33,9 @@
                 <thead>
                 <tr>
                     <th class="text-nowrap" data-sortable="true">ID</th>
-                    <th class="text-nowrap" data-sortable="true">Board</th>
-                    <th class="text-nowrap" data-sortable="true">Sort-ID</th>
                     <th class="text-nowrap" data-sortable="true">Spalte</th>
                     <th class="text-nowrap" data-sortable="true">Spaltenbeschreibung</th>
+                    <th class="text-nowrap" data-sortable="true">Board</th>
                     <th class="text-nowrap" data-sortable="true">Aktionen</th>
                 </tr>
                 </thead>
@@ -44,10 +43,9 @@
                 <?php foreach ($spalten as $spalte): ?>
                     <tr>
                         <td><?= esc($spalte['id']) ?></td>
-                        <td><?= esc($spalte['board']) ?></td>
-                        <td><?= esc($spalte['sortid']) ?></td>
                         <td><?= esc($spalte['spalte']) ?></td>
                         <td><?= esc($spalte['spaltenbeschreibung']) ?></td>
+                        <td><?= esc($spalte['board']) ?></td>
                         <td>
                             <div class="d-inline-flex gap-2">
                                 <a href="<?= base_url('public/spalten-erstellen/copy/' . $spalte['id'])?>">

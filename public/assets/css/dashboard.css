@@ -105,5 +105,12 @@ Unten werden die borders dann entsprechend überschrieben.*/
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
+/*Fügt nach der letzten Spalte einen winzig kleinen Abstand ein, sodass gap-3 greifen kann
+und die letzte Spalte sich mit den anderen Elementen in der Board-Card ausrichten kann*/
+.columns-container::after {
+    content: "";
+    flex: 0 0 0.001rem;
+}
+
 
 

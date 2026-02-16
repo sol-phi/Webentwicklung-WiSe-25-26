@@ -77,7 +77,7 @@ class TasksModel extends Model
         ]);
     }
     // Analog
-    public function updateTasksWithOrder($data, $taskId){
+    public function updateTasksOrder($data, $taskId){
         $this->db->table('tasks')->where('id', $taskId)->update([
             'sortid'              => $data['SortID'],
         ]);

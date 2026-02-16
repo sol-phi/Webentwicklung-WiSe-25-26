@@ -76,7 +76,6 @@ class SpaltenErstellen extends BaseController
         $data = [
             'spaltenId'   => $spaltenId,  // nur für update und delete relevant
             'Board'       => $this->request->getPost('Board'),       // enthält die numeric ID aus dem <select>
-            'SortID'      => $this->request->getPost('SortID'),
             'Bezeichnung' => $this->request->getPost('Bezeichnung'),
             'Beschreibung'=> $this->request->getPost('Beschreibung'),
         ];

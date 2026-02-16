@@ -2,8 +2,16 @@
 .blue-gradient-drag-icon {
     color: #2c54c0;
 }
+/*Innerhalb des Spalten Headers...*/
+.column-handle {
+    cursor: grab;
+}
+/*... außer auf dem Text*/
+.spalten-title {
+    cursor: text;
+}
 /*Innerhalb des Task Headers...*/
-.grabbable {
+.task-handle {
     cursor: grab;
 }
 /*... außer auf dem Text*/

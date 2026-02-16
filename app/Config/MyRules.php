@@ -25,7 +25,6 @@ class MyRules extends BaseConfig
     public $spaltenerstellen = [
         'Bezeichnung' => 'required',
         'Beschreibung' => 'required',
-        'SortID' => 'required|integer',
         'Board' => 'required',
     ];
     public $spaltenerstellen_errors = [
@@ -34,10 +33,6 @@ class MyRules extends BaseConfig
         ],
         'Beschreibung' => [
             'required' => 'Bitte geben Sie eine Beschreibung für die Spalte ein.',
-        ],
-        'SortID' => [
-            'required' => 'Bitte geben Sie eine SortID ein.',
-            'integer'  => 'Die SortID muss eine ganze Zahl sein.',
         ],
         'Board' => [
             'required' => 'Die Auswahl eines Boards ist ein Pflichtfeld.',

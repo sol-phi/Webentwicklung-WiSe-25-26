@@ -60,7 +60,7 @@ class Tasks extends BaseController
 
         // Alle Tasks in der Zielspalte werden geupdatet, durch Lesen aus dem Order Array. $item beinhält TaskID und SortID.
         foreach($data['Order'] as $item){
-            $this->tasksModel->updateTasksWithOrder($item, $item['TaskID']);
+            $this->tasksModel->updateTasksOrder($item, $item['TaskID']);
         }
 
         // Falls wir bis hier keine Fehler kriegen, muss es geklappt haben

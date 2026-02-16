@@ -13,6 +13,18 @@
     --bs-btn-active-color: #ffffff;
     border-radius: 0.4rem;
 }
+/*Gibt der Suchleiste ihren einzigartigen Stil*/
+.blue-gradient-buttons-search{
+    --bs-btn-disabled-border-color: #7a95c3;
+    --bs-btn-disabled-color: #3b6fd6;
+    border-radius: 0.4rem;
+    opacity: 1 !important;
+}
+.blue-gradient-fields-search{
+    border: 1px solid #7a95c3;
+    border-radius: 0.4rem;
+}
+/*Für Icons im Allgemeinen*/
 .blue-gradient-icons {
     color: #3b6fd6;
 }

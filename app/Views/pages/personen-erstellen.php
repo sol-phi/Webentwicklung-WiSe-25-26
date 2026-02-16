@@ -96,7 +96,7 @@
                         <label for="Passwort" class="col-form-label">Passwort</label>
                     </div>
                     <div class="col-md-10">
-                        <!--type="text" und nicht password, da Validierung serverside. Beim Erstellen sollte man das Passwort sehen könnenb.-->
+                        <!--type="text" und nicht password, da Validierung serverside. Beim Erstellen sollte man das Passwort sehen können.-->
                         <input type="text" class="form-control <?= session('errors.Passwort') ? 'is-invalid' : '' ?>"
                                id="Passwort" name="Passwort" placeholder="Passwort für die Person"
                                value="<?= old('Passwort', $selected_person['passwort'] ?? '') ?>"
@@ -111,6 +111,9 @@
 
                 <!--Verschiedene Buttons je nach Aktion-->
                 <?php if ($todo == "delete"): ?>
+                    <div class="alert alert-warning">
+                        Möchten Sie diese Person wirklich löschen? (Ihnen zugewiesene Tasks werden dabei gelöscht!)
+                    </div>
                     <button type="submit" class="btn btn-danger">Löschen</button>
                 <?php elseif ($todo == "create" || $todo == "copy" || $todo == "update"): ?>
                     <button type="submit" class="btn btn-success">Speichern</button>

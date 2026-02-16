@@ -35,9 +35,9 @@
                     <tr>
                         <th class="text-nowrap" data-sortable="true">ID</th>
                         <th class="text-nowrap" data-sortable="true">Task</th>
-                        <th class="text-nowrap" data-sortable="true">Taskart</th>
                         <th class="text-nowrap" data-sortable="true">Spalte</th>
                         <th class="text-nowrap" data-sortable="true">Board</th>
+                        <th class="text-nowrap" data-sortable="true">Taskart</th>
                         <th class="text-nowrap" data-sortable="true">Person</th>
                         <th class="text-nowrap" data-sortable="true">Erstelldatum</th>
                         <th class="text-nowrap" data-sortable="true">Erinnerungsdatum</th>
@@ -50,7 +50,17 @@
                         <tr>
                             <td><?= esc($task['id']) ?></td>
                             <td><?= esc($task['tasks']) ?></td>
-
+                            <?php foreach ($spalten as $spalte): ?>
+                                <?php if ($task['spaltenid'] == $spalte['id']): ?>
+                                    <td><?= esc($spalte['spalte']) ?></td>
+                                    <?php foreach ($boards as $board): ?>
+                                        <?php if ($spalte['boardsid'] == $board['id']): ?>
+                                            <td><?= esc($board['board']) ?></td>
+                                            <?php break;?>
+                                        <?php endif;?>
+                                    <?php endforeach;?>
+                                <?php endif;?>
+                            <?php endforeach;?>
                             <?php foreach ($taskarten as $taskart): ?>
                                 <!--Hier durchlaufen wir alle Taskarten, um den passenden Taskart-Namen für den dazugehörigen Task zu laden.-->
                                 <!--Für weitere Einträge analog-->
@@ -64,17 +74,6 @@
                                         </div>
                                     </td>
                                     <?php break;?>
-                                <?php endif;?>
-                            <?php endforeach;?>
-                            <?php foreach ($spalten as $spalte): ?>
-                                <?php if ($task['spaltenid'] == $spalte['id']): ?>
-                                    <td><?= esc($spalte['spalte']) ?></td>
-                                    <?php foreach ($boards as $board): ?>
-                                        <?php if ($spalte['boardsid'] == $board['id']): ?>
-                                            <td><?= esc($board['board']) ?></td>
-                                            <?php break;?>
-                                        <?php endif;?>
-                                    <?php endforeach;?>
                                 <?php endif;?>
                             <?php endforeach;?>
                             <?php foreach ($personen as $person): ?>
@@ -92,13 +91,18 @@
                                     <?= esc((new DateTime($task['erinnerungsdatum']))->format('d M Y H:i')) ?>
                                 <?php else: ?>
                                     -
-                                <?php endif; ?></td>
+                                <?php endif; ?>
+                            </td>
 
                             <td> <!--Sorgt dafür, dass Notizen abgeschnitten und in title komplett angezeigt werden, wenn sie zu lang sind-->
-                                <div style="width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                            title="<?= esc($task['notizen']) ?>">
-                                    <?= esc($task['notizen']) ?>
-                                </div>
+                                <?php if (!empty($task['notizen'])): ?>
+                                    <div style="width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                         title="<?= esc($task['notizen']) ?>">
+                                        <?= esc($task['notizen']) ?>
+                                    </div>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
                             </td>
 
                             <td>

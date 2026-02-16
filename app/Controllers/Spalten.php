@@ -38,7 +38,7 @@ class Spalten extends BaseController
         }
 
         foreach($data['Order'] as $item){
-            $this->spaltenModel->updateSpalteSortId($item['SpaltenID'], $item['SortID']);
+            $this->spaltenModel->updateSpaltenOrder($item['SpaltenID'], $item['SortID']);
         }
 
         return $this->response->setJSON(['success' => true]);

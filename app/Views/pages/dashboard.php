@@ -49,8 +49,8 @@
                     </div>
                     <!--Funktioniert nicht, sollte aber auf jeder Seite drauf sein. Vielleicht für später?-->
                     <div class="input-group ms-3" style="max-width: 250px;">
-                        <input id="taskSearch" type="search" class="form-control blue-gradient-boards-card" placeholder="Suchen...">
-                        <button class="btn blue-gradient-buttons" type="button" id="button-search">
+                        <input id="taskSearch" type="search" class="form-control blue-gradient-fields-search" placeholder="Suchen...">
+                        <button class="btn blue-gradient-buttons-search" type="button" id="button-search" disabled>
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
@@ -76,10 +76,12 @@
                                     <!--Jede Spalte wird in einer vertikalen Card dargestellt-->
                                     <div class="card h-100 w-100 blue-gradient-spalten-card">
 
-                                        <div class="card-header blue-gradient-spalten-header column-handle position-relative" style="cursor: grab">
+                                        <div class="card-header blue-gradient-spalten-header column-handle position-relative">
                                             <i class="fa-solid fa-grip blue-gradient-drag-icon"
                                                style="position: absolute; top: 0px; left: 50%; transform: translateX(-50%);"></i>
-                                            <div class="fs-5 fw-semibold mt-2"><?= esc($spalte['spalte']) ?></div>
+                                            <div class="fs-5 fw-semibold mt-2 spalten-title" style="display: inline-block; margin-top: 10px;">
+                                                <?= esc($spalte['spalte']) ?>
+                                            </div>
                                         </div>
                                         <div class="card-header blue-gradient-spalten-beschreibung">
                                             <div class="small"><?= esc($spalte['spaltenbeschreibung']) ?></div>
@@ -99,7 +101,7 @@
                                                     <div class="card blue-gradient-tasks-card draggable" data-task-id="<?= $task['id'] ?>">
 
                                                         <!--grabbable ist der Teil, über den man für einen Drag hovern muss.-->
-                                                        <div class="card-header fw-semibold blue-gradient-tasks-header position-relative grabbable">
+                                                        <div class="card-header fw-semibold blue-gradient-tasks-header position-relative task-handle">
                                                             <!--Hack, um das Icon oben zentriert anzuzeigen-->
                                                             <i class="fa-solid fa-grip blue-gradient-drag-icon"
                                                                style="position: absolute; top: 0px; left: 50%; transform: translateX(-50%);"></i>
@@ -206,9 +208,6 @@
                                 </div>
                             <?php endforeach; ?>
 
-                            <!--Hacky workaround für Scrollbar an äußerster Card. Damit wird ein weiteres, sehr enges "Spaltenelement" erzeugt, sodass gap-3 nach rechts greift
-                            Ignore-Drag damit man nicht auf diese Spalte droppen kann (im javascript)-->
-                            <div class="d-flex flex-column flex-shrink-0 gap-3 ignore-drag" style="width: 0.001rem"></div>
                         </div>
 
                     <?php endif; ?>
