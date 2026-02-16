@@ -41,9 +41,3 @@ body.dragging * {
     margin-right: 1rem !important; /* Ersatz für gap-3 */
     margin-left: 0 !important;
 }
-
-/* Das Hacky-Scroll-Div ausblenden, da man dort Spalten droppen kann */
-.ignore-drag {
-    visibility: hidden;
-    pointer-events: none;
-}

@@ -207,8 +207,8 @@
                             <?php endforeach; ?>
 
                             <!--Hacky workaround für Scrollbar an äußerster Card. Damit wird ein weiteres, sehr enges "Spaltenelement" erzeugt, sodass gap-3 nach rechts greift
-                            Ignore-Drag damit man nicht auf diese Spalte droppen kann-->
-                            <div class="d-flex flex-column flex-shrink-0 gap-3 ignore-drag" style="width: 0.001rem;"></div>
+                            Ignore-Drag damit man nicht auf diese Spalte droppen kann (im javascript)-->
+                            <div class="d-flex flex-column flex-shrink-0 gap-3 ignore-drag" style="width: 0.001rem"></div>
                         </div>
 
                     <?php endif; ?>
