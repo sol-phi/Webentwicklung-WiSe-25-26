@@ -120,8 +120,9 @@
                                                                                 <div class="tasks-align-icons">
                                                                                     <i class="fa-solid text-muted <?= esc($taskart['taskartenicon']) ?>"></i>
                                                                                 </div>
-
-                                                                                <div class="flex-grow-1">
+                                                                                <!--Verhindert, dass extrem lange Taskart-Namen das Layout zerstören-->
+                                                                                <div class="flex-grow-1 text-truncate" style="min-width: 0; max-width: 125px;"
+                                                                                     title="<?= esc($taskart['taskart']) ?>">
                                                                                     <?= esc($taskart['taskart']) ?>
                                                                                 </div>
                                                                             </div>
@@ -230,6 +231,3 @@
 </script>
 <script src="<?= base_url('public/assets/js/drag-and-drop.js') ?>"></script>
 <script src="<?= base_url('public/assets/js/search.js') ?>"></script>
-
-
-
