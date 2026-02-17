@@ -16,14 +16,14 @@ class Boards extends BaseController
         $this->boardsModel = new BoardsModel();
     }
 
-    public function getIndex(): void
+    public function getIndex(): string
     {
         // Daten aus dem Model zum Erzeugen der Tabelle
         $data['boards'] = $this->boardsModel->getData();
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/boards', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/boards', $data).
+               view('templates/footer');
     }
 }

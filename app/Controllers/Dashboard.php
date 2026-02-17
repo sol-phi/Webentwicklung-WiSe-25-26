@@ -51,9 +51,9 @@ class Dashboard extends BaseController
             return redirect()->to(base_url('public/dashboard/' . $data['boards'][0]['id']));
         }
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/dashboard', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/dashboard', $data).
+               view('templates/footer');
     }
 }

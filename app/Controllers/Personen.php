@@ -16,14 +16,14 @@ class Personen extends BaseController
         $this->personenModel = new PersonenModel();
     }
 
-    public function getIndex(): void
+    public function getIndex(): string
     {
         // Daten aus dem Model zum Erzeugen der Tabelle
         $data['personen'] = $this->personenModel->getData();
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/personen', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/personen', $data).
+               view('templates/footer');
     }
 }

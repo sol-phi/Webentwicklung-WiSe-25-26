@@ -16,15 +16,15 @@ class Spalten extends BaseController
         $this->spaltenModel = new SpaltenModel();
     }
 
-    public function getIndex(): void
+    public function getIndex(): string
     {
         // Daten aus dem Model zum Erzeugen der Tabelle
         $data['spalten'] = $this->spaltenModel->getDatawithBoardNames();
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/spalten', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/spalten', $data).
+               view('templates/footer');
     }
 
 

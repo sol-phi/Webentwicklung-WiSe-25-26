@@ -13,13 +13,13 @@ class Taskarten extends BaseController
         $this->taskartenModel = new TaskartenModel();
     }
 
-    public function getIndex(): void
+    public function getIndex(): string
     {
         $data['taskarten'] = $this->taskartenModel->getData();
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/taskarten', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/taskarten', $data).
+               view('templates/footer');
     }
 }

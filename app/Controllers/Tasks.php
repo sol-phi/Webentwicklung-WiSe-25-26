@@ -40,10 +40,10 @@ class Tasks extends BaseController
         $data['taskarten'] = $this->taskartenModel->getData();
         $data['personen'] = $this->personenModel->getData();
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/tasks', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/tasks', $data).
+               view('templates/footer');
     }
 
     // Von Ajax nach einem erfolgreichem Drop aufgerufen

@@ -37,10 +37,10 @@ class BoardsErstellen extends BaseController
         // Damit die Erstellen View weiß, welche Aktion gerade ausgeführt wird.
         $data['todo'] = $todo;
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/boards-erstellen', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/boards-erstellen', $data).
+               view('templates/footer');
     }
 
     public function postSubmit($todo = null, $boardId = null)

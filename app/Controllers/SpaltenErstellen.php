@@ -47,10 +47,10 @@ class SpaltenErstellen extends BaseController
             return redirect()->to(base_url('public/spalten'));
         }
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/spalten-erstellen', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/spalten-erstellen', $data).
+               view('templates/footer');
     }
 
     public function postSubmit($todo = null, $spaltenId = null)

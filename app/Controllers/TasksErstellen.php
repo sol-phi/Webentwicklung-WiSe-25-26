@@ -65,10 +65,10 @@ class TasksErstellen extends BaseController
             return redirect()->to(base_url('public/tasks'));
         }
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/tasks-erstellen', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/tasks-erstellen', $data).
+               view('templates/footer');
     }
 
     // Falls von dem Dashboard kommend. $boardId, $tod0 und $taskId werden in der URL als Parameter übergeben, und darauf kann mit AutoRouting direkt hier zugegriffen werden.
@@ -113,10 +113,10 @@ class TasksErstellen extends BaseController
             return redirect()->to(base_url('public/dashboard/' . $data['selected_board']['id']));
         }
 
-        echo view('templates/header');
-        echo view('templates/navigation');
-        echo view('pages/tasks-erstellen', $data);
-        echo view('templates/footer');
+        return view('templates/header').
+               view('templates/navigation').
+               view('pages/tasks-erstellen', $data).
+               view('templates/footer');
     }
 
     // Beim Einreichen des Formulars gibt die View vier Parameter mit, einmal auf welche Ansicht wieder zurückgeleitet werden soll ($view),
