@@ -36,16 +36,3 @@ body.dragging * {
 .gu-transit {
     opacity: 0.4;
 }
-
-/* === SPALTEN-LAYOUT FIX (Deaktiviert Gap, nutzt Margin, da sonst komische Abstände entstehen) === */
-
-/* Container: Gap deaktivieren, damit Dragula nicht springt */
-.columns-container {
-    gap: 0 !important;
-}
-
-/* Spalten: Abstand manuell rechts setzen */
-.draggable-column {
-    margin-right: 1rem !important; /* Ersatz für gap-3 */
-    margin-left: 0 !important;
-}
