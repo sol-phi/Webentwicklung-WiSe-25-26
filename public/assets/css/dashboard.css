@@ -90,7 +90,6 @@ Unten werden die borders dann entsprechend überschrieben.*/
 .input-group .form-control,
 .input-group .form-control:focus {
     border-color: #7a95c3;
-    border-right: 1px solid transparent;
     outline: none;
     box-shadow: none;
 }
@@ -111,6 +110,3 @@ und die letzte Spalte sich mit den anderen Elementen in der Board-Card ausrichte
     content: "";
     flex: 0 0 0.001rem;
 }
-
-
-

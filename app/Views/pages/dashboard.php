@@ -50,9 +50,9 @@
                     <!--Funktioniert nicht, sollte aber auf jeder Seite drauf sein. Vielleicht für später?-->
                     <div class="input-group ms-3" style="max-width: 250px;">
                         <input id="taskSearch" type="search" class="form-control blue-gradient-fields-search" placeholder="Suchen...">
-                        <button class="btn blue-gradient-buttons-search" type="button" id="button-search" disabled>
+                        <!-- <button class="btn blue-gradient-buttons-search" type="button" id="button-search" disabled>
                             <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             </div>

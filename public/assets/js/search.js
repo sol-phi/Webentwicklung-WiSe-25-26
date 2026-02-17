@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('taskSearch');
-    const searchButton = document.getElementById('button-search');
+
 
     // Event-Listener für das Tippen (Input) und den Button (Click)
     searchInput.addEventListener('input', filterDashboard);
-    searchButton.addEventListener('click', filterDashboard);
 
     function filterDashboard() {
         const searchTerm = searchInput.value.toLowerCase().trim();
