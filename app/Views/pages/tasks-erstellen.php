@@ -218,9 +218,9 @@
                                     style="color:#212529;"
                                 <?php endif; ?>
                                 <?= $todo == "delete" ? 'disabled' : '' ?>>
-                            <?php if ($todo == "create"): ?>
-                                <option value="" disabled <?= !old('SpaltenID') ? 'selected' : '' ?> hidden>Bitte Spalte wählen</option>
-                            <?php endif; ?>
+
+                            <option value="" disabled <?= !old('SpaltenID') && !isset($selected_task['spaltenid']) ? 'selected' : '' ?> hidden>Bitte Spalte wählen</option>
+
 
                             <?php foreach ($spalten as $spalte): ?>
                                 <!-- Keine IF-Bedingung, die Spalten anderer Boards ausblendet.
